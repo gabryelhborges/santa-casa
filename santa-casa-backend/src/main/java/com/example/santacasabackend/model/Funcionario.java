@@ -1,5 +1,4 @@
 package com.example.santacasabackend.model;
 
-public class Paciente {
-
+public class Funcionario {
 }
