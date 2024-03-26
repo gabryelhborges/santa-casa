@@ -1,4 +1,4 @@
-package com.example.santacasabackend.model;
+package com.example.santacasabackend.db.model;
 
 public class Funcionario {
 }
