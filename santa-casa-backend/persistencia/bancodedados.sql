@@ -26,3 +26,17 @@ create table pacientes (
     orientacao_sexual     integer default 0, --  0 -HETEROSSEXUAL  1- HOMOSSEXUAL  2- BISSEXUAL 3- OUTRO
     constraint pkPacientes primary key (id_paciente)
 );
+
+create table fornecedor(
+    idFornecedor integer not null  auto_increment,
+    cnpj varchar(18) not null unique,
+    f_nome varchar(70) not null,
+    endereco varchar(100),
+    numero integer,
+    complemento varchar(200),
+    bairro varchar(100),
+    cidade varchar(30), --maior nome de cidade do brasil tem 29 caracteres
+    uf char(2) not null,
+    telefone varchar(14),
+    constraint pk_fornecedor primary  key (idFornecedor);
+);
