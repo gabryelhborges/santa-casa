@@ -33,7 +33,7 @@ create table funcionarios(
     farmaceutico        varchar(1),
     coren               varchar(14),
     cpf                 varchar(14) not null unique,
-    telefone_funcinario varchar(20),
+    telefone_funcionario varchar(20),
     constraint pfFuncionario primary key (idFuncionario)
 );
 
