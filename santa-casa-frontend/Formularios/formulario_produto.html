@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,16 +22,16 @@
                 <form action="" method="POST" style="padding: 15px;">
                     <div class="dual-input-container">
                         <input type="text" class="input-style" placeholder="Código identificador de produto" name="codigo_produto" required>
-                        <input type="text" class="input-style" placeholder="Código forenecedor" name="text">
+                        <input type="text" class="input-style" placeholder="Código forenecedor" name="text" required>
                     </div>
                     <div>
-                        <input type="text" class="input-style" placeholder="Nome do Produto" name="nome">
+                        <input type="text" class="input-style" placeholder="Nome do Produto" name="nome" required>
                     </div>
                     <div class="triple-input-container">
                         <input type="number" class="input-style" placeholder="Quantidade total" name="quantidade_total" min="0" max="1000" step="1" required>
                         <div>
                             <select id="select-4908" name="select" class="input-style">
-                                <option value="remedio" data-calc="remedio">
+                                <option value="remedio" data-calc="remedio" >
                                     Remédio
                                 </option>
                                 <option value="material" data-calc="material">
@@ -42,8 +42,8 @@
                         <input type="number" class="input-style" placeholder="Entrada numérica" name="valor_custo" min="0" max="1000" step="0.01" required>
                     </div>
                     <div class="dual-input-container">
-                        <input type="date" class="input-style" value="2022-01-01" name="ultima_compra" required data-date-format="dd/mm/yyyy">
-                        <input type="date" class="input-style" value="2022-02-01" name="ultima_saida" required data-date-format="dd/mm/yyyy">
+                        <input type="date" class="input-style" value="2022-01-01" name="ultima_compra" required data-date-format="dd/mm/yyyy" required>
+                        <input type="date" class="input-style" value="2022-02-01" name="ultima_saida" required data-date-format="dd/mm/yyyy" required>
                     </div>
                     <div>
                         <textarea class="input-style" rows="4" cols="50" name="descricao_uso" placeholder="Descrição de uso" maxlength="300" required></textarea>
