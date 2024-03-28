@@ -19,18 +19,48 @@
                 </div>
                 <form action="" method="POST" style="padding: 15px;">
                     <div class="dual-input-container">
-                        <input type="text" class="input-style" placeholder="CNPJ" name="cnpj" required>
+                        <input id="cnpj" type="text" class="input-style" placeholder="CNPJ" name="cnpj" required>
                     </div>
                     <div>
-                        <input type="text" class="input-style" placeholder="Nome do fornecedor" name="n_fornecedor" required>
+                        <input id="nome_fornecedor" type="text" class="input-style" placeholder="Nome do fornecedor" name="n_fornecedor" required>
                     </div>
                     <div class="dual-input-container">
-                        <input type="text" class="input-style" placeholder="endereço" name="endereco">
-                        <input type="number" class="input-style" placeholder="numero" name="numero">
+                        <input id="endereco" type="text" class="input-style" placeholder="endereço" name="endereco">
+                        <input id="numero" type="number" class="input-style" placeholder="numero" name="numero" style="width: 30px;">
                     </div>
-                    <div class="dual-input-container">
-                        <input type="text" class="input-style" placeholder="complemento" name="complemento">
-                        <input type="text" class="input-style" placeholder="bairro" name="bairro">
+                    <div class="triple-input-container">
+                        <input id="complemento" type="text" class="input-style" placeholder="complemento" name="complemento">
+                        <input id="bairro" type="text" class="input-style" placeholder="bairro" name="bairro">
+                        <select id="UF" name="UF" class="input-style">
+                            <option value="">Selecione a UF</option>
+                            <option value="AC">AC</option>
+                            <option value="AL">AL</option>
+                            <option value="AP">AP</option>
+                            <option value="AM">AM</option>
+                            <option value="BA">BA</option>
+                            <option value="CE">CE</option>
+                            <option value="DF">DF</option>
+                            <option value="ES">ES</option>
+                            <option value="GO">GO</option>
+                            <option value="MA">MA</option>
+                            <option value="MS">MS</option>
+                            <option value="MT">MT</option>
+                            <option value="MG">MG</option>
+                            <option value="PA">PA</option>
+                            <option value="PB">PB</option>
+                            <option value="PR">PR</option>
+                            <option value="PE">PE</option>
+                            <option value="PI">PI</option>
+                            <option value="RJ">RJ</option>
+                            <option value="RN">RN</option>
+                            <option value="RS">RS</option>
+                            <option value="RO">RO</option>
+                            <option value="RR">RR</option>
+                            <option value="SC">SC</option>
+                            <option value="SP">SP</option>
+                            <option value="SE">SE</option>
+                            <option value="TO">TO</option>
+                        </select>
                     </div>
                     <br>
                     <div>
