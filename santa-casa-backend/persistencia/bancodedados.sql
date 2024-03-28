@@ -35,7 +35,7 @@ create table fornecedor(
     numero integer,
     complemento varchar(200),
     bairro varchar(100),
-    cidade varchar(30), --maior nome de cidade do brasil tem 29 caracteres
+    cidade varchar(30), -- maior nome de cidade do brasil tem 29 caracteres
     uf char(2) not null,
     telefone varchar(14),
     constraint pk_fornecedor primary  key (idFornecedor);
