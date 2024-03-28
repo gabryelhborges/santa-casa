@@ -1,4 +1,4 @@
-import ProdutoDAO from "../persistencia/produtoDAO";
+import ProdutoDAO from "../persistencia/produtoDAO.js";
 
 export default class Produto{
     #prod_ID
@@ -168,6 +168,7 @@ export default class Produto{
     }
     async consultar(termo){
         const produtoDAO = new ProdutoDAO();
-        await produtoDAO.consultar(termo);
+        return await produtoDAO.consultar(termo);
+        
     }
 }
