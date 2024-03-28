@@ -84,3 +84,12 @@
     border: 2px  solid black;
     border-radius: 5px;
 }
+
+.btt-animation{
+    transition: background-color 0.7s;
+}
+
+.btt-animation:hover{
+    background-color: #0056b3;
+    color: whitesmoke;
+}
