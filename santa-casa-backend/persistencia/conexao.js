@@ -9,7 +9,7 @@ export default async function conectar(){
             port: '3306',
             user: 'root',
             password: '',
-            database: 'projetopi2',
+            database: 'santa_casa',
             waitForConnections: true,
             connectionLimit: 10,
             maxIdle: 2, // Máximo de conexões inativas; o valor padrão é o mesmo que "connectionLimit"
