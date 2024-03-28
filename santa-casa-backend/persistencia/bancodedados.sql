@@ -26,3 +26,13 @@ create table pacientes (
     orientacao_sexual     integer default 0, --  0 -HETEROSSEXUAL  1- HOMOSSEXUAL  2- BISSEXUAL 3- OUTRO
     constraint pkPacientes primary key (id_paciente)
 );
+
+create table funcionarios(
+    idFuncionario       integer not null auto_increment,
+    nome_funcionario    varchar(60) not null,
+    farmaceutico        varchar(1),
+    coren               varchar(14),
+    cpf                 varchar(14) not null unique,
+    telefone_funcinario varchar(20),
+    constraint pfFuncionario primary key (idFuncionario)
+);
