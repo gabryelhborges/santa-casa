@@ -6,7 +6,7 @@ export default async function conectar(){
     else {
         const pool = mysql.createPool({
             host: 'localhost',//localhost
-            port: '4000',
+            port: '3306',
             user: 'root',
             password: '',
             database: 'santa_casa',
