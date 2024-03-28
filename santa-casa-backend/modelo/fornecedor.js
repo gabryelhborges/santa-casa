@@ -156,6 +156,6 @@ export default class Fornecedor{
     }
     async consultar(termo){
         const fornDAO = new FornecedorDAO();
-        await fornDAO.consultar(termo);
+        return await fornDAO.consultar(termo);
     }
 }

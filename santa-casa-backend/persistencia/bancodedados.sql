@@ -64,5 +64,5 @@ create table produtos(
     quantidade_total integer not null,
     tipo varchar(50) not null,
     constraint pk_prod primary key (prod_ID),
-    constraint fk_pf foreign key (Fornecedor_idFornecedor) references fornecedor
+    constraint fk_pf foreign key (Fornecedor_idFornecedor) references fornecedor(idFornecedor)
 );
