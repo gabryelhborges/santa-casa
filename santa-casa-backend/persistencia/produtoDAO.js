@@ -4,8 +4,8 @@ import conectar from "./conexao.js";
 export default class ProdutoDAO{
     async gravar(produto){
         if(produto instanceof Produto){
-            const sql = "INSERT INTO produtos (Fornecedor_idFornecedor ,nome,psicotropico,valor_custo,ultima_compra,ultima_saida,observacao,descricao_uso, quantidade_total) VALUES (?,?,?,?,?,?,?,?,?,?);";
-            const parametros = [ produto.Fornecedor_idFornecedor,produto.nome,produto.psicotropico,produto.valor_custo,produto.ultima_compra,produto.ultima_saida,produto.observacao,produto.descricao_uso, produto.quantidade_total];
+            const sql = "INSERT INTO produtos(Fornecedor_idFornecedor ,nome,psicotropico,valor_custo,ultima_compra,ultima_saida,observacao,descricao_uso, quantidade_total, tipo) VALUES (?,?,?,?,?,?,?,?,?,?);";
+            const parametros = [ produto.Fornecedor_idFornecedor,produto.nome,produto.psicotropico,produto.valor_custo,produto.ultima_compra,produto.ultima_saida,produto.observacao,produto.descricao_uso, produto.quantidade_total, produto.tipo];
             const conexao = await conectar();
             const retorno = await conexao.execute(sql, parametros);
             produto.prod_ID = retorno[0].insertId;
@@ -15,8 +15,8 @@ export default class ProdutoDAO{
 
     async atualizar(produto){
         if(produto instanceof Produto){
-            const sql = "UPDATE produtos SET Fornecedor_idFornecedor  = ?,nome = ?,psicotropico = ?,valor_custo = ?,ultima_compra = ?,ultima_saida = ?,observacao = ?,descricao_uso = ?, quantidade_total = ? WHERE prod_ID = ?";
-            const parametros = [produto.Fornecedor_idFornecedor,produto.nome,produto.psicotropico,produto.valor_custo,produto.ultima_compra,produto.ultima_saida,produto.observacao,produto.descricao_uso, produto.quantidade_total];
+            const sql = "UPDATE produtos SET Fornecedor_idFornecedor  = ?,nome = ?,psicotropico = ?,valor_custo = ?,ultima_compra = ?,ultima_saida = ?,observacao = ?,descricao_uso = ?, quantidade_total = ?, tipo = ? WHERE prod_ID = ?";
+            const parametros = [produto.Fornecedor_idFornecedor,produto.nome,produto.psicotropico,produto.valor_custo,produto.ultima_compra,produto.ultima_saida,produto.observacao,produto.descricao_uso, produto.quantidade_total, produto.tipo, produto.prod_ID];
             const conexao = await conectar();
             await conexao.execute(sql, parametros);
             global.poolConexoes.releaseConnection(conexao);
