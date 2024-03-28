@@ -68,6 +68,7 @@ export default class FuncionarioDAO{
         for(const registro of registros){
             const funcionario = new Funcionario(registro.idFuncionario,
                                                 registro.nome_funcionario,
+                                                registro.farmaceutico,
                                                 registro.coren,
                                                 registro.cpf,
                                                 registro.telefone_funcionario
