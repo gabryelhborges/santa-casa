@@ -40,3 +40,20 @@ create table fornecedor(
     telefone varchar(14),
     constraint pk_fornecedor primary  key (idFornecedor);
 );
+
+create table produtos
+(
+    prod_ID integer not null auto_increment,
+    Fornecedor_idFornecedor integer not null,
+    nome varchar(45) not null,
+    psicotropico varchar(1) not null,
+    valor_custo decimal(5,2) not null,
+    ultima_compra date,
+    ultima_saida date,
+    observacao varchar(300),
+    descricao_uso varchar(300) not null,
+    quantidade_total integer not null,
+    tipo varchar(50) not null,
+    constraint pk_prod primary key (prod_ID),
+    constraint fk_pf foreign key (Fornecedor_idFornecedor) references fornecedor
+);
