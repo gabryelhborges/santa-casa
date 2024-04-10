@@ -180,7 +180,7 @@ export default class PacienteCtrl {
 Exemplo json paciente:
 
 {
-  "cpf": "123.456.789-10",
+  "cpf": "123.456.999-10",
   "nome": "João da Silva",
   "raca": "Branca",
   "estado_civil": "S", // Solteiro
