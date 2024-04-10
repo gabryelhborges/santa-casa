@@ -9,29 +9,18 @@ var acao = 'cadastrar';
 
 function validarFormulario(evento) {
     if (formProd.checkValidity()) {
-        let iCodProd = document.getElementById('iCodProd').value;
+        let iCodBarras = document.getElementById('iCodProd').value;
         let iCodFornecedor = document.getElementById('iCodFornecedor').value;
         let iNomeProd = document.getElementById('iNomeProd').value;
         let iQtdTotal = document.getElementById('iQtdTotal').value;
         let sTipoProd = document.getElementById('sTipoProd').value;
         let iValorCusto = document.getElementById('iValorCusto').value;
         let dUltimaCompra = document.getElementById('dUltimaCompra').value;
-        let bairro = document.getElementById('bairro').value;
-        let telefone = document.getElementById('telefone').value;
-        let profissao = document.getElementById('profissao').value;
-        let cadastro = dataAtualFormatada();
-        let numero = document.getElementById('numero').value;
-        let complemento = document.getElementById('complemento').value;
-        let cep = document.getElementById('cep').value;
-        let naturalidade = document.getElementById('naturalidade').value;
-        let nome_pai = document.getElementById('nome_pai').value;
-        let nome_responsavel = document.getElementById('nome_responsavel').value;
-        let nome_mae = document.getElementById('nome_mae').value;
-        let nome_social = document.getElementById('nome_social').value;
-        let utilizar_nome_social = document.getElementById('utilizar_nome_social').value;
-        let religiao = document.getElementById('religiao').value;
-        let orientacao_sexual = document.getElementById('orientacao_sexual').value;
-        let pac = new Paciente(0, cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, cadastro, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual);
+        let dUltimaSaida = document.getElementById('dUltimaSaida').value;
+        let tDesc = document.getElementById('tDesc').value;
+        let tObs = document.getElementById('tObs').value;
+        let iPsico = document.getElementById('iPsico').value;
+        let produto = new Produto(iCodBarras,iCodFornecedor, iNomeProd, iQtdTotal, sTipoProd, iValorCusto, dUltimaCompra, dUltimaSaida, tDesc, tObs, cadastro, iPsico);
         
         if (acao === 'cadastrar') {
             fetch(urlBase, {
@@ -39,7 +28,7 @@ function validarFormulario(evento) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(pac)
+                body: JSON.stringify(produto)
             })
                 .then((resposta) => {
                     return resposta.json();
@@ -48,7 +37,7 @@ function validarFormulario(evento) {
                     if (dados.status) {
                         limparFormulario();
                         exibirMensagem(dados.mensagem);
-                        exibirPacientes();
+                        exibirProdutos();
                     }
                     else {
                         exibirMensagem(dados.mensagem);
@@ -59,37 +48,25 @@ function validarFormulario(evento) {
                 });
         }
         else if (acao === 'alterar') {
-            if (confirm('Deseja realmente alterar esse paciente?')) {
-                let idPaciente = document.getElementById('idPaciente').value;
-                let cpf = document.getElementById('cpf').value;
-                let nome = document.getElementById('nome').value;
-                let raca = document.getElementById('raca').value;
-                let estado_civil = document.getElementById('estado_civil').value;
-                let sexo = document.getElementById('sexo').value;
-                let data_nascimento = document.getElementById('data_nascimento').value;
-                let endereco = document.getElementById('endereco').value;
-                let bairro = document.getElementById('bairro').value;
-                let telefone = document.getElementById('telefone').value;
-                let profissao = document.getElementById('profissao').value;
-                let cadastro = dataAtualFormatada();
-                let numero = document.getElementById('numero').value;
-                let complemento = document.getElementById('complemento').value;
-                let cep = document.getElementById('cep').value;
-                let naturalidade = document.getElementById('naturalidade').value;
-                let nome_pai = document.getElementById('nome_pai').value;
-                let nome_responsavel = document.getElementById('nome_responsavel').value;
-                let nome_mae = document.getElementById('nome_mae').value;
-                let nome_social = document.getElementById('nome_social').value;
-                let utilizar_nome_social = document.getElementById('utilizar_nome_social').value;
-                let religiao = document.getElementById('religiao').value;
-                let orientacao_sexual = document.getElementById('orientacao_sexual').value;
-                let pac = new Paciente(idPaciente, cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, cadastro, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual);
+            if (confirm('Deseja realmente alterar esse produto?')) {
+                let iCodBarras = document.getElementById('iCodProd').value;
+                let iCodFornecedor = document.getElementById('iCodFornecedor').value;
+                let iNomeProd = document.getElementById('iNomeProd').value;
+                let iQtdTotal = document.getElementById('iQtdTotal').value;
+                let sTipoProd = document.getElementById('sTipoProd').value;
+                let iValorCusto = document.getElementById('iValorCusto').value;
+                let dUltimaCompra = document.getElementById('dUltimaCompra').value;
+                let dUltimaSaida = document.getElementById('dUltimaSaida').value;
+                let tDesc = document.getElementById('tDesc').value;
+                let tObs = document.getElementById('tObs').value;
+                let iPsico = document.getElementById('iPsico').value;
+                let produto = new Produto(iCodBarras,iCodFornecedor, iNomeProd, iQtdTotal, sTipoProd, iValorCusto, dUltimaCompra, dUltimaSaida, tDesc, tObs, cadastro, iPsico);
                 fetch(urlBase, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(pac)
+                    body: JSON.stringify(produto)
                 })
                     .then((resposta) => {
                         return resposta.json();
@@ -98,7 +75,7 @@ function validarFormulario(evento) {
                         if (dados.mensagem) {
                             limparFormulario();
                             exibirMensagem(dados.mensagem);
-                            exibirPacientes();
+                            exibirProdutos();
                         }
                         else {
                             exibirMensagem(dados.mensagem);
@@ -110,15 +87,15 @@ function validarFormulario(evento) {
             }
         }
         else if (acao === 'excluir') {
-            if (confirm('Deseja realmente excluir esse paciente?')) {
-                const idPaciente = document.getElementById('idPaciente').value;
-                let pac = new Paciente(idPaciente);
+            if (confirm('Deseja realmente excluir esse produto?')) {
+                let iCodBarras = document.getElementById('iCodProd').value;
+                let produto = new Produto(iCodBarras);
                 fetch(urlBase, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(pac)
+                    body: JSON.stringify(produto)
                 })
                     .then((resposta) => {
                         return resposta.json();
@@ -126,10 +103,10 @@ function validarFormulario(evento) {
                     .then((dados) => {
                         limparFormulario();
                         exibirMensagem(dados.mensagem);
-                        exibirPacientes();
+                        exibirProdutos();
                     })
                     .catch((erro) => {
-                        exibirMensagem('Erro ao tentar excluir o paciente: ' + erro.message);
+                        exibirMensagem('Erro ao tentar excluir o produto: ' + erro.message);
                     });
             }
         }
@@ -141,7 +118,7 @@ function validarFormulario(evento) {
     evento.stopPropagation();
 }
 
-function exibirPacientes() {
+function exibirProdutos() {
     fetch(urlBase, {
         method: 'GET',
         redirect: 'follow'
@@ -152,38 +129,38 @@ function exibirPacientes() {
         .then((json) => {
             let divTabela = document.getElementById('tabela');
             divTabela.innerHTML = '';
-            listaPacientes = json.listaPacientes;
-            if (Array.isArray(listaPacientes)) {
-                if (listaPacientes.length > 0) {
+            listaProdutos = json.listaProdutos;
+            if (Array.isArray(listaProdutos)) {
+                if (listaProdutos.length > 0) {
                     let tabela = document.createElement('table');
                     tabela.className = 'table table-striped table-hover';
                     let cabecalho = document.createElement('thead');
                     cabecalho.innerHTML = `
                     <tr>
-                        <th>idPaciente</th>
-                        <th>CPF</th>
+                        <th>Código</th>
                         <th>Nome</th>
-                        <th>Data Nascimento</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
                     </tr>
                     `;
                     tabela.appendChild(cabecalho);
                     let corpo = document.createElement('tbody');
-                    for (let i = 0; i < listaPacientes.length; i++) {
+                    for (let i = 0; i < listaProdutos.length; i++) {
                         let linha = document.createElement('tr');
-                        let paciente = listaPacientes[i];
+                        let produto = listaProdutos[i];
                         linha.innerHTML = `
-                        <td>${paciente.idPaciente}</td>
-                        <td>${paciente.cpf}</td>
-                        <td>${paciente.nome}</td>
-                        <td>${paciente.data_nascimento}</td>
+                        <td>${produto.iCodBarras}</td>
+                        <td>${produto.iNomeProd}</td>
+                        <td>${produto.tDesc}</td>
+                        <td>${produto.iValorCusto}</td>
                         <td>
-                            <button class="btn btn-danger" onclick="selecionarPaciente(${gerarParametrosPaciente(paciente)},'excluir')">
+                            <button class="btn btn-danger" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'excluir')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
                                 </svg>
                             </button>
-                            <button class="btn btn-warning" onclick="selecionarPaciente(${gerarParametrosPaciente(paciente)},'alterar')">
+                            <button class="btn btn-warning" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'alterar')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                                     <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
                                 </svg>
@@ -197,25 +174,21 @@ function exibirPacientes() {
                 }
                 else {
                     divTabela.innerHTML = `<div class="alert alert-warning" role="alert"> 
-                                    Não existem pacientes cadastrados
+                                    Não existem Produtos cadastrados
                                 </div>`;
                 }
             }
         })
         .catch((erro) => {
-            exibirMensagem('Não foi possível recuperar os pacientes do backend: ' + erro.message);
+            exibirMensagem('Não foi possível recuperar os Produtos do backend: ' + erro.message);
         });
 }
 
-function gerarParametrosPaciente(paciente) {
-    return `'${paciente.idPaciente}','${paciente.cpf}','${paciente.nome}',
-    '${paciente.raca}','${paciente.estado_civil}','${paciente.sexo}',
-    '${paciente.data_nascimento}','${paciente.endereco}','${paciente.bairro}',
-    '${paciente.telefone}','${paciente.profissao}','${paciente.cadastro}',
-    '${paciente.numero}','${paciente.complemento}','${paciente.cep}',
-    '${paciente.naturalidade}','${paciente.nome_pai}','${paciente.nome_responsavel}',
-    '${paciente.nome_mae}','${paciente.nome_social}','${paciente.utilizar_nome_social}',
-    '${paciente.religiao}','${paciente.orientacao_sexual}'`;
+function gerarParametrosProduto(produto) {
+    return `'${produto.iCodBarras}','${produto.iCodFornecedor}','${produto.iNomeProd}',
+    '${produto.iQtdTotal}','${produto.sTipoProd}','${produto.iValorCusto}',
+    '${produto.dUltimaCompra}','${produto.dUltimaSaida}','${produto.tDesc}',
+    '${produto.tObs}','${produto.iPsico}'`;
 }
 
 function formataData(dataParametro){
@@ -251,29 +224,19 @@ function dataAtualFormatada(){
     return dataFormatada;
 }
 
-function selecionarPaciente(idPaciente, cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, cadastro, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual, modo) {
-    document.getElementById('idPaciente').value = idPaciente;
-    document.getElementById('cpf').value = cpf;
-    document.getElementById('nome').value = nome;
-    document.getElementById('raca').value = raca;
-    document.getElementById('estado_civil').value = estado_civil;
-    document.getElementById('sexo').value = sexo;
-    document.getElementById('data_nascimento').value = formataData(data_nascimento);
-    document.getElementById('endereco').value = endereco;
-    document.getElementById('bairro').value = bairro;
-    document.getElementById('telefone').value = telefone;
-    document.getElementById('profissao').value = profissao;
-    document.getElementById('numero').value = numero;
-    document.getElementById('complemento').value = complemento;
-    document.getElementById('cep').value = cep;
-    document.getElementById('naturalidade').value = naturalidade;
-    document.getElementById('nome_pai').value = nome_pai;
-    document.getElementById('nome_responsavel').value = nome_responsavel;
-    document.getElementById('nome_mae').value = nome_mae;
-    document.getElementById('nome_social').value = nome_social;
-    document.getElementById('utilizar_nome_social').value = utilizar_nome_social;
-    document.getElementById('religiao').value = religiao;
-    document.getElementById('orientacao_sexual').value = orientacao_sexual;
+function selecionarProduto(iCodBarras,iCodFornecedor, iNomeProd, iQtdTotal, sTipoProd, iValorCusto, dUltimaCompra, dUltimaSaida, tDesc, tObs, cadastro, iPsico) {
+   
+        document.getElementById('iCodBarras').value = iCodBarras;
+        document.getElementById('iCodFornecedor').value = iCodFornecedor;
+        document.getElementById('iNomeProd').value = iNomeProd;
+        document.getElementById('iQtdTotal').value = iQtdTotal;
+        document.getElementById('sTipoProd').value = sTipoProd;
+        document.getElementById('iValorCusto').value = iValorCusto;
+        document.getElementById('dUltimaCompra').value = dUltimaCompra;
+        document.getElementById('dUltimaSaida').value = dUltimaSaida;
+        document.getElementById('tDesc').value = tDesc;
+        document.getElementById('tObs').value = tObs;
+        document.getElementById('iPsico').value = iPsico;
 
     let bttForm = document.getElementById('bttForm');
     if (modo == 'alterar') {
@@ -287,28 +250,17 @@ function selecionarPaciente(idPaciente, cpf, nome, raca, estado_civil, sexo, dat
 }
 
 function limparFormulario() {
-    document.getElementById('cpf').value = '';
-    document.getElementById('nome').value = '';
-    document.getElementById('raca').value = '';
-    document.getElementById('estado_civil').value = '';
-    document.getElementById('sexo').value = '';
-    document.getElementById('data_nascimento').value = '';
-    document.getElementById('endereco').value = '';
-    document.getElementById('bairro').value = '';
-    document.getElementById('telefone').value = '';
-    document.getElementById('profissao').value = '';
-    //document.getElementById('cadastro').value = '';
-    document.getElementById('numero').value = '';
-    document.getElementById('complemento').value = '';
-    document.getElementById('cep').value = '';
-    document.getElementById('naturalidade').value = '';
-    document.getElementById('nome_pai').value = '';
-    document.getElementById('nome_responsavel').value = '';
-    document.getElementById('nome_mae').value = '';
-    document.getElementById('nome_social').value = '';
-    document.getElementById('utilizar_nome_social').value = '';
-    document.getElementById('religiao').value = '';
-    document.getElementById('orientacao_sexual').value = '';
+    document.getElementById('iCodBarras').value = '';
+    document.getElementById('iCodFornecedor').value = '';
+    document.getElementById('iNomeProd').value = '';
+    document.getElementById('iQtdTotal').value = '';
+    document.getElementById('sTipoProd').value = '';
+    document.getElementById('iValorCusto').value = '';
+    document.getElementById('dUltimaCompra').value = '';
+    document.getElementById('dUltimaSaida').value = '';
+    document.getElementById('tDesc').value = '';
+    document.getElementById('tObs').value = '';
+    document.getElementById('iPsico').value = '';
 
     acao = "cadastrar";
     let bttForm = document.getElementById('bttForm');
