@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="triple-input-container">
-                        <input type="text" class="input-style" placeholder="Informe o CPF" name="cpf" id="cpf" required>
+                        <input type="text" class="input-style" onchange="mascaraCPF(this)" placeholder="Informe o CPF" name="cpf" id="cpf" required>
 
 
                         <select class="input-style" name="raca" id="raca" required>
@@ -72,7 +72,7 @@
 
                         <input type="text" class="input-style" placeholder="Informe o bairro" name="bairro" id="bairro">
 
-                        <input type="text" class="input-style" placeholder="Informe o telefone" name="telefone"
+                        <input type="text" class="input-style" onchange="mascaraTelefone(this)" placeholder="Informe o telefone" name="telefone"
                             id="telefone">
 
                         <input type="text" class="input-style" placeholder="Informe a profissão" name="profissao"
@@ -155,6 +155,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
+    <script src="../util/util.js"></script>
     <script src="../modelo/Paciente.js"></script>
     <script src="../controle/pacienteCtrl.js"></script>
 
