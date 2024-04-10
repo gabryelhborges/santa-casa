@@ -189,6 +189,7 @@ function selecionarFornecedor(idFornecedor,cnpj,f_nome,endereco,numero,complemen
 
     let btnForm = document.getElementById('btnForm');
     if(modo=='alterar'){
+        document.getElementById('cnpj').disabled = true;
         acao = 'alterar';
         btnForm.innerHTML='Alterar';
     }
