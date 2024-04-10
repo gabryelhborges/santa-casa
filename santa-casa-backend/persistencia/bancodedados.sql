@@ -52,7 +52,7 @@ create table fornecedor(
 );
 
 create table produtos(
-    prod_ID integer not null auto_increment,
+    prod_ID integer not null,
     Fornecedor_idFornecedor integer not null,
     nome varchar(45) not null,
     psicotropico varchar(1) not null,
