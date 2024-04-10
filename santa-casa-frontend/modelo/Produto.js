@@ -1,6 +1,6 @@
-import ProdutoDAO from "../persistencia/produtoDAO.js";
 
-export default class Produto {
+
+export default class Produto{
     #prod_ID
     #Fornecedor_idFornecedor 
     #nome
@@ -154,21 +154,8 @@ export default class Produto {
         };
     }
 
-    async gravar(){
-        const produtoDAO = new ProdutoDAO();
-        await produtoDAO.gravar(this);
+    toString(){
+        return "produto: " + this.#nome;
     }
-    async atualizar(){
-        const produtoDAO = new ProdutoDAO();
-        await produtoDAO.atualizar(this);
-    }
-    async excluir(){
-        const produtoDAO = new ProdutoDAO();
-        await produtoDAO.excluir(this);
-    }
-    async consultar(termo){
-        const produtoDAO = new ProdutoDAO();
-        return await produtoDAO.consultar(termo);
-        
-    }
+
 }

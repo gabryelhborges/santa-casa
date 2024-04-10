@@ -93,3 +93,15 @@
     background-color: #0056b3;
     color: whitesmoke;
 }
+
+.flex-container {
+    display: flex;
+  }
+
+
+
+#label{
+    margin-bottom: 10px;
+    padding-bottom: 50px;
+    display: inline-block;
+}

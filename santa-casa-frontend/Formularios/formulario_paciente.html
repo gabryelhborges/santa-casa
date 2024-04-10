@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../estilização/formulario.css" media="screen" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Cadastro de Pacientes</title>
 </head>
 
@@ -17,28 +19,30 @@
                     <h2>Cadastro de Paciente</h2>
                     <hr>
                 </div>
-                <form action="" method="POST" style="padding: 15px;">
+                <form id="formPaciente" method="post" style="padding: 15px;">
+                    <div>
+                        <input type="hidden" class="input-style" placeholder="IdPaciente" name="idPaciente"
+                            id="idPaciente">
+                    </div>
 
                     <div>
-                        <label for="nome">Nome*:</label>
                         <input type="text" class="input-style" placeholder="Informe o nome do paciente" name="nome"
                             id="nome" required>
                     </div>
 
                     <div class="triple-input-container">
-                        <label for="cpf">CPF*:</label>
                         <input type="text" class="input-style" placeholder="Informe o CPF" name="cpf" id="cpf" required>
-                        <label for="raca">Raça*:</label>
+
+
                         <select class="input-style" name="raca" id="raca" required>
-                            <option value="branca">Branca</option>
-                            <option value="preta">Preta</option>
-                            <option value="parda">Parda</option>
-                            <option value="indigena">Indígena</option>
-                            <option value="amarela">Amarela</option>
+                            <option value="Branca">Branca</option>
+                            <option value="Preta">Preta</option>
+                            <option value="Parda">Parda</option>
+                            <option value="Indigena">Indigena</option>
+                            <option value="Amarela">Amarela</option>
                         </select>
                         <div>
-                            <label for="estado_civil">Estado Civil*:</label>
-                            <select class="input-style" name="estado_civil" id="estado_civil" required>
+                            <select class="input-style" name="estado_civil" placeholder="Informe o estado civil" id="estado_civil" required>
                                 <option value="S">Solteiro</option>
                                 <option value="C">Casado</option>
                                 <option value="D">Divorciado</option>
@@ -49,88 +53,82 @@
                     </div>
 
                     <div class="dual-input-container">
-                        <label for="sexo">Sexo*:</label>
                         <select class="input-style" name="sexo" id="sexo" required>
                             <option value="F">Feminino</option>
                             <option value="M">Masculino</option>
                         </select>
-                        <label for="data_nascimento">Data Nascimento:</label>
+                        <label for="data_nascimento">Data nascimento:</label>
                         <input type="date" class="input-style" value="" id="data_nascimento" name="data_nascimento"
                             required data-date-format="dd/mm/yyyy">
                     </div>
 
                     <div>
-                        <label for="endereco">Endereço:</label>
+
                         <input type="text" class="input-style" placeholder="Informe o endereço" name="endereco"
                             id="endereco">
                     </div>
 
                     <div class="triple-input-container">
-                        <label for="bairro">Bairro:</label>
+
                         <input type="text" class="input-style" placeholder="Informe o bairro" name="bairro" id="bairro">
-                        <label for="telefone">Telefone:</label>
+
                         <input type="text" class="input-style" placeholder="Informe o telefone" name="telefone"
                             id="telefone">
-                        <label for="profissao">Profissão</label>
+
                         <input type="text" class="input-style" placeholder="Informe a profissão" name="profissao"
                             id="profissao">
                     </div>
 
                     <div class="triple-input-container">
-                        <label for="numero">Número:</label>
+
                         <input type="number" class="input-style" placeholder="N.º" name="numero" id="numero">
-                        <label for="complemento">Complemento:</label>
+
                         <input type="text" class="input-style" placeholder="Informe o complemento" name="complemento"
                             id="complemento">
-                        <label for="cep">CEP:</label>
+
                         <input type="text" class="input-style" placeholder="Informe o CEP" name="cep" id="cep">
-                        <label for="naturalidade">Naturalidade:</label>
+
                         <input type="text" class="input-style" placeholder="Informe a naturalidade" name="naturalidade"
                             id="naturalidade">
                     </div>
 
                     <div class="triple-input-container">
-                        <label for="nome_pai">Nome pai:</label>
+
                         <input type="text" class="input-style" placeholder="Informe o nome do pai" name="nome_pai"
                             id="nome_pai">
-                        <label for="nome_mae">Nome mãe:</label>
+
                         <input type="text" class="input-style" placeholder="Informe o nome da mãe" name="nome_mae"
                             id="nome_mae">
-                        <label for="nome_responsavel">Nome responsável:</label>
+
                         <input type="text" class="input-style" placeholder="Informe o nome do responsável"
                             name="nome_responsavel" id="nome_responsavel">
                     </div>
 
                     <div>
-                        <label for="nome_social">Nome social:</label>
+
                         <input type="text" class="input-style" placeholder="Informe o nome social" name="nome_social"
                             id="nome_social">
                     </div>
 
                     <div class="triple-input-container">
-                        <label for="utilizar_nome_social">Utilizar nome social</label>
+                        <label for="utilizar_nome_social">Usar Nome Social:</label>
                         <select class="input-style" name="utilizar_nome_social" id="utilizar_nome_social">
                             <option value="N" selected>Não</option>
                             <option value="S">Sim</option>
                         </select>
-                        <label for="religiao">Religião:</label>
+
                         <input type="text" class="input-style" placeholder="Informe a religião" name="religiao"
                             id="religiao">
-                        <label for="orientacao_sexual">Orientação Sexual:</label>
-                        <input type="text" class="input-style" placeholder="Informe a orientação sexual"
-                            name="orientacao_sexual" id="orientacao_sexual">
+
+                        <select class="input-style" name="orientacao_sexual" id="orientacao_sexual">
+                        </select>
                     </div>
 
                     <br>
                     <div>
-                        <button class="input-style btt-animation" type="submit" style="padding: 12px 20px;">
-                            Cadastrar
-                        </button>
-
+                        <button id="bttForm" class="input-style" type="submit" style="padding: 12px 20px;">Cadastrar</button>
                         <div>
-                            <button class="input-style" onclick="goToIndex()">
-                                Voltar
-                            </button>
+                            <button class="input-style" onclick="goToIndex()">Voltar</button>
                         </div>
                         <script>
                             function goToIndex() {
@@ -142,13 +140,22 @@
             </div>
         </div>
 
-        <div>
-            <table id="tabelaPacientes">
+        <div id="mensagem">
 
-            </table>
         </div>
 
+        <div id="tabela">
+
+        </div>
     </body>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+    <script src="../modelo/Paciente.js"></script>
+    <script src="../controle/pacienteCtrl.js"></script>
 
 </html>

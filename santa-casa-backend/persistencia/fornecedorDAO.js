@@ -8,17 +8,17 @@ export default class FornecedorDAO{
             const conn = await conectar();
             const retorno = await conn.execute(sql, parametros);
             fornecedor.idFornecedor = retorno[0].insertID;
-            globalThis.poolConexoes.releaseConnection(conn);
+            global.poolConexoes.releaseConnection(conn);
         }
     }
 
     async atualizar(fornecedor){
         if(fornecedor instanceof Fornecedor){
             const sql = "UPDATE fornecedor SET cnpj = ?, f_nome = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, uf = ?, telefone = ? WHERE idFornecedor = ?";
-            const parametros = [fornecedor.cnpj, fornecedor.f_nome, fornecedor.endereco, fornecedor.numero, fornecedor.complemento, fornecedor.bairro, fornecedor.cidade, fornecedor.uf, fornecedor.telefone];
+            const parametros = [fornecedor.cnpj, fornecedor.f_nome, fornecedor.endereco, fornecedor.numero, fornecedor.complemento, fornecedor.bairro, fornecedor.cidade, fornecedor.uf, fornecedor.telefone, fornecedor.idFornecedor];
             const conexao = await conectar();
             await conexao.execute(sql,parametros);
-            globalThis.poolConexoes.releaseConnection(conexao);
+            global.poolConexoes.releaseConnection(conexao);
         }
     }
 
@@ -43,14 +43,14 @@ export default class FornecedorDAO{
             if(!termo){
                 termo="";
             }
-            sql = "SELECT * FROM fornecedor WHERE ifFornecedor = ?";
-            parametro=["%"+termo+"%"];
+            sql = "SELECT * FROM fornecedor WHERE f_nome like ? ORDER BY f_nome";
+            parametro = ["%" + termo + "%"];
         }
         const conexao = await conectar();
         const [registros, campos] = await conexao.execute(sql, parametro);
         let listaFornecedor = [];
         for(const registro of registros){
-            const forn = new Fornecedor(registro.idFornecedor,registro.cnpj,registro.f_nome,registro.endereco,registro.numero,registro.complemento,registro.bairro,registro.cidade,registro.uf,cidade.telefone);
+            const forn = new Fornecedor(registro.idFornecedor,registro.cnpj,registro.f_nome,registro.endereco,registro.numero,registro.complemento,registro.bairro,registro.cidade,registro.uf,registro.telefone);
             listaFornecedor.push(forn);
         }
         global.poolConexoes.releaseConnection(conexao);
