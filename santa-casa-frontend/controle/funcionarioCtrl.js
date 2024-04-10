@@ -14,7 +14,12 @@ function validarFormulario(evento){
         let nome = document.getElementById("nome").value;
         let coren = document.getElementById("coren").value;
         let telefone = document.getElementById( "telefone" ).value; 
-        let farmaceutico = document.getElementById("farmaceutico").value;
+        let farmaceutico = document.getElementById("farmaceutico");
+        if (farmaceutico.checked) {
+            farmaceutico = 'S';
+        } else {
+            farmaceutico = 'N';
+        }
         let fun = new Funcionario(0,nome, farmaceutico, coren, cpf, telefone);
 
         if (acao === 'cadastrar'){
@@ -58,7 +63,6 @@ function validarFormulario(evento){
                 .then((dados)=>{
                     exibirFun(); //atualizar a exibição da tabela
                     limparFormulario();
-                    exibirMensagem(dados.mensagem);
                 })
                 .catch((erro)=>{
                     exibirMensagem("Erro ao tentar excluir o registro: " + erro.message);
@@ -73,7 +77,12 @@ function validarFormulario(evento){
                 let nome = document.getElementById("nome").value;
                 let coren = document.getElementById("coren").value;
                 let telefone = document.getElementById( "telefone" ).value; 
-                let farmaceutico = document.getElementById("farmaceutico").value;
+                let farmaceutico = document.getElementById("farmaceutico");
+                if (farmaceutico.checked) {
+                    farmaceutico = 'S';
+                } else {
+                    farmaceutico = 'N';
+                }
                 let fun = new Funcionario(id,nome, farmaceutico, coren, cpf, telefone);
                 fetch(urlBase,{
                     method:"PATCH",
@@ -85,7 +94,7 @@ function validarFormulario(evento){
                 .then((dados)=>{
                     exibirFun(); //atualizar a exibição da tabela
                     limparFormulario();
-                    exibirMensagem(dados.mensagem);
+
                 })
                 .catch((erro)=>{
                     exibirMensagem("Erro ao tentar excluir o registro: " + erro.message);
@@ -188,7 +197,11 @@ function selecionarFun(pidFuncionario,pnome_funcionario,pcoren,pcpf,ptelefone_fu
     document.getElementById("nome").value = pnome_funcionario
     document.getElementById("coren").value = pcoren;
     document.getElementById("telefone").value = ptelefone_funcionario; 
-    document.getElementById("farmaceutico").value = pfarmaceutico;
+    if (pfarmaceutico === 'S') {
+        document.getElementById("farmaceutico").checked = true;
+    } else {
+        document.getElementById("farmaceutico").checked = false;
+    }
     let botao = document.getElementById('botao');
     if (modo == 'excluir'){
         acao = 'excluir';
