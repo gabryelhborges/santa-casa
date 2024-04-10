@@ -5,6 +5,8 @@ formFun.onsubmit = validarFormulario;
 exibirFun();
 var acao = 'cadastrar';
 
+var id;
+
 function validarFormulario(evento){
 
     if(formFun.checkValidity()){
@@ -43,8 +45,14 @@ function validarFormulario(evento){
         else if (acao === 'excluir'){
             if (confirm('Deseja realmente excluir esse funcionario?'))
             {
-                const cpf = document.getElementById("cpf").value;
-                fetch(urlBase+"/"+email, {method:"DELETE"}).then((resposta)=>{
+                let fun = new Funcionario(id);
+                fetch(urlBase,{
+                    method:"DELETE",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify(fun)
+                }).then((resposta)=>{
                     return resposta.json();
                 })
                 .then((dados)=>{
@@ -61,10 +69,18 @@ function validarFormulario(evento){
         else if (acao ==='alterar'){
             if (confirm('Deseja realmente alterar esse voluntario?'))
             {
-                const email = document.getElementById("email").value;
-                fetch(urlBase+ "/" + email,{method:"DELETE"})
-                .then((resposta)=>{
-                    return resposta.json();
+                let cpf = document.getElementById("cpf").value;
+                let nome = document.getElementById("nome").value;
+                let coren = document.getElementById("coren").value;
+                let telefone = document.getElementById( "telefone" ).value; 
+                let farmaceutico = document.getElementById("farmaceutico").value;
+                let fun = new Funcionario(id,nome, farmaceutico, coren, cpf, telefone);
+                fetch(urlBase,{
+                    method:"PATCH",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify(fun)
                 })
                 .then((dados)=>{
                     exibirFun(); //atualizar a exibição da tabela
@@ -123,7 +139,7 @@ function exibirFun(){
                     <td>${fun.idFuncionario}</td>
                     <td>${fun.nome_funcionario}</td>
                     <td>${fun.cpf}</td>
-                    <td>${fun.telefone_funcionario}<td>
+                    <td>${fun.telefone_funcionario}</td>
                     <td>${fun.coren}</td>
                     <td>${fun.farmaceutico}</td>
                     <td>
@@ -166,12 +182,12 @@ function gerarParametrosFun(fun){
     return `'${fun.idFuncionario}','${fun.nome_funcionario}','${fun.coren}','${fun.cpf}','${fun.telefone_funcionario}','${fun.farmaceutico}'`
 }
 
-function selecionarFun(pidFuncionario,pnome_funcionario,pcoren,pcpf,ptelefone_funcionario,pfarmaceutico){
-    document.getElementById('idFuncionario').value= pidFuncionario;
+function selecionarFun(pidFuncionario,pnome_funcionario,pcoren,pcpf,ptelefone_funcionario,pfarmaceutico,modo){
+    id = pidFuncionario;
     document.getElementById("cpf").value = pcpf;
-    document.getElementById("nome_funcionario").value = pnome_funcionario
+    document.getElementById("nome").value = pnome_funcionario
     document.getElementById("coren").value = pcoren;
-    document.getElementById( "telefone_funcionario" ).value = ptelefone_funcionario; 
+    document.getElementById("telefone").value = ptelefone_funcionario; 
     document.getElementById("farmaceutico").value = pfarmaceutico;
     let botao = document.getElementById('botao');
     if (modo == 'excluir'){
@@ -179,8 +195,8 @@ function selecionarFun(pidFuncionario,pnome_funcionario,pcoren,pcpf,ptelefone_fu
         botao.innerHTML = 'Excluir';
     }
     else if (modo == 'alterar'){
-    acao = 'alterar';
-    botao.innerHTML = 'Alterar';
+        acao = 'alterar';
+        botao.innerHTML = 'Alterar';
     }
 }
 
@@ -188,9 +204,11 @@ function limparFormulario(){
     document.getElementById("cpf").value = "";
     document.getElementById("nome").value = "";
     document.getElementById("coren").value = "";
-    document.getElementById( "telefone" ).value = ""; 
+    document.getElementById("telefone").value = ""; 
     document.getElementById("farmaceutico").value = "";
     acao="cadastrar";
+    let botao = document.getElementById('botao');
+    botao.innerHTML="Cadastrar";
 }
 
 function exibirMensagem(mensagem){

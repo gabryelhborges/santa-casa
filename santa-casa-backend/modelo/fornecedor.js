@@ -1,4 +1,4 @@
-import FornecedorDAO from "../persistencia/fornecedorDAO";
+import FornecedorDAO from '../persistencia/fornecedorDAO.js';
 
 export default class Fornecedor{
     #idFornecedor;

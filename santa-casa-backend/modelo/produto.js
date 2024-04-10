@@ -1,6 +1,6 @@
-import ProdutoDAO from "../persistencia/produtoDAO";
+import ProdutoDAO from "../persistencia/produtoDAO.js";
 
-export default class Produto{
+export default class Produto {
     #prod_ID
     #Fornecedor_idFornecedor 
     #nome
