@@ -1,4 +1,4 @@
-import FornecedorDAO from '../persistencia/fornecedorDAO.js';
+import FornecedorDAO from "../persistencia/fornecedorDAO.js";
 
 export default class Fornecedor{
     #idFornecedor;
@@ -156,6 +156,6 @@ export default class Fornecedor{
     }
     async consultar(termo){
         const fornDAO = new FornecedorDAO();
-        await fornDAO.consultar(termo);
+        return await fornDAO.consultar(termo);
     }
 }

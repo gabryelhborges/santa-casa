@@ -33,7 +33,7 @@ create table funcionarios(
     farmaceutico        varchar(1),
     coren               varchar(14),
     cpf                 varchar(14) not null unique,
-    telefone_funcinario varchar(20),
+    telefone_funcionario varchar(20),
     constraint pfFuncionario primary key (idFuncionario)
 );
 
@@ -45,14 +45,14 @@ create table fornecedor(
     numero integer,
     complemento varchar(200),
     bairro varchar(100),
-    cidade varchar(30), --maior nome de cidade do brasil tem 29 caracteres
+    cidade varchar(30), -- maior nome de cidade do brasil tem 29 caracteres
     uf char(2) not null,
     telefone varchar(14),
     constraint pk_fornecedor primary  key (idFornecedor);
 );
 
 create table produtos(
-    prod_ID integer not null auto_increment,
+    prod_ID integer not null,
     Fornecedor_idFornecedor integer not null,
     nome varchar(45) not null,
     psicotropico varchar(1) not null,
@@ -64,5 +64,5 @@ create table produtos(
     quantidade_total integer not null,
     tipo varchar(50) not null,
     constraint pk_prod primary key (prod_ID),
-    constraint fk_pf foreign key (Fornecedor_idFornecedor) references fornecedor
+    constraint fk_pf foreign key (Fornecedor_idFornecedor) references fornecedor(idFornecedor)
 );

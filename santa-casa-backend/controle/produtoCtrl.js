@@ -5,6 +5,7 @@ export default class ProdutoCtrl {
         resposta.type('application/json');
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
             const dados = requisicao.body;
+            const prod_ID = dados.prod_ID;
             const Fornecedor_idFornecedor = dados.Fornecedor_idFornecedor;
             const nome = dados.nome;
             const psicotropico = dados.psicotropico;
@@ -17,8 +18,8 @@ export default class ProdutoCtrl {
             const tipo = dados.tipo ;
             
             //Validar apenas os atributos que são NOT NULL?
-            if (Fornecedor_idFornecedor && nome && psicotropico && valor_custo && tipo && quantidade_total) {
-                const produto = new Produto(0, Fornecedor_idFornecedor, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
+            if (prod_ID && Fornecedor_idFornecedor && nome && psicotropico && valor_custo && tipo && quantidade_total) {
+                const produto = new Produto(prod_ID, Fornecedor_idFornecedor, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
                 produto.gravar().then(() => {
                     resposta.status(200).json({
                         "status": true,
