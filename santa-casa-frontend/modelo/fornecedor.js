@@ -1,6 +1,4 @@
-import FornecedorDAO from "../persistencia/fornecedorDAO.js";
-
-export default class Fornecedor{
+class Fornecedor{
     #idFornecedor;
     #cnpj;
     #f_nome;
@@ -12,7 +10,7 @@ export default class Fornecedor{
     #uf;
     #telefone;
 
-    constructor(idFornecedor=0,cnpj="",f_nome="",endereco="",numero=0,complemento="",bairro="",cidade="",uf="", telefone="") {
+    constructor(idFornecedor =0, cnpj="", f_nome="", endereco="", numero=0, complemento="", bairro="", cidade="", uf="", telefone=""){
         this.#idFornecedor = idFornecedor;
         this.#cnpj = cnpj;
         this.#f_nome = f_nome;
@@ -22,7 +20,7 @@ export default class Fornecedor{
         this.#bairro = bairro;
         this.#cidade = cidade;
         this.#uf = uf;
-        this.#telefone= telefone; 
+        this.#telefone = telefone;
     }
 
     // getter for idFornecedor
@@ -125,7 +123,9 @@ export default class Fornecedor{
         this.#telefone = value;
     }
 
-    toString(){}
+    toString(){
+        return "fornecedor: "+this.f_nome;
+    }
 
     toJSON(){
         return{
@@ -140,22 +140,5 @@ export default class Fornecedor{
             uf: this.#uf,
             telefone: this.#telefone
         };
-    }
-
-    async gravar(){
-        const fornDAO = new FornecedorDAO();
-        await fornDAO.gravar(this);
-    }
-    async atualizar(){
-        const fornDAO = new FornecedorDAO();
-        await fornDAO.atualizar(this);
-    }
-    async excluir(){
-        const fornDAO = new FornecedorDAO();
-        await fornDAO.excluir(this);
-    }
-    async consultar(termo){
-        const fornDAO = new FornecedorDAO();
-        return await fornDAO.consultar(termo);
     }
 }
