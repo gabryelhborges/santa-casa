@@ -46,7 +46,7 @@ export default class FornecedorCtrl{
 
     atualizar(requisicao,resposta) {
         resposta.type('application/json');
-        if((requisicao.method === "PUT" || requisicao === "PATCH") && requisicao.is("application/json")){
+        if((requisicao.method === "PUT" || requisicao.method === "PATCH") && requisicao.is("application/json")){
             const dados = requisicao.body;
             const idFornecedor = dados.idFornecedor;
             const cnpj = dados.cnpj;
@@ -59,7 +59,9 @@ export default class FornecedorCtrl{
             const uf = dados.uf;
             const telefone = dados.telefone;
             if(idFornecedor && cnpj && f_nome){
-                const forn = new Fornecedor(idFornecedor,cnpj,f_nome,endereco,numero,complemento,bairro,cidade,uf,telefone);
+                const forn = new Fornecedor(idFornecedor,cnpj,
+                    f_nome,endereco,numero,complemento,bairro,
+                    cidade,uf,telefone);
                 forn.atualizar().then(()=>{
                     resposta.status(200).json({
                         "status": true,

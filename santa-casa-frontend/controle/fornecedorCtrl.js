@@ -1,4 +1,4 @@
-const urlBase = 'http://localhost:4040/fornecedor';
+const urlBase = "http://localhost:4040/fornecedor";
 
 var formFor = document.getElementById('formFornecedor');
 formFor.reset();
@@ -9,6 +9,7 @@ var acao = 'cadastrar';
 var id;
 
 function validarFormulario(eventos) {
+
     if(formFor.checkValidity()){
         let cnpj = document.getElementById('cnpj').value;
         let f_nome = document.getElementById('f_nome').value;
@@ -54,27 +55,31 @@ function validarFormulario(eventos) {
                 let cidade = document.getElementById('cidade').value;
                 let uf = document.getElementById('uf').value;
                 let telefone = document.getElementById('telefone').value;
-                let forn = new Fornecedor(id,cnpj,f_nome,endereco,numero,complemento,bairro,cidade,uf,telefone);
+                let forn = new Fornecedor(id,cnpj,f_nome,endereco,
+                    numero,complemento,bairro,cidade,uf,telefone);
                 fetch(urlBase, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(forn)
-                }).then((resposta)=>{
-                    return resposta.json();
-                }).then((dados)=>{
-                    if(dados.mensagem){
-                        limparFormulario();
-                        exibirMensagem(dados.mensagem);
-                        exibirFornecedores();
-                    }
-                    else{
-                        exibirMensagem(dados.mensagem);
-                    }
-                }).catch((erro)=>{
-                    exibirMensagem('Não foi possível realizar a atualização do fornecedor: '+erro.message);
                 })
+                    .then((resposta) => {
+                        return resposta.json();
+                    })
+                    .then((dados) => {
+                        if (dados.mensagem) {
+                            limparFormulario();
+                            exibirMensagem(dados.mensagem);
+                            exibirFornecedores();
+                        }
+                        else {
+                            exibirMensagem(dados.mensagem);
+                        }
+                    })
+                    .catch((erro) => {
+                        exibirMensagem('Não foi possível realizar a operação: ' + erro.message);
+                    });
             }
         }
         else if (acao === 'excluir') {

@@ -14,10 +14,22 @@ export default class FornecedorDAO{
 
     async atualizar(fornecedor){
         if(fornecedor instanceof Fornecedor){
-            const sql = "UPDATE fornecedor SET cnpj = ?, f_nome = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, uf = ?, telefone = ? WHERE idFornecedor = ?";
-            const parametros = [fornecedor.cnpj, fornecedor.f_nome, fornecedor.endereco, fornecedor.numero, fornecedor.complemento, fornecedor.bairro, fornecedor.cidade, fornecedor.uf, fornecedor.telefone, fornecedor.idFornecedor];
+            const sql = "UPDATE fornecedor SET cnpj = ?, f_nome = ?,\
+             endereco = ?, numero = ?, complemento = ?, bairro = ?,\
+              cidade = ?, uf = ?, telefone = ? WHERE idFornecedor = ?";
+            const parametros = [fornecedor.cnpj,
+                 fornecedor.f_nome,
+                  fornecedor.endereco,
+                   fornecedor.numero,
+                    fornecedor.complemento,
+                     fornecedor.bairro,
+                      fornecedor.cidade,
+                       fornecedor.uf,
+                        fornecedor.telefone,
+                         fornecedor.idFornecedor];
             const conexao = await conectar();
-            await conexao.execute(sql,parametros);
+            const retorno = await conexao.execute(sql,parametros);
+            fornecedor.idFornecedor = retorno[0].insertId;
             global.poolConexoes.releaseConnection(conexao);
         }
     }
