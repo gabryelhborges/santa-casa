@@ -164,6 +164,9 @@ function exibirPacientes() {
                         <th>CPF</th>
                         <th>Nome</th>
                         <th>Data Nascimento</th>
+                        <th>Raça</th>
+                        <th>Estado Civil</th>
+                        <th>Sexo</th>
                     </tr>
                     `;
                     tabela.appendChild(cabecalho);
@@ -175,7 +178,10 @@ function exibirPacientes() {
                         <td>${paciente.idPaciente}</td>
                         <td>${paciente.cpf}</td>
                         <td>${paciente.nome}</td>
-                        <td>${paciente.data_nascimento}</td>
+                        <td>${formataData(paciente.data_nascimento)}</td>
+                        <td>${paciente.raca}</td>
+                        <td>${paciente.estado_civil}</td>
+                        <td>${paciente.sexo}</td>
                         <td>
                             <button class="btn btn-danger" onclick="selecionarPaciente(${gerarParametrosPaciente(paciente)},'excluir')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -210,7 +216,7 @@ function exibirPacientes() {
 function gerarParametrosPaciente(paciente) {
     return `'${paciente.idPaciente}','${paciente.cpf}','${paciente.nome}',
     '${paciente.raca}','${paciente.estado_civil}','${paciente.sexo}',
-    '${paciente.data_nascimento}','${paciente.endereco}','${paciente.bairro}',
+    '${formataData(paciente.data_nascimento)}','${paciente.endereco}','${paciente.bairro}',
     '${paciente.telefone}','${paciente.profissao}','${paciente.cadastro}',
     '${paciente.numero}','${paciente.complemento}','${paciente.cep}',
     '${paciente.naturalidade}','${paciente.nome_pai}','${paciente.nome_responsavel}',
@@ -259,21 +265,23 @@ function selecionarPaciente(idPaciente, cpf, nome, raca, estado_civil, sexo, dat
     document.getElementById('estado_civil').value = estado_civil;
     document.getElementById('sexo').value = sexo;
     document.getElementById('data_nascimento').value = formataData(data_nascimento);
-    document.getElementById('endereco').value = endereco;
-    document.getElementById('bairro').value = bairro;
-    document.getElementById('telefone').value = telefone;
-    document.getElementById('profissao').value = profissao;
-    document.getElementById('numero').value = numero;
-    document.getElementById('complemento').value = complemento;
-    document.getElementById('cep').value = cep;
-    document.getElementById('naturalidade').value = naturalidade;
-    document.getElementById('nome_pai').value = nome_pai;
-    document.getElementById('nome_responsavel').value = nome_responsavel;
-    document.getElementById('nome_mae').value = nome_mae;
-    document.getElementById('nome_social').value = nome_social;
-    document.getElementById('utilizar_nome_social').value = utilizar_nome_social;
-    document.getElementById('religiao').value = religiao;
-    document.getElementById('orientacao_sexual').value = orientacao_sexual;
+
+    //Variáveis que podem ser null, devem ser tratadas(if ternário)  ---->   variavel == "null" ? [verdade] : [falso]
+    document.getElementById('endereco').value = endereco == "null" ? "" : endereco;
+    document.getElementById('bairro').value = bairro == "null" ? "" : bairro;
+    document.getElementById('telefone').value = telefone == "null" ? "" : telefone;
+    document.getElementById('profissao').value = profissao == "null" ? "" : profissao;
+    document.getElementById('numero').value = numero == "null" ? "" : numero;
+    document.getElementById('complemento').value = complemento == "null" ? "" : complemento;
+    document.getElementById('cep').value = "null" ? "" : cep == "null" ? "" : cep;
+    document.getElementById('naturalidade').value = naturalidade == "null" ? "" : naturalidade;
+    document.getElementById('nome_pai').value = nome_pai == "null" ? "" : nome_pai;
+    document.getElementById('nome_responsavel').value = nome_responsavel == "null" ? "" : nome_responsavel;
+    document.getElementById('nome_mae').value = nome_mae == "null" ? "" : nome_mae;
+    document.getElementById('nome_social').value = nome_social == "null" ? "" : nome_social;
+    document.getElementById('utilizar_nome_social').value = utilizar_nome_social == "null" ? "" : utilizar_nome_social;
+    document.getElementById('religiao').value = religiao == "null" ? "" : religiao;
+    document.getElementById('orientacao_sexual').value = orientacao_sexual == "null" ? "" : orientacao_sexual;
 
     let bttForm = document.getElementById('bttForm');
     if (modo == 'alterar') {
