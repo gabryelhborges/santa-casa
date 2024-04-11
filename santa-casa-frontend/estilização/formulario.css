@@ -97,11 +97,3 @@
 .flex-container {
     display: flex;
   }
-
-
-
-#label{
-    margin-bottom: 10px;
-    padding-bottom: 50px;
-    display: inline-block;
-}

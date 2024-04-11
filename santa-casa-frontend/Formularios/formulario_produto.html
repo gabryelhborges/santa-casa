@@ -8,9 +8,11 @@
             Cadastrar Produto
         </title>
         <link rel="stylesheet" type="text/css" href="../estilização/formulario.css" media="screen" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     </head>
     <body class="body">
-        <div class="corpo">
+        <div class="corpo" style="padding-top: 250px;">
             <div class="fundo-formulario">
                 <div class="titulo-form">
                     <h2 >
@@ -26,12 +28,12 @@
                             <label >Código do Produto</label>
                             <label >Código do Fornecedor</label>
                         </div>
-                        <input id="iCodBarras"  type="text" class="input-style" placeholder="Código identificador de produto" name="codigo_produto" required>
-                        <input id="iCodFornecedor" type="text" class="input-style" placeholder="Código forenecedor" name="text" required>
+                        <input id="prod_ID"  type="text" class="input-style" placeholder="Código identificador de produto" name="codigo_produto" required>
+                        <input id="Fornecedor_idFornecedor" type="text" class="input-style" placeholder="Código forenecedor" name="text" required>
                     </div>
                     <label>&nbsp;&nbsp;&nbsp;Nome do Produto</label>
                     <div>
-                        <input id="iNomeProd" type="text" class="input-style" placeholder="Nome do Produto" name="nome" required>
+                        <input id="nome" type="text" class="input-style" placeholder="Nome do Produto" name="nome" required>
                     </div>
                     <div class="triple-input-container">
                         <div class="dual-input-container">
@@ -39,42 +41,38 @@
                             <label >Tipo do Produto</label>
                             <label >Valor de Custo</label>
                         </div>
-                        <input id="iQtdTotal" min="0" type="number" class="input-style" placeholder="Quantidade total" name="quantidade_total" min="0" max="1000" step="1" required>
+                        <input id="quantidade_total" type="number" class="input-style" placeholder="Quantidade total" name="quantidade_total" min="0" max="1000" step="1" required>
                         <div>
-                            <select id="sTipoProd" name="select" class="input-style">
-                                <option value="remedio" data-calc="remedio" >
-                                    Remédio
-                                </option>
-                                <option value="material" data-calc="material">
-                                    Material
-                                </option>
+                            <select id="tipo" name="select" class="input-style">
+                                <option value="Remedio" selected> Remedio </option>
+                                <option value="Material"> Material </option>
                             </select>
                         </div>
-                        <input id="iValorCusto" type="number" class="input-style" placeholder="Valor de Custo" name="valor_custo" min="0" max="1000" step="0.01" required>
+                        <input id="valor_custo" type="number" class="input-style" placeholder="Valor de Custo" name="valor_custo" min="0" max="1000" step="0.01" required>
                     </div>
                     <div class="dual-input-container">
                         <label >Ultima Compra</label>
                         <label >Ultima Saida</label>
                     </div>
                     <div class="dual-input-container">
-                        <input id="dUltimaCompra" type="date" class="input-style" value="2022-01-01" name="ultima_compra" required data-date-format="dd/mm/yyyy" required>
-                        <input id="dUltimaSaida" type="date" class="input-style" value="2022-02-01" name="ultima_saida" required data-date-format="dd/mm/yyyy" required>
+                        <input id="ultima_compra" type="date" class="input-style" value="2022-01-01" name="ultima_compra" required data-date-format="dd/mm/yyyy" required>
+                        <input id="ultima_saida" type="date" class="input-style" value="2022-02-01" name="ultima_saida" required data-date-format="dd/mm/yyyy" required>
                     </div>
                     <div>
-                        <label>&nbsp;&nbsp;&nbsp;Descrição</label>
-                        <textarea id="tDesc" class="input-style" rows="4" cols="50" name="descricao_uso" placeholder="Descrição de uso" maxlength="300" required></textarea>
+                        <label>&nbsp;&nbsp;&nbsp;Descrição de uso</label>
+                        <textarea id="descricao_uso" class="input-style" rows="4" cols="50" name="descricao_uso" placeholder="Descrição dde uso" maxlength="2000" required></textarea>
                     </div>
                     <div>
                         <label>&nbsp;&nbsp;&nbsp;Observações</label>
-                        <textarea id="tObs" class="input-style" rows="4" cols="50" name="observacao" placeholder="Observações" maxlength="2000" required></textarea>
+                        <textarea id="observacao" class="input-style" rows="4" cols="50" name="observacao" placeholder="Observações" maxlength="2000" required></textarea>
                     </div>
                     <div>
-                        <input id="iPsico" type="checkbox" name="checkbox" value="Psicotrópico">
+                        <input id="psicotropico" type="checkbox" name="checkbox" value="S">
                         <label>Psicotrópico</label>
                     </div>
                     <br>
                     <div>
-                        <button id="btnCadProd" class="input-style" type="submit" style="padding: 12px 20px;">
+                        <button id="bttForm" class="input-style" type="submit" style="padding: 12px 20px;">
                             Cadastrar
                         </button>
                         
@@ -93,20 +91,16 @@
             </div>
         </div>
         
-        <div id="mensagem">
+        <div id="mensagem" style="padding-top: 250px;"></div>
+        <div id="tabela"> </div>
 
-        </div>
-
-        <div id="tabela">
-
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
     integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
     crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
     <script src="../modelo/Produto.js"></script>
     <script src="../controle/produtoCtrl.js"></script>
-    </body>
 </html>
