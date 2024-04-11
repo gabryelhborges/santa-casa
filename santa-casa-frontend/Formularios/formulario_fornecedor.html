@@ -21,7 +21,7 @@
             <form id="formFornecedor" action="" method="POST" style="padding: 15px;">
                 <label>&nbsp;&nbsp;CNPJ:</label>
                 <div class="dual-input-container">
-                    <input id="cnpj" type="text" class="input-style" placeholder="CNPJ" name="cnpj" required>
+                    <input id="cnpj" type="text" onchange="mascaraCNPJ(this)" class="input-style" placeholder="CNPJ" name="cnpj" required>
                 </div>
                 <div class="dual-input-container">
                     <label>Nome do Fornecedor:</label>
@@ -83,7 +83,7 @@
                     </select>
                 </div>
                 <label>Telefone: </label>
-                <input id="telefone" type="text" class="input-style" placeholder="Telefone" name="telefone" required>
+                <input id="telefone" type="text" onchange="mascaraTelefone(this)" class="input-style" placeholder="Telefone" name="telefone"  required>
                 <br>
                 <hr/>
                 <div>
@@ -118,4 +118,5 @@
     crossorigin="anonymous"></script>
 <script src="../modelo/fornecedor.js"></script>
 <script src="../controle/fornecedorCtrl.js"></script>
+<script src="../util/util.js"></script>
 </html>
