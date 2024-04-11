@@ -13,6 +13,8 @@ function validarFormulario(evento){
         let cpf = document.getElementById("cpf").value;
         let nome = document.getElementById("nome").value;
         let coren = document.getElementById("coren").value;
+        if(!coren)
+            coren = ' ';
         let telefone = document.getElementById( "telefone" ).value; 
         let farmaceutico = document.getElementById("farmaceutico");
         if (farmaceutico.checked) {
@@ -195,7 +197,7 @@ function selecionarFun(pidFuncionario,pnome_funcionario,pcoren,pcpf,ptelefone_fu
     id = pidFuncionario;
     document.getElementById("cpf").value = pcpf;
     document.getElementById("nome").value = pnome_funcionario
-    document.getElementById("coren").value = pcoren;
+    document.getElementById("coren").value=pcoren == "null" ? "" : pcoren;
     document.getElementById("telefone").value = ptelefone_funcionario; 
     if (pfarmaceutico === 'S') {
         document.getElementById("farmaceutico").checked = true;
