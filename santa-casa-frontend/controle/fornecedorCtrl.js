@@ -176,7 +176,7 @@ function gerarParametrosFornecedor(fornecedor) {
     '${fornecedor.uf}','${fornecedor.telefone}'`;
 }
 
-function selecionarFornecedor(idFornecedor,cnpj,f_nome,endereco,numero,complemento,bairro,cidade,uf,telefone, modo){
+function selecionarFornecedor(idFornecedor, cnpj, f_nome, endereco, numero, complemento, bairro, cidade, uf, telefone, modo){
     document.getElementById('idFornecedor').value = idFornecedor;
     document.getElementById('cnpj').value = cnpj;
     document.getElementById('f_nome').value = f_nome;
