@@ -48,7 +48,7 @@ create table fornecedor(
     cidade varchar(30), -- maior nome de cidade do brasil tem 29 caracteres
     uf char(2) not null,
     telefone varchar(20),
-    constraint pk_fornecedor primary  key (idFornecedor);
+    constraint pk_fornecedor primary  key (idFornecedor)
 );
 
 create table produtos(

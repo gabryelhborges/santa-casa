@@ -19,13 +19,11 @@
                 <hr>
             </div>
             <form id="formFornecedor" action="" method="POST" style="padding: 15px;">
-                <label>&nbsp;&nbsp;CNPJ:</label>
+                <label>&nbsp;&nbsp;CNPJ: <strong>*</strong></label>
                 <div class="dual-input-container">
                     <input id="cnpj" type="text" onchange="mascaraCNPJ(this)" class="input-style" placeholder="CNPJ" name="cnpj" required>
                 </div>
-                <div class="dual-input-container">
-                    <label>Nome do Fornecedor:</label>
-                </div>
+                    <label>&nbsp;&nbsp;Nome do Fornecedor:<strong>*</strong></label>
                 <div class="dual-input-container">
                     <input id="f_nome" type="text" class="input-style" placeholder="Nome do fornecedor" name="n_fornecedor" required>
                 </div>
@@ -82,7 +80,7 @@
                         <option value="TO">TO</option>
                     </select>
                 </div>
-                <label>Telefone: </label>
+                <label>&nbsp;&nbsp;Telefone: </label>
                 <input id="telefone" type="text" onchange="mascaraTelefone(this)" class="input-style" placeholder="Telefone" name="telefone"  required>
                 <br>
                 <hr/>
@@ -105,10 +103,17 @@
             </form>
         </div>
     </div>
-
     <div id="mensagem"></div>
-
-    <div id="tabela"></div>
+    <div class="fundo-formulario">
+        <br>
+        <label>&nbsp;&nbsp;Nome para busca</label>
+        <input id="nomebusca" type="text" class="input-style" placeholder="Nome" name="nome">
+        <div class="dual-input-container">
+            <button id="btnBuscar" class="input-style" style="margin-bottom: 10px;">Buscar Fornecedor pelo Nome</button>
+            <button type="button" class="input-style" onclick="window.location.reload();">Cancelar</button>
+        </div>
+        <div id="tabela"></div>
+    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
     integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
