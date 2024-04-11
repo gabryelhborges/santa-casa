@@ -9,18 +9,18 @@ var acao = 'cadastrar';
 
 function validarFormulario(evento) {
     if (formProd.checkValidity()) {
-        let iCodBarras = document.getElementById('iCodProd').value;
-        let iCodFornecedor = document.getElementById('iCodFornecedor').value;
-        let iNomeProd = document.getElementById('iNomeProd').value;
-        let iQtdTotal = document.getElementById('iQtdTotal').value;
-        let sTipoProd = document.getElementById('sTipoProd').value;
-        let iValorCusto = document.getElementById('iValorCusto').value;
-        let dUltimaCompra = document.getElementById('dUltimaCompra').value;
-        let dUltimaSaida = document.getElementById('dUltimaSaida').value;
-        let tDesc = document.getElementById('tDesc').value;
-        let tObs = document.getElementById('tObs').value;
-        let iPsico = document.getElementById('iPsico').value;
-        let produto = new Produto(iCodBarras,iCodFornecedor, iNomeProd, iQtdTotal, sTipoProd, iValorCusto, dUltimaCompra, dUltimaSaida, tDesc, tObs, cadastro, iPsico);
+        let prod_ID = document.getElementById('prod_ID').value;
+        let Fornecedor_idFornecedor = document.getElementById('Fornecedor_idFornecedor').value;
+        let nome = document.getElementById('nome').value;
+        let psicotropico = document.getElementById('psicotropico').value;
+        let valor_custo = document.getElementById('valor_custo').value;
+        let ultima_compra = document.getElementById('ultima_compra').value;
+        let ultima_saida = document.getElementById('ultima_saida').value;
+        let observacao = document.getElementById('observacao').value;
+        let descricao_uso = document.getElementById('descricao_uso').value;
+        let quantidade_total = document.getElementById('quantidade_total').value;
+        let tipo = document.getElementById('tipo').value;
+        let produto = new Produto(prod_ID,Fornecedor_idFornecedor, nome, psicotropico, valor_custo, ultima_compra, ultima_saida,  observacao, descricao_uso, quantidade_total, tipo);
         
         if (acao === 'cadastrar') {
             fetch(urlBase, {
@@ -49,18 +49,18 @@ function validarFormulario(evento) {
         }
         else if (acao === 'alterar') {
             if (confirm('Deseja realmente alterar esse produto?')) {
-                let iCodBarras = document.getElementById('iCodProd').value;
-                let iCodFornecedor = document.getElementById('iCodFornecedor').value;
-                let iNomeProd = document.getElementById('iNomeProd').value;
-                let iQtdTotal = document.getElementById('iQtdTotal').value;
-                let sTipoProd = document.getElementById('sTipoProd').value;
-                let iValorCusto = document.getElementById('iValorCusto').value;
-                let dUltimaCompra = document.getElementById('dUltimaCompra').value;
-                let dUltimaSaida = document.getElementById('dUltimaSaida').value;
-                let tDesc = document.getElementById('tDesc').value;
-                let tObs = document.getElementById('tObs').value;
-                let iPsico = document.getElementById('iPsico').value;
-                let produto = new Produto(iCodBarras,iCodFornecedor, iNomeProd, iQtdTotal, sTipoProd, iValorCusto, dUltimaCompra, dUltimaSaida, tDesc, tObs, cadastro, iPsico);
+                let prod_ID = document.getElementById('prod_ID').value;
+                let Fornecedor_idFornecedor = document.getElementById('Fornecedor_idFornecedor').value;
+                let nome = document.getElementById('nome').value;
+                let psicotropico = document.getElementById('psicotropico').value;
+                let valor_custo = document.getElementById('valor_custo').value;
+                let ultima_compra = document.getElementById('ultima_compra').value;
+                let ultima_saida = document.getElementById('ultima_saida').value;
+                let observacao = document.getElementById('observacao').value;
+                let descricao_uso = document.getElementById('descricao_uso').value;
+                let quantidade_total = document.getElementById('quantidade_total').value;
+                let tipo = document.getElementById('tipo').value;
+                let produto = new Produto(prod_ID,Fornecedor_idFornecedor, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
                 fetch(urlBase, {
                     method: 'PATCH',
                     headers: {
@@ -88,8 +88,8 @@ function validarFormulario(evento) {
         }
         else if (acao === 'excluir') {
             if (confirm('Deseja realmente excluir esse produto?')) {
-                let iCodBarras = document.getElementById('iCodProd').value;
-                let produto = new Produto(iCodBarras);
+                let prod_ID = document.getElementById('prod_ID').value;
+                let produto = new Produto(prod_ID);
                 fetch(urlBase, {
                     method: 'DELETE',
                     headers: {
@@ -137,9 +137,9 @@ function exibirProdutos() {
                     let cabecalho = document.createElement('thead');
                     cabecalho.innerHTML = `
                     <tr>
-                        <th>Código</th>
+                        <th>Código Produto</th>
+                        <th>Código Fornecedor</th>
                         <th>Nome</th>
-                        <th>Descrição</th>
                         <th>Valor</th>
                     </tr>
                     `;
@@ -149,10 +149,10 @@ function exibirProdutos() {
                         let linha = document.createElement('tr');
                         let produto = listaProdutos[i];
                         linha.innerHTML = `
-                        <td>${produto.iCodBarras}</td>
-                        <td>${produto.iNomeProd}</td>
-                        <td>${produto.tDesc}</td>
-                        <td>${produto.iValorCusto}</td>
+                        <td>${produto.prod_ID}</td>
+                        <td>${produto.Fornecedor_idFornecedor}</td>
+                        <td>${produto.nome}</td>
+                        <td>${produto.valor_custo}</td>
                         <td>
                             <button class="btn btn-danger" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'excluir')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -185,10 +185,10 @@ function exibirProdutos() {
 }
 
 function gerarParametrosProduto(produto) {
-    return `'${produto.iCodBarras}','${produto.iCodFornecedor}','${produto.iNomeProd}',
-    '${produto.iQtdTotal}','${produto.sTipoProd}','${produto.iValorCusto}',
-    '${produto.dUltimaCompra}','${produto.dUltimaSaida}','${produto.tDesc}',
-    '${produto.tObs}','${produto.iPsico}'`;
+    return `'${produto.prod_ID}','${produto.Fornecedor_idFornecedor}','${produto.nome}',
+    '${produto.psicotropico}','${produto.valor_custo}','${formataData(produto.ultima_compra)}',
+    '${formataData(produto.ultima_saida)}','${produto.observacao}','${produto.descricao_uso}',
+    '${produto.quantidade_total}','${produto.tipo}'`;
 }
 
 function formataData(dataParametro){
@@ -224,19 +224,19 @@ function dataAtualFormatada(){
     return dataFormatada;
 }
 
-function selecionarProduto(iCodBarras,iCodFornecedor, iNomeProd, iQtdTotal, sTipoProd, iValorCusto, dUltimaCompra, dUltimaSaida, tDesc, tObs, cadastro, iPsico) {
+function selecionarProduto(prod_ID,Fornecedor_idFornecedor, nome, psicotropico, valor_custo, ultima_compra, ultima_saida,  observacao, descricao_uso, quantidade_total, tipo, modo) {
    
-        document.getElementById('iCodBarras').value = iCodBarras;
-        document.getElementById('iCodFornecedor').value = iCodFornecedor;
-        document.getElementById('iNomeProd').value = iNomeProd;
-        document.getElementById('iQtdTotal').value = iQtdTotal;
-        document.getElementById('sTipoProd').value = sTipoProd;
-        document.getElementById('iValorCusto').value = iValorCusto;
-        document.getElementById('dUltimaCompra').value = dUltimaCompra;
-        document.getElementById('dUltimaSaida').value = dUltimaSaida;
-        document.getElementById('tDesc').value = tDesc;
-        document.getElementById('tObs').value = tObs;
-        document.getElementById('iPsico').value = iPsico;
+        document.getElementById('prod_ID').value = prod_ID;
+        document.getElementById('Fornecedor_idFornecedor').value = Fornecedor_idFornecedor;
+        document.getElementById('nome').value = nome;
+        document.getElementById('psicotropico').value = psicotropico;
+        document.getElementById('valor_custo').value = valor_custo;
+        document.getElementById('ultima_compra').value = ultima_compra;
+        document.getElementById('ultima_saida').value = ultima_saida;
+        document.getElementById('observacao').value = observacao;
+        document.getElementById('descricao_uso').value = descricao_uso;
+        document.getElementById('quantidade_total').value = quantidade_total;
+        document.getElementById('tipo').value = tipo;
 
     let bttForm = document.getElementById('bttForm');
     if (modo == 'alterar') {
@@ -250,17 +250,17 @@ function selecionarProduto(iCodBarras,iCodFornecedor, iNomeProd, iQtdTotal, sTip
 }
 
 function limparFormulario() {
-    document.getElementById('iCodBarras').value = '';
-    document.getElementById('iCodFornecedor').value = '';
-    document.getElementById('iNomeProd').value = '';
-    document.getElementById('iQtdTotal').value = '';
-    document.getElementById('sTipoProd').value = '';
-    document.getElementById('iValorCusto').value = '';
-    document.getElementById('dUltimaCompra').value = '';
-    document.getElementById('dUltimaSaida').value = '';
-    document.getElementById('tDesc').value = '';
-    document.getElementById('tObs').value = '';
-    document.getElementById('iPsico').value = '';
+    document.getElementById('prod_ID').value = '';
+    document.getElementById('Fornecedor_idFornecedor').value = '';
+    document.getElementById('nome').value = '';
+    document.getElementById('psicotropico').value = '';
+    document.getElementById('valor_custo').value = '';
+    document.getElementById('ultima_compra').value = '';
+    document.getElementById('ultima_saida').value = '';
+    document.getElementById('observacao').value = '';
+    document.getElementById('descricao_uso').value = '';
+    document.getElementById('quantidade_total').value = '';
+    document.getElementById('tipo').value = '';
 
     acao = "cadastrar";
     let bttForm = document.getElementById('bttForm');
