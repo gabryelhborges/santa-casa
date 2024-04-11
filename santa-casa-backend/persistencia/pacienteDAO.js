@@ -55,7 +55,29 @@ export default class PacienteDAO{
         let listaPacientes = [];
         //Preenchendo a lista com cada registro retornado
         for(const registro of registros){
-            const paciente = new Paciente(registro.id_paciente, registro.cpf, registro.nome, registro.raca, registro.estado_civil, registro.sexo, registro.data_nascimento, registro.endereco, registro.bairro, registro.telefone, registro.profissao, registro.numero, registro.complemento, registro.cep, registro.naturalidade, registro.nome_pai, registro.nome_responsavel, registro.nome_mae, registro.nome_social, registro.utilizar_nome_social, registro.religiao, registro.orientacao_sexual);
+            let paciente = new Paciente(registro.id_paciente, 
+                registro.cpf, 
+                registro.nome, 
+                registro.raca, 
+                registro.estado_civil, 
+                registro.sexo, 
+                registro.data_nascimento, 
+                registro.endereco, 
+                registro.bairro, 
+                registro.telefone, 
+                registro.profissao, 
+                registro.cadastro,
+                registro.numero, 
+                registro.complemento, 
+                registro.cep, 
+                registro.naturalidade, 
+                registro.nome_pai, 
+                registro.nome_responsavel, 
+                registro.nome_mae, 
+                registro.nome_social, 
+                registro.utilizar_nome_social, 
+                registro.religiao, 
+                registro.orientacao_sexual);
             listaPacientes.push(paciente);
         }
         global.poolConexoes.releaseConnection(conexao);
