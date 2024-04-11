@@ -123,9 +123,7 @@ class Fornecedor{
         this.#telefone = value;
     }
 
-    toString(){
-        return "fornecedor: "+this.f_nome;
-    }
+    toString(){}
 
     toJSON(){
         return{
@@ -140,5 +138,9 @@ class Fornecedor{
             uf: this.#uf,
             telefone: this.#telefone
         };
+    }
+
+    toString(){
+        return "fornecedor: "+this.f_nome;
     }
 }

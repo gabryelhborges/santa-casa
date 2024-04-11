@@ -8,7 +8,7 @@ function mascaraCPF(input){
 
 function mascaraCNPJ(input){
     let cnpj = input.value.replace(/\D/g, '');
-    cnpj = cnpj.replace(/(\d{2})(d{3})(d{3})(d{2})(d{2})/,"$1.$2.$3/$4-$5");
+    cnpj = cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
     input.value = cnpj;
 }
 

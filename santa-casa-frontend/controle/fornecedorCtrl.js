@@ -6,6 +6,7 @@ formFor.onsubmit=validarFormulario;
 
 exibirFornecedores();
 var acao = 'cadastrar';
+var id;
 
 function validarFormulario(eventos) {
     if(formFor.checkValidity()){
@@ -44,7 +45,6 @@ function validarFormulario(eventos) {
         }
         else if (acao === 'alterar'){
             if(confirm('Deseja realmente alterar esse fornecedor?')){
-                let idFornecedor = document.getElementById('idFornecedor').value;
                 let cnpj = document.getElementById('cnpj').value;
                 let f_nome = document.getElementById('f_nome').value;
                 let endereco = document.getElementById('endereco').value;
@@ -54,7 +54,7 @@ function validarFormulario(eventos) {
                 let cidade = document.getElementById('cidade').value;
                 let uf = document.getElementById('uf').value;
                 let telefone = document.getElementById('telefone').value;
-                let forn = new Fornecedor(idFornecedor,cnpj,f_nome,endereco,numero,complemento,bairro,cidade,uf,telefone);
+                let forn = new Fornecedor(id,cnpj,f_nome,endereco,numero,complemento,bairro,cidade,uf,telefone);
                 fetch(urlBase, {
                     method: 'PATCH',
                     headers: {
@@ -79,8 +79,7 @@ function validarFormulario(eventos) {
         }
         else if (acao === 'excluir') {
             if(confirm('Deseja realmente excluir esse fornecedor?')){
-                const idFornecedor = document.getElementById('idFornecedor').value;
-                let forn = new Fornecedor(idFornecedor);
+                let forn = new Fornecedor(id);
                 fetch(urlBase, {
                     method: 'DELETE',
                     headers: {
@@ -176,8 +175,8 @@ function gerarParametrosFornecedor(fornecedor) {
     '${fornecedor.uf}','${fornecedor.telefone}'`;
 }
 
-function selecionarFornecedor(idFornecedor, cnpj, f_nome, endereco, numero, complemento, bairro, cidade, uf, telefone, modo){
-    document.getElementById('idFornecedor').value = idFornecedor;
+function selecionarFornecedor(idFornecedor,cnpj,f_nome,endereco,numero,complemento,bairro,cidade,uf,telefone, modo){
+    id = idFornecedor;
     document.getElementById('cnpj').value = cnpj;
     document.getElementById('f_nome').value = f_nome;
     document.getElementById('endereco').value = endereco;
