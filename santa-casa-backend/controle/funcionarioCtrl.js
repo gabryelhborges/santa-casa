@@ -45,7 +45,7 @@ export default class FuncionarioCtrl{
         resposta.type('application/json');
         if((requisicao.method === "PUT" || requisicao.method === "PATCH") && requisicao.is("application/json")){
             const dados = requisicao.body;
-            const  idFuncionario = dados.idFuncionario
+            const idFuncionario = dados.idFuncionario
             const nome_funcionario = dados.nome_funcionario;
             const farmaceutico = dados.farmaceutico;
             const coren = dados.coren;

@@ -15,7 +15,13 @@ export default class PacienteDAO{
 
     async atualizar(paciente){
         if(paciente instanceof Paciente){
-            const sql = "UPDATE pacientes SET cpf = ?, nome = ?, raca = ?, estado_civil = ?, sexo = ?, data_nascimento = ?, endereco = ?, bairro = ?, telefone = ?, profissao = ?, numero = ?, complemento = ?, cep = ?, naturalidade = ?, nome_pai = ?, nome_responsavel = ?, nome_mae = ?, nome_social = ?, utilizar_nome_social = ?, religiao = ?, orientacao_sexual = ? WHERE id_paciente = ?";
+            const sql = "UPDATE pacientes SET cpf = ?, nome = ?,\
+             raca = ?, estado_civil = ?, sexo = ?, data_nascimento = ?,\
+              endereco = ?, bairro = ?, telefone = ?, profissao = ?,\
+               numero = ?, complemento = ?, cep = ?, naturalidade = ?,\
+                nome_pai = ?, nome_responsavel = ?, nome_mae = ?,\
+                 nome_social = ?, utilizar_nome_social = ?, religiao = ?,\
+                  orientacao_sexual = ? WHERE id_paciente = ?";
             const parametros = [paciente.cpf, paciente.nome, paciente.raca, paciente.estado_civil, paciente.sexo, paciente.data_nascimento, paciente.endereco, paciente.bairro, paciente.telefone, paciente.profissao, paciente.numero, paciente.complemento, paciente.cep, paciente.naturalidade, paciente.nome_pai, paciente.nome_responsavel, paciente.nome_mae, paciente.nome_social, paciente.utilizar_nome_social, paciente.religiao, paciente.orientacao_sexual, paciente.idPaciente];
             const conexao = await conectar();
             await conexao.execute(sql, parametros);

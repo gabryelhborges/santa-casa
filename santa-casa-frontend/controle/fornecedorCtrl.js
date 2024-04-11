@@ -1,4 +1,4 @@
-const urlBase = 'http://localhost:4040/fornecedor';
+const urlBase = "http://localhost:4040/fornecedor";
 
 var formFor = document.getElementById('formFornecedor');
 formFor.reset();
@@ -6,8 +6,10 @@ formFor.onsubmit=validarFormulario;
 
 exibirFornecedores();
 var acao = 'cadastrar';
+var id;
 
 function validarFormulario(eventos) {
+
     if(formFor.checkValidity()){
         let cnpj = document.getElementById('cnpj').value;
         let f_nome = document.getElementById('f_nome').value;
@@ -44,7 +46,6 @@ function validarFormulario(eventos) {
         }
         else if (acao === 'alterar'){
             if(confirm('Deseja realmente alterar esse fornecedor?')){
-                let idFornecedor = document.getElementById('idFornecedor').value;
                 let cnpj = document.getElementById('cnpj').value;
                 let f_nome = document.getElementById('f_nome').value;
                 let endereco = document.getElementById('endereco').value;
@@ -54,33 +55,36 @@ function validarFormulario(eventos) {
                 let cidade = document.getElementById('cidade').value;
                 let uf = document.getElementById('uf').value;
                 let telefone = document.getElementById('telefone').value;
-                let forn = new Fornecedor(idFornecedor,cnpj,f_nome,endereco,numero,complemento,bairro,cidade,uf,telefone);
+                let forn = new Fornecedor(id,cnpj,f_nome,endereco,
+                    numero,complemento,bairro,cidade,uf,telefone);
                 fetch(urlBase, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(forn)
-                }).then((resposta)=>{
-                    return resposta.json();
-                }).then((dados)=>{
-                    if(dados.mensagem){
-                        limparFormulario();
-                        exibirMensagem(dados.mensagem);
-                        exibirFornecedores();
-                    }
-                    else{
-                        exibirMensagem(dados.mensagem);
-                    }
-                }).catch((erro)=>{
-                    exibirMensagem('Não foi possível realizar a atualização do fornecedor: '+erro.message);
                 })
+                    .then((resposta) => {
+                        return resposta.json();
+                    })
+                    .then((dados) => {
+                        if (dados.mensagem) {
+                            limparFormulario();
+                            exibirMensagem(dados.mensagem);
+                            exibirFornecedores();
+                        }
+                        else {
+                            exibirMensagem(dados.mensagem);
+                        }
+                    })
+                    .catch((erro) => {
+                        exibirMensagem('Não foi possível realizar a operação: ' + erro.message);
+                    });
             }
         }
         else if (acao === 'excluir') {
             if(confirm('Deseja realmente excluir esse fornecedor?')){
-                const idFornecedor = document.getElementById('idFornecedor').value;
-                let forn = new Fornecedor(idFornecedor);
+                let forn = new Fornecedor(id);
                 fetch(urlBase, {
                     method: 'DELETE',
                     headers: {
@@ -177,7 +181,7 @@ function gerarParametrosFornecedor(fornecedor) {
 }
 
 function selecionarFornecedor(idFornecedor,cnpj,f_nome,endereco,numero,complemento,bairro,cidade,uf,telefone, modo){
-    document.getElementById('idFornecedor').value = idFornecedor;
+    id = idFornecedor;
     document.getElementById('cnpj').value = cnpj;
     document.getElementById('f_nome').value = f_nome;
     document.getElementById('endereco').value = endereco;
