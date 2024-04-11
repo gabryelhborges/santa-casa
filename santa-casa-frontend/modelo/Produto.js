@@ -1,6 +1,4 @@
-
-
-export default class Produto{
+class Produto{
     #prod_ID
     #Fornecedor_idFornecedor 
     #nome
@@ -8,13 +6,13 @@ export default class Produto{
     #valor_custo
     #ultima_compra
     #ultima_saida
-    #quantidade_total
     #observacao
     #descricao_uso
+    #quantidade_total
     #tipo
     
 
-    constructor(prod_ID=0,Fornecedor_idFornecedor=0,nome="",psicotropico="",valor_custo=0,ultima_compra="",ultima_saida="",quantidade_total=0,observacao="", descricao_uso="", tipo="") {
+    constructor(prod_ID=0,Fornecedor_idFornecedor=0,nome="",psicotropico="",valor_custo=0,ultima_compra="",ultima_saida="",observacao="", descricao_uso="", quantidade_total=0,tipo="") {
         this.#prod_ID = prod_ID;
         this.#Fornecedor_idFornecedor = Fornecedor_idFornecedor;
         this.#nome = nome;
@@ -22,9 +20,9 @@ export default class Produto{
         this.#valor_custo = valor_custo;
         this.#ultima_compra = ultima_compra;
         this.#ultima_saida = ultima_saida;
-        this.#quantidade_total = quantidade_total;
         this.#observacao = observacao;
         this.#descricao_uso= descricao_uso; 
+        this.#quantidade_total = quantidade_total;
         this.#tipo = tipo;
     }
 
@@ -147,9 +145,9 @@ export default class Produto{
             valor_custo: this.#valor_custo,
             ultima_compra: this.#ultima_compra,
             ultima_saida: this.#ultima_saida,
-            quantidade_total: this.#quantidade_total,
             observacao: this.#observacao,
             descricao_uso: this.#descricao_uso,
+            quantidade_total: this.#quantidade_total,
             tipo: this.#tipo
         };
     }
