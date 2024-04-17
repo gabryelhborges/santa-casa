@@ -4,6 +4,7 @@ var formProd = document.getElementById('formProduto');
 formProd.reset();
 formProd.onsubmit = validarFormulario;
 
+inputFornecedoresNome();
 exibirProdutos();
 var acao = 'cadastrar';
 
@@ -129,7 +130,7 @@ function inputFornecedoresNome(){
         .then((json) => {
             let select = document.getElementById('Fornecedor_idFornecedor');
             
-            listaFor = json.listaFor;
+            listaFor = json.listaFornecedor;
             if (Array.isArray(listaFor)) {
                 if (listaFor.length > 0) {
                     for (let i = 0; i < listaFor.length; i++) {
@@ -188,7 +189,7 @@ function exibirProdutos() {
                         linha.innerHTML = `
                         <td>${produto.prod_ID}</td>
                         <td>${produto.nome}</td>
-                        <td>${produto.nome}</td>
+                        <td>${produto.Fornecedor_idFornecedor}</td>
                         <td>${produto.valor_custo}</td>
                         <td>
                             <button class="btn btn-danger" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'excluir')">

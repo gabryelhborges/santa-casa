@@ -88,5 +88,5 @@ create table nomefarmacologico(
 create table formafarmaceutica(
     ffa_cod integer not null auto_increment,
     forma varchar(40) not null,
-    constraint pk_ffa primary key(ffa-cod)
+    constraint pk_ffa primary key(ffa_cod)
 );
