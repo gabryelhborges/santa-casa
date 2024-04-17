@@ -12,6 +12,23 @@ function mascaraCNPJ(input){
     input.value = cnpj;
 }
 
+function mascaraValor(input) {
+ // Remove caracteres não numéricos
+ var valor = input.value.replace(/\D/g, '');
+
+ // Adiciona a vírgula para separar os centavos
+ var valorFormatado = (parseInt(valor) / 100).toFixed(2);
+
+ // Adiciona os pontos de milhar
+ valorFormatado = valorFormatado.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+ // Atualiza o valor do input
+ input.value = valorFormatado;
+}
+
+
+
+
 function mascaraTelefone(input) {
     // Remove qualquer caractere que não seja número
     let telefone = input.value.replace(/\D/g, '');

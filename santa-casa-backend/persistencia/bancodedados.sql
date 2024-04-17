@@ -66,3 +66,27 @@ create table produtos(
     constraint pk_prod primary key (prod_ID),
     constraint fk_pf foreign key (Fornecedor_idFornecedor) references fornecedor(idFornecedor)
 );
+
+create table fabricante(
+    fab_cod integer not null auto_increment,
+    fab_nome varchar(70) not null,
+    constraint pk_fab primary key (fab_cod)
+);
+
+create table unidade(
+    un_cod integer not null auto_increment,
+    unidade varchar(30) not null,
+    constraint pk_un primary key (un_cod)
+);
+
+create table nomefarmacologico(
+    far_cod integer not null auto_increment,
+    nome_far varchar(70) not null,
+    constraint pk_far primary key (far_cod)
+);
+
+create table formafarmaceutica(
+    ffa_cod integer not null auto_increment,
+    forma varchar(40) not null,
+    constraint pk_ffa primary key(ffa-cod)
+);
