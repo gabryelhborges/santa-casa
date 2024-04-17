@@ -1,5 +1,5 @@
 const urlBase = 'http://localhost:4040/produto';
-
+const urlForn = 'http://localhost:4040/fornecedor';
 var formProd = document.getElementById('formProduto');
 formProd.reset();
 formProd.onsubmit = validarFormulario;
@@ -13,7 +13,7 @@ function validarFormulario(evento) {
         let Fornecedor_idFornecedor = document.getElementById('Fornecedor_idFornecedor').value;
         let nome = document.getElementById('nome').value;
         let psicotropico = document.getElementById('psicotropico').value;
-        let valor_custo = document.getElementById('valor_custo').value;
+        let valor_custo = stringParaDecimal(document.getElementById('valor_custo').value);
         let ultima_compra = document.getElementById('ultima_compra').value;
         let ultima_saida = document.getElementById('ultima_saida').value;
         let observacao = document.getElementById('observacao').value;
@@ -53,7 +53,7 @@ function validarFormulario(evento) {
                 let Fornecedor_idFornecedor = document.getElementById('Fornecedor_idFornecedor').value;
                 let nome = document.getElementById('nome').value;
                 let psicotropico = document.getElementById('psicotropico').value;
-                let valor_custo = document.getElementById('valor_custo').value;
+                let valor_custo = stringParaDecimal(document.getElementById('valor_custo').value);
                 let ultima_compra = document.getElementById('ultima_compra').value;
                 let ultima_saida = document.getElementById('ultima_saida').value;
                 let observacao = document.getElementById('observacao').value;
@@ -118,8 +118,45 @@ function validarFormulario(evento) {
     evento.stopPropagation();
 }
 
+function inputFornecedoresNome(){
+    fetch(urlForn,{
+        method: 'GET',
+        redirect: 'follow'
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            let select = document.getElementById('Fornecedor_idFornecedor');
+            
+            listaFor = json.listaFor;
+            if (Array.isArray(listaFor)) {
+                if (listaFor.length > 0) {
+                    for (let i = 0; i < listaFor.length; i++) {
+                        let fornecedor = listaFor[i];
+                        let option = document.createElement('option');
+                        option.text = fornecedor.f_nome;
+                        option.value = fornecedor.idFornecedor;
+                        select.appendChild(option);
+                    }
+                }
+                else {
+                    select.innerHTML = `<option>Erro Fornecedores</option>`;
+                }
+            }
+        })
+        .catch((erro) => {
+            exibirMensagem('Não foi possível recuperar os fornecedores do backend: ' + erro.message);
+        });
+}
+
+
+// function listaNomeFor(){
+    
+// }
+
 function exibirProdutos() {
-    fetch(urlBase, {
+    fetch(urlBase,{
         method: 'GET',
         redirect: 'follow'
     })
@@ -138,8 +175,8 @@ function exibirProdutos() {
                     cabecalho.innerHTML = `
                     <tr>
                         <th>Código Produto</th>
-                        <th>Código Fornecedor</th>
-                        <th>Nome</th>
+                        <th>Produto</th>
+                        <th>Fornecedor</th>
                         <th>Valor</th>
                     </tr>
                     `;
@@ -150,7 +187,7 @@ function exibirProdutos() {
                         let produto = listaProdutos[i];
                         linha.innerHTML = `
                         <td>${produto.prod_ID}</td>
-                        <td>${produto.Fornecedor_idFornecedor}</td>
+                        <td>${produto.nome}</td>
                         <td>${produto.nome}</td>
                         <td>${produto.valor_custo}</td>
                         <td>
@@ -275,4 +312,14 @@ function exibirMensagem(mensagem) {
     setTimeout(() => {
         elemMensagem.innerHTML = '';
     }, 7000);//7 Segundos
+}
+
+function stringParaDecimal(stringValor) {
+    // Remove todos os caracteres que não são números ou pontos
+    var valorLimpo = stringValor.replace(/[^\d.]/g, '');
+
+    // Converte a string para um número decimal
+    var numeroDecimal = parseFloat(valorLimpo);
+
+    return numeroDecimal;
 }
