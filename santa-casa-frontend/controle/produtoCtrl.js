@@ -209,7 +209,7 @@ function exibirProdutos() {
                         linha.innerHTML = `
                         <td>${produto.prod_ID}</td>
                         <td>${produto.nome}</td>
-                        <td>${listaNomeFor(produto.Fornecedor_idFornecedor)}</td>
+                        <td>${produto.Fornecedor_idFornecedor}</td>
                         <td>${produto.valor_custo}</td>
                         <td>
                             <button class="btn btn-danger" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'excluir')">
