@@ -152,9 +152,29 @@ function inputFornecedoresNome(){
 }
 
 
-// function listaNomeFor(){
-    
-// }
+function listaNomeFor(dado){
+    const urlNome = `${urlForn}/${dado}`;
+    fetch(urlNome,{
+        method: 'GET',
+        redirect: 'follow'
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            listaNome = json.listaFornecedor;
+            if (Array.isArray(listaNome)) {
+              nome = listaNome[0];
+              return nome.f_nome;
+            }
+            else
+                return null;
+        })
+        .catch((erro) => {
+            exibirMensagem('Não foi possível recuperar os fornecedores do backend: ' + erro.message);
+        });
+
+}
 
 function exibirProdutos() {
     fetch(urlBase,{
