@@ -69,24 +69,24 @@ create table produtos(
 
 create table fabricante(
     fab_cod integer not null auto_increment,
-    fab_nome varchar(70) not null,
+    fab_nome varchar(70) not null, -- bayern, cimed
     constraint pk_fab primary key (fab_cod)
 );
 
 create table unidade(
     un_cod integer not null auto_increment,
-    unidade varchar(30) not null,
+    unidade varchar(30) not null, -- ml, comprimido, 
     constraint pk_un primary key (un_cod)
 );
 
 create table nomefarmacologico(
     far_cod integer not null auto_increment,
-    nome_far varchar(70) not null,
+    nome_far varchar(70) not null, -- novalgina = diporona
     constraint pk_far primary key (far_cod)
 );
 
 create table formafarmaceutica(
     ffa_cod integer not null auto_increment,
-    forma varchar(40) not null,
+    forma varchar(40) not null, -- solução oral, comprimido, capsula, dragea 
     constraint pk_ffa primary key(ffa_cod)
 );

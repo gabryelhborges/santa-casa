@@ -151,7 +151,7 @@ function inputFornecedoresNome(){
         });
 }
 
-
+//retornar lista geral
 function listaNomeFor(dado){
     const urlNome = `${urlForn}/${dado}`;
     fetch(urlNome,{
@@ -177,6 +177,7 @@ function listaNomeFor(dado){
 }
 
 function exibirProdutos() {
+    //chamar func lista
     fetch(urlBase,{
         method: 'GET',
         redirect: 'follow'
@@ -337,8 +338,9 @@ function exibirMensagem(mensagem) {
 
 function stringParaDecimal(stringValor) {
     // Remove todos os caracteres que não são números ou pontos
-    var valorLimpo = stringValor.replace(/[^\d.]/g, '');
-
+    var valorLimpo = stringValor.replace(/\./g, "");
+    
+    valorLimpo = valorLimpo.replace(/,/g, ".");
     // Converte a string para um número decimal
     var numeroDecimal = parseFloat(valorLimpo);
 
