@@ -4,6 +4,7 @@ var formProd = document.getElementById('formProduto');
 formProd.reset();
 formProd.onsubmit = validarFormulario;
 
+inputFornecedoresNome();
 exibirProdutos();
 var acao = 'cadastrar';
 
@@ -129,7 +130,7 @@ function inputFornecedoresNome(){
         .then((json) => {
             let select = document.getElementById('Fornecedor_idFornecedor');
             
-            listaFor = json.listaFor;
+            listaFor = json.listaFornecedor;
             if (Array.isArray(listaFor)) {
                 if (listaFor.length > 0) {
                     for (let i = 0; i < listaFor.length; i++) {
@@ -151,9 +152,29 @@ function inputFornecedoresNome(){
 }
 
 
-// function listaNomeFor(){
-    
-// }
+function listaNomeFor(dado){
+    const urlNome = `${urlForn}/${dado}`;
+    fetch(urlNome,{
+        method: 'GET',
+        redirect: 'follow'
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            listaNome = json.listaFornecedor;
+            if (Array.isArray(listaNome)) {
+              nome = listaNome[0];
+              return nome.f_nome;
+            }
+            else
+                return null;
+        })
+        .catch((erro) => {
+            exibirMensagem('Não foi possível recuperar os fornecedores do backend: ' + erro.message);
+        });
+
+}
 
 function exibirProdutos() {
     fetch(urlBase,{
@@ -188,7 +209,7 @@ function exibirProdutos() {
                         linha.innerHTML = `
                         <td>${produto.prod_ID}</td>
                         <td>${produto.nome}</td>
-                        <td>${produto.nome}</td>
+                        <td>${listaNomeFor(produto.Fornecedor_idFornecedor)}</td>
                         <td>${produto.valor_custo}</td>
                         <td>
                             <button class="btn btn-danger" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'excluir')">
