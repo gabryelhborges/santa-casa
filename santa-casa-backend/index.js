@@ -3,7 +3,7 @@ import cors from "cors";
 import rotaPaciente from "./rotas/rotaPaciente.js";
 import rotaFuncionario from "./rotas/rotaFuncionario.js";
 import rotaProduto from "./rotas/rotaProduto.js";
-import rotaFornecedor from "./rotas/rotaFornecedor.js";
+import rotaFabricante from "./rotas/rotaFabricante.js";
 
 //Aplicação HTTP pronta, bastando parametrizá-la
 const host = "0.0.0.0";
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/paciente', rotaPaciente);
 app.use('/funcionario', rotaFuncionario);
 app.use('/produto', rotaProduto);
-app.use('/fornecedor',rotaFornecedor);
+app.use('/fabricante',rotaFabricante);
 
 app.listen(porta, host, ()=>{
     console.log(`API do sistema em execução: ${host}:${porta}`);
