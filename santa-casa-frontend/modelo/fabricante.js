@@ -1,5 +1,5 @@
-class Fornecedor{
-    #idFornecedor;
+class Fabricante{
+    #idFabricante;
     #cnpj;
     #f_nome;
     #endereco;
@@ -10,8 +10,8 @@ class Fornecedor{
     #uf;
     #telefone;
 
-    constructor(idFornecedor =0, cnpj="", f_nome="", endereco="", numero=0, complemento="", bairro="", cidade="", uf="", telefone=""){
-        this.#idFornecedor = idFornecedor;
+    constructor(idFabricante =0, cnpj="", f_nome="", endereco="", numero=0, complemento="", bairro="", cidade="", uf="", telefone=""){
+        this.#idFabricante = idFabricante;
         this.#cnpj = cnpj;
         this.#f_nome = f_nome;
         this.#endereco = endereco;
@@ -23,14 +23,14 @@ class Fornecedor{
         this.#telefone = telefone;
     }
 
-    // getter for idFornecedor
-    get idFornecedor() {
-        return this.#idFornecedor;
+    // getter for idFabricante
+    get idFabricante() {
+        return this.#idFabricante;
     }
 
-    // setter for idFornecedor
-    set idFornecedor(value) {
-    this.#idFornecedor = value;
+    // setter for idFabricante
+    set idFabricante(value) {
+    this.#idFabricante = value;
     }
 
     // getter for cnpj
@@ -127,7 +127,7 @@ class Fornecedor{
 
     toJSON(){
         return{
-            idFornecedor: this.#idFornecedor,
+            idFabricante: this.#idFabricante,
             cnpj: this.#cnpj,
             f_nome: this.#f_nome,
             endereco: this.#endereco,
@@ -141,6 +141,6 @@ class Fornecedor{
     }
 
     toString(){
-        return "fornecedor: "+this.f_nome;
+        return "fabricante: "+this.f_nome;
     }
 }

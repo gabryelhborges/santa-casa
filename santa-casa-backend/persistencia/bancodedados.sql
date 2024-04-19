@@ -37,8 +37,8 @@ create table funcionarios(
     constraint pfFuncionario primary key (idFuncionario)
 );
 
-create table fornecedor(
-    idFornecedor integer not null  auto_increment,
+create table fabricante(
+    idFabricante integer not null  auto_increment,
     cnpj varchar(18) not null unique,
     f_nome varchar(70) not null,
     endereco varchar(100),
@@ -48,12 +48,12 @@ create table fornecedor(
     cidade varchar(30), -- maior nome de cidade do brasil tem 29 caracteres
     uf char(2) not null,
     telefone varchar(20),
-    constraint pk_fornecedor primary  key (idFornecedor)
+    constraint pk_fabricante primary  key (idFabricante)
 );
 
 create table produtos(
     prod_ID integer not null,
-    Fornecedor_idFornecedor integer not null,
+    Fabricante_idFabricante integer not null,
     nome varchar(45) not null,
     psicotropico varchar(1) not null,
     valor_custo decimal(5,2) not null,
@@ -64,7 +64,7 @@ create table produtos(
     quantidade_total integer not null,
     tipo varchar(50) not null,
     constraint pk_prod primary key (prod_ID),
-    constraint fk_pf foreign key (Fornecedor_idFornecedor) references fornecedor(idFornecedor)
+    constraint fk_pf foreign key (Fabricante_idFabricante) references fabricante(idFabricante)
 );
 
 create table fabricante(
