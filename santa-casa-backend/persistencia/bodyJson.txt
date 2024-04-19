@@ -54,7 +54,7 @@ PRODUTOS
 
 {
     "prod_ID": 1,
-    "Fornecedor_idFornecedor": 1,
+    "Fabricante_idFabricante": 1,
     "nome": "Produto Exemplo",
     "psicotropico": "N",
     "valor_custo": 100.00,

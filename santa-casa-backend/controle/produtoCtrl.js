@@ -6,7 +6,7 @@ export default class ProdutoCtrl {
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
             const dados = requisicao.body;
             const prod_ID = dados.prod_ID;
-            const Fornecedor_idFornecedor = dados.Fornecedor_idFornecedor;
+            const Fabricante_idFabricante = dados.Fabricante_idFabricante;
             const nome = dados.nome;
             const psicotropico = dados.psicotropico;
             const valor_custo = dados.valor_custo;
@@ -18,8 +18,8 @@ export default class ProdutoCtrl {
             const tipo = dados.tipo ;
             
             //Validar apenas os atributos que são NOT NULL?
-            if (prod_ID && Fornecedor_idFornecedor && nome && psicotropico && valor_custo && tipo && quantidade_total) {
-                const produto = new Produto(prod_ID, Fornecedor_idFornecedor, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
+            if (prod_ID && Fabricante_idFabricante && nome && psicotropico && valor_custo && tipo && quantidade_total) {
+                const produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
                 produto.gravar().then(() => {
                     resposta.status(200).json({
                         "status": true,
@@ -53,7 +53,7 @@ export default class ProdutoCtrl {
         if ((requisicao.method === "PUT" || requisicao.method === "PATCH") && requisicao.is("application/json")){
             const dados = requisicao.body;
             const prod_ID = dados.prod_ID;
-            const Fornecedor_idFornecedor = dados.Fornecedor_idFornecedor;
+            const Fabricante_idFabricante = dados.Fabricante_idFabricante;
             const nome = dados.nome;
             const psicotropico = dados.psicotropico;
             const valor_custo = dados.valor_custo;
@@ -63,8 +63,8 @@ export default class ProdutoCtrl {
             const descricao_uso = dados.descricao_uso;
             const quantidade_total = dados.quantidade_total;
             const tipo = dados.tipo;
-            if(Fornecedor_idFornecedor && nome && psicotropico && valor_custo && tipo && quantidade_total){
-                const produto = new Produto(prod_ID, Fornecedor_idFornecedor, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
+            if(Fabricante_idFabricante && nome && psicotropico && valor_custo && tipo && quantidade_total){
+                const produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
                 produto.atualizar().then(()=>{
                     resposta.status(200).json({
                         "status": true,

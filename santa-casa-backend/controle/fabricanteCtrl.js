@@ -1,6 +1,6 @@
-import Fornecedor from  "../modelo/Fornecedor.js";
+import Fabricante from  "../modelo/fabricante.js";
 
-export default class FornecedorCtrl{
+export default class FabricanteCtrl{
     gravar(requisicao, resposta){
         resposta.type('application/json');
         if(requisicao.method = "POST" && requisicao.is("application/json")){
@@ -15,31 +15,31 @@ export default class FornecedorCtrl{
             const uf = dados.uf || null;
             const telefone = dados.telefone || null;
             if(cnpj && f_nome){
-                const forn = new Fornecedor(0,cnpj,f_nome,endereco,numero,complemento,bairro,cidade,uf,telefone);
+                const forn = new Fabricante(0,cnpj,f_nome,endereco,numero,complemento,bairro,cidade,uf,telefone);
                 forn.gravar().then(()=>{
                     resposta.status(200).json({
                         "status": true,
-                        "codigoGerado": forn.idFornecedor,
-                        "mensagem":"Fornecedor cadastrado com sucesso!"
+                        "codigoGerado": forn.idFabricante,
+                        "mensagem":"Fabricante cadastrado com sucesso!"
                     })
                 }).catch((erro)=>{
                     resposta.status(500).json({
                         "status": false,
-                        "mensagem": "Erro ao cadastrar o fornecedor: "+erro.message
+                        "mensagem": "Erro ao cadastrar o fabricante: "+erro.message
                     });
             });
         }
         else{
             resposta.status(400).json({
                 "status": false,
-                "mensagem": "Informe os dados obrigatórios do fornecedor!"
+                "mensagem": "Informe os dados obrigatórios do fabricante!"
             });
         }
     }
     else{
         resposta.status(400).json({
             "status": false,
-            "mensagem": "Utilize o método POST para cadastrar um fornecedor!"
+            "mensagem": "Utilize o método POST para cadastrar um fabricante!"
         });
     }
     }
@@ -48,7 +48,7 @@ export default class FornecedorCtrl{
         resposta.type('application/json');
         if((requisicao.method === "PUT" || requisicao.method === "PATCH") && requisicao.is("application/json")){
             const dados = requisicao.body;
-            const idFornecedor = dados.idFornecedor;
+            const idFabricante = dados.idFabricante;
             const cnpj = dados.cnpj;
             const f_nome = dados.f_nome;
             const endereco = dados.endereco;
@@ -58,19 +58,19 @@ export default class FornecedorCtrl{
             const cidade = dados.cidade;
             const uf = dados.uf;
             const telefone = dados.telefone;
-            if(idFornecedor && cnpj && f_nome){
-                const forn = new Fornecedor(idFornecedor,cnpj,
+            if(idFabricante && cnpj && f_nome){
+                const forn = new Fabricante(idFabricante,cnpj,
                     f_nome,endereco,numero,complemento,bairro,
                     cidade,uf,telefone);
                 forn.atualizar().then(()=>{
                     resposta.status(200).json({
                         "status": true,
-                        "mensagem" : "Fornecedor Atualizado com sucesso!"
+                        "mensagem" : "Fabricante Atualizado com sucesso!"
                     });
                 }).catch((erro)=>{
                     resposta.status(500).json({
                         "status": false,
-                        "mensagem": "Não foi possível atualizar o fornecedor: " + erro.message
+                        "mensagem": "Não foi possível atualizar o fabricante: " + erro.message
                     });
                 });
             }
@@ -84,7 +84,7 @@ export default class FornecedorCtrl{
         else{
             resposta.status(400).json({
                 "status": false,
-                "mensagem": "Utilize o método POST ou PATCH para atualizar o fornecedor!"
+                "mensagem": "Utilize o método POST ou PATCH para atualizar o fabricante!"
             });
         }
     }
@@ -92,18 +92,18 @@ export default class FornecedorCtrl{
     excluir(requisicao,resposta) {
         resposta.type('application/json');
         if(requisicao.method === "DELETE" && requisicao.is("application/json")){
-            const idFornecedor = requisicao.body.idFornecedor;
-            if(idFornecedor){
-                const forn = new Fornecedor(idFornecedor);
+            const idFabricante = requisicao.body.idFabricante;
+            if(idFabricante){
+                const forn = new Fabricante(idFabricante);
                 forn.excluir().then(()=>{
                     resposta.status(200).json({
                         "status":true,
-                        "mensagem": "Fornecedor Excluído com sucesso!"
+                        "mensagem": "Fabricante Excluído com sucesso!"
                     });
                 }).catch((erro)=>{
                     resposta.status(500).json({
                         "status":false,
-                        "mensagem":"Erro ao excluir um fornecedor: "+erro.message
+                        "mensagem":"Erro ao excluir um fabricante: "+erro.message
                     });
                 })
             }
@@ -111,7 +111,7 @@ export default class FornecedorCtrl{
         else{
             resposta.status(400).json({
                 "status":false,
-                "mensagem": "Utilize o método DELETE para exlcuir um fornecedor"
+                "mensagem": "Utilize o método DELETE para exlcuir um fabricante"
             });
         }
     }
@@ -123,23 +123,23 @@ export default class FornecedorCtrl{
             termo = "";
         }
         if(requisicao.method === "GET"){
-            const forn = new Fornecedor();
-            forn.consultar(termo).then((listaFornecedor)=>{
+            const forn = new Fabricante();
+            forn.consultar(termo).then((listaFabricante)=>{
                 resposta.status(200).json({
                     "status":true,
-                    "listaFornecedor":listaFornecedor
+                    "listaFabricante":listaFabricante
                 });
             }).catch((erro)=>{
                 resposta.status(500).json({
                     "status":false,
-                    "mensagem":"Erro ao consultar Fornecedor(es): "+erro.message
+                    "mensagem":"Erro ao consultar Fabricante(es): "+erro.message
                 });
             });
         }
         else{
             resposta.status(400).json({
                 "status": false,
-                "mensagem": "Utilize o método GET para consultar algum fornecedor!"
+                "mensagem": "Utilize o método GET para consultar algum fabricante!"
             });
         }
     }
