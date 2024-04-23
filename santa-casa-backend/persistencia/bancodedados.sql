@@ -1,3 +1,4 @@
+-- drop database santa_casa;
 create database santa_casa;
 use santa_casa;
 create table pacientes (
@@ -67,12 +68,6 @@ create table produtos(
     constraint fk_pf foreign key (Fabricante_idFabricante) references fabricante(idFabricante)
 );
 
-create table fabricante(
-    fab_cod integer not null auto_increment,
-    fab_nome varchar(70) not null, -- bayern, cimed
-    constraint pk_fab primary key (fab_cod)
-);
-
 create table unidade(
     un_cod integer not null auto_increment,
     unidade varchar(30) not null, -- ml, comprimido, 
@@ -90,3 +85,26 @@ create table formafarmaceutica(
     forma varchar(40) not null, -- solução oral, comprimido, capsula, dragea 
     constraint pk_ffa primary key(ffa_cod)
 );
+
+-- insert nos pacientes
+insert into pacientes values(1,'526.217.888-07','Leon B Ronchi', 'branco','solteiro','masculino','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
+insert into pacientes values(2,'999.999.999-99','Fulano da Silva Sauro','pardo','casado','masculino','1997-10-13','Rua tal','Bairro X','(99) 99998-9999','marceneiro','','9999','complemento X','00000-000','Testeiro','Fulanão','Fulaninho','Fulanona','Robson','N','Catolico',3);
+insert into pacientes values(null,'396.354.698-02','Yago Akio', 'preto','viuvo','feminino','1500-02-30','Rua do arco-iris','Bairro do unicornio','(69) 96969-6969','Garoto de Programa','','69','Complemento A','12345-123','Japonês','Ricardo','Gabryel H Borges','Liria','Suzane Von Richthofen','S','Petista',3);
+-- select * from pacientes;
+
+insert into funcionarios values(null, 'Gabryel H Borges', 'S','','478.067.288-05','(18) 99808-2343');
+insert into funcionarios values(null, 'Aglae Pereira Zaupa','N','SP-12345-6','069.916.188-61','(11) 95555-5999');
+insert into funcionarios values(null, 'Gabriel Carrocini', 'N','','999.999.999-99','(18) 10101-0011');
+--  * from funcionarios;
+
+insert into fabricante values(null, '54.516.661/0001-01','Johnson & Johnson','Av. Pres. Juscelino Kubitschek',2041,'','Vila Nova Conceição','São Paulo','SP','0800 703 6363');
+insert into fabricante values(null, '56.994.502/0001-30','Novartis','Av. Professor Vicente Rao',90,'','Cidade Monções','Sao Paulo','SP','0800 020 7758');
+insert into fabricante values(null, '33.009.945/0001-23','Roche','R. Dr. Rubens Gomes Bueno',691,'','Santo Amaro','Sao Paulo','SP','0800 772 0295');
+insert into fabricante values(null, '61.072.393/0001-33','Pfizer','R. Alexandre Dumas',1860,'','Santo Amaro','Sao Paulo','SP','(11) 5185-8500');
+insert into fabricante values(null, '02.685.377/0001-57','Sanofi', 'Av. das Nações Unidas',14401,'Zona Sul','Chácara Santo Antônio', 'Sao Paulo', 'SP', '(11) 2889-3800');
+insert into fabricante values(null, '33.069.212/0001-84','Merck', 'Av. das Nações Unidas',12995,'30 andar','Pinheiros','Sao Paulo', 'SP', '(11) 3346-8507');
+insert into fabricante values(null, '33.247.743/0001-10','GSK (GlaxoSmithKline)','R. Carneiro da Cunha',303,'','Vila da Saúde','Sao Paulo','SP','(11) 2276-2183');
+insert into fabricante values(null, '60.318.797/0001-00','AstraZeneca','Rodovia Raposo Tavares',0,'KM 26.9 S/N','Moinho Velho','Cotia', 'SP', '(11) 3737-1200');
+insert into fabricante values(null, '18.459.628/0001-15','Bayer','R. Domingos Jorge',1100,'','Vila Socorro','Sao Paulo', 'SP','(11) 5694-5166');
+insert into fabricante values(null, '15.670.288/0002-60','Gilead Sciences','Av. Dr. Chucri Zaidan',1240,'','Morumbi', 'Sao Paulo', 'SP','0800 771 0744');
+-- select * from fabricante;
