@@ -1,107 +1,115 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>
-            Cadastrar Produto
-        </title>
-        <link rel="stylesheet" type="text/css" href="../estilização/formulario.css" media="screen" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="shortcut icon" type="imagex/png" href="../image/farmacia.png">
-    </head>
-    <body class="body">
-        <div class="corpo" style="padding-top: 250px;">
-            <div class="fundo-formulario">
-                <div class="titulo-form">
-                    <h2 >
-                        Cadastro de Produto
-                    </h2>
-                    <hr>
-                </div>
-                
-                <form id="formProduto" action="" method="POST" style="padding: 15px;">
-                    <input id="iCodProduto" type="hidden" name="iCodProduto">
-                    <div class="dual-input-container">
-                        <div class="dual-input-container">
-                            <label >Código do Produto</label>
-                            <label >Código do Fornecedor</label>
-                        </div>
-                        <input id="prod_ID"  type="text" class="input-style" placeholder="Código identificador de produto" name="codigo_produto" required>
-                        <input id="Fornecedor_idFornecedor" type="text" class="input-style" placeholder="Código forenecedor" name="text" required>
-                    </div>
-                    <label>&nbsp;&nbsp;&nbsp;Nome do Produto</label>
-                    <div>
-                        <input id="nome" type="text" class="input-style" placeholder="Nome do Produto" name="nome" required>
-                    </div>
-                    <div class="triple-input-container">
-                        <div class="dual-input-container">
-                            <label >Quantidade</label>
-                            <label >Tipo do Produto</label>
-                            <label >Valor de Custo</label>
-                        </div>
-                        <input id="quantidade_total" type="number" class="input-style" placeholder="Quantidade total" name="quantidade_total" min="0" max="1000" step="1" required>
-                        <div>
-                            <select id="tipo" name="select" class="input-style">
-                                <option value="Remedio" selected> Remedio </option>
-                                <option value="Material"> Material </option>
-                            </select>
-                        </div>
-                        <input id="valor_custo" type="number" class="input-style" placeholder="Valor de Custo" name="valor_custo" min="0" max="1000" step="0.01" required>
-                    </div>
-                    <div class="dual-input-container">
-                        <label >Ultima Compra</label>
-                        <label >Ultima Saida</label>
-                    </div>
-                    <div class="dual-input-container">
-                        <input id="ultima_compra" type="date" class="input-style" value="2022-01-01" name="ultima_compra" required data-date-format="dd/mm/yyyy" required>
-                        <input id="ultima_saida" type="date" class="input-style" value="2022-02-01" name="ultima_saida" required data-date-format="dd/mm/yyyy" required>
-                    </div>
-                    <div>
-                        <label>&nbsp;&nbsp;&nbsp;Descrição de uso</label>
-                        <textarea id="descricao_uso" class="input-style" rows="4" cols="50" name="descricao_uso" placeholder="Descrição dde uso" maxlength="2000" required></textarea>
-                    </div>
-                    <div>
-                        <label>&nbsp;&nbsp;&nbsp;Observações</label>
-                        <textarea id="observacao" class="input-style" rows="4" cols="50" name="observacao" placeholder="Observações" maxlength="2000" required></textarea>
-                    </div>
-                    <div>
-                        <input id="psicotropico" type="checkbox" name="checkbox" value="S">
-                        <label>Psicotrópico</label>
-                    </div>
-                    <br>
-                    <div>
-                        <button id="bttForm" class="input-style" type="submit" style="padding: 12px 20px;">
-                            Cadastrar
-                        </button>
-                        
-                        <div>
-                            <button class="input-style" onclick="goToIndex()">
-                                Voltar
-                            </button>
-                        </div>
-                        <script>
-                            function goToIndex() {
-                                window.location.href = "../index.html";
-                            }
-                        </script>
-                    </div>
-                </form>
-            </div>
-        </div>
-        
-        <div id="mensagem" style="padding-top: 250px;"></div>
-        <div id="tabela"> </div>
 
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Cadastrar Produto
+    </title>
+    <link rel="stylesheet" type="text/css" href="../estilização/formulario.css" media="screen" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="shortcut icon" type="imagex/png" href="../image/farmacia.png">
+</head>
+
+<body class="body">
+    <div class="corpo" style="padding-top: 250px;">
+        <div class="fundo-formulario">
+            <div class="titulo-form">
+                <h2>
+                    Cadastro de Produto
+                </h2>
+                <hr>
+            </div>
+
+            <form id="formProduto" action="" method="POST" style="padding: 15px;">
+                <input id="iCodProduto" type="hidden" name="iCodProduto">
+                <div class="dual-input-container" id="div1">
+                    <div class="dual-input-container">
+                        <label>Código do Produto <strong style="color: red;">*</strong></label>
+                        <label>Fabricante<strong style="color: red;">*</strong></label>
+                    </div>
+                    <input id="prod_ID" type="text" class="input-style" placeholder="Código identificador de produto"
+                        name="codigo_produto" required>
+                    <select id="Fabricante_idFabricante" name="selectFabricante" class="input-style" required> </select>
+                </div>
+                <label>&nbsp;&nbsp;&nbsp;Nome do Produto <strong style="color: red;">*</strong></label>
+                <div>
+                    <input id="nome" type="text" class="input-style" placeholder="Nome do Produto" name="nome" required>
+                </div>
+                <div class="triple-input-container">
+                    <div class="dual-input-container">
+                        <label>Quantidade <strong style="color: red;">*</strong></label>
+                        <label>Tipo do Produto</label>
+                        <label>Valor de Custo <strong style="color: red;">*</strong></label>
+                    </div>
+                    <input id="quantidade_total" type="number" class="input-style" placeholder="Quantidade total"
+                        name="quantidade_total" min="0" max="1000" step="1" required>
+                    <div>
+                        <select id="tipo" name="select" class="input-style">
+                            <option value="Remedio" selected> Remedio </option>
+                            <option value="Material"> Material </option>
+                        </select>
+                    </div>
+                    <input oninput="mascaraValor(this)" id="valor_custo" type="text" class="input-style" placeholder="R$ 0,00" name="valor_custo" required>
+                </div>
+                <div class="dual-input-container">
+                    <label>Ultima Compra<strong style="color: red;">*</strong></label>
+                    <label>Ultima Saida<strong style="color: red;">*</strong></label>
+                </div>
+                <div class="dual-input-container">
+                    <input id="ultima_compra" type="date" class="input-style" value="2022-01-01" name="ultima_compra"
+                        required data-date-format="dd/mm/yyyy" required>
+                    <input id="ultima_saida" type="date" class="input-style" value="2022-02-01" name="ultima_saida"
+                        required data-date-format="dd/mm/yyyy" required>
+                </div>
+                <div>
+                    <label>&nbsp;&nbsp;&nbsp;Descrição de uso<strong style="color: red;">*</strong></label>
+                    <textarea id="descricao_uso" class="input-style" rows="4" cols="50" name="descricao_uso"
+                        placeholder="Descrição dde uso" maxlength="2000" required></textarea>
+                </div>
+                <div>
+                    <label>&nbsp;&nbsp;&nbsp;Observações</label>
+                    <textarea id="observacao" class="input-style" rows="4" cols="50" name="observacao"
+                        placeholder="Observações" maxlength="2000" required></textarea>
+                </div>
+                <div>
+                    <input id="psicotropico" type="checkbox" name="checkbox" value="S">
+                    <label>Psicotrópico</strong></label>
+                </div>
+                <br>
+                <div>
+                    <button id="bttForm" class="input-style" type="submit" style="padding: 12px 20px;">
+                        Cadastrar
+                    </button>
+
+                    <div>
+                        <button class="input-style" onclick="goToIndex()">
+                            Voltar
+                        </button>
+                    </div>
+                    <script>
+                        function goToIndex() {
+                            window.location.href = "../index.html";
+                        }
+                    </script>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="mensagem" style="padding-top: 250px;"></div>
+    <div id="tabela"> </div>
+
+</body>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-    crossorigin="anonymous"></script>
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-    crossorigin="anonymous"></script>
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
     <script src="../modelo/Produto.js"></script>
     <script src="../controle/produtoCtrl.js"></script>
+    <script src="../util/util.js"></script>
+
 </html>

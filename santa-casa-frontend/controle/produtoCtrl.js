@@ -1,26 +1,27 @@
 const urlBase = 'http://localhost:4040/produto';
-
+const urlForn = 'http://localhost:4040/fabricante';
 var formProd = document.getElementById('formProduto');
 formProd.reset();
 formProd.onsubmit = validarFormulario;
 
+inputFabricanteesNome();
 exibirProdutos();
 var acao = 'cadastrar';
 
 function validarFormulario(evento) {
     if (formProd.checkValidity()) {
         let prod_ID = document.getElementById('prod_ID').value;
-        let Fornecedor_idFornecedor = document.getElementById('Fornecedor_idFornecedor').value;
+        let Fabricante_idFabricante = document.getElementById('Fabricante_idFabricante').value;
         let nome = document.getElementById('nome').value;
         let psicotropico = document.getElementById('psicotropico').value;
-        let valor_custo = document.getElementById('valor_custo').value;
+        let valor_custo = stringParaDecimal(document.getElementById('valor_custo').value);
         let ultima_compra = document.getElementById('ultima_compra').value;
         let ultima_saida = document.getElementById('ultima_saida').value;
         let observacao = document.getElementById('observacao').value;
         let descricao_uso = document.getElementById('descricao_uso').value;
         let quantidade_total = document.getElementById('quantidade_total').value;
         let tipo = document.getElementById('tipo').value;
-        let produto = new Produto(prod_ID,Fornecedor_idFornecedor, nome, psicotropico, valor_custo, ultima_compra, ultima_saida,  observacao, descricao_uso, quantidade_total, tipo);
+        let produto = new Produto(prod_ID,Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida,  observacao, descricao_uso, quantidade_total, tipo);
         
         if (acao === 'cadastrar') {
             fetch(urlBase, {
@@ -50,17 +51,17 @@ function validarFormulario(evento) {
         else if (acao === 'alterar') {
             if (confirm('Deseja realmente alterar esse produto?')) {
                 let prod_ID = document.getElementById('prod_ID').value;
-                let Fornecedor_idFornecedor = document.getElementById('Fornecedor_idFornecedor').value;
+                let Fabricante_idFabricante = document.getElementById('Fabricante_idFabricante').value;
                 let nome = document.getElementById('nome').value;
                 let psicotropico = document.getElementById('psicotropico').value;
-                let valor_custo = document.getElementById('valor_custo').value;
+                let valor_custo = stringParaDecimal(document.getElementById('valor_custo').value);
                 let ultima_compra = document.getElementById('ultima_compra').value;
                 let ultima_saida = document.getElementById('ultima_saida').value;
                 let observacao = document.getElementById('observacao').value;
                 let descricao_uso = document.getElementById('descricao_uso').value;
                 let quantidade_total = document.getElementById('quantidade_total').value;
                 let tipo = document.getElementById('tipo').value;
-                let produto = new Produto(prod_ID,Fornecedor_idFornecedor, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
+                let produto = new Produto(prod_ID,Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
                 fetch(urlBase, {
                     method: 'PATCH',
                     headers: {
@@ -118,8 +119,66 @@ function validarFormulario(evento) {
     evento.stopPropagation();
 }
 
+function inputFabricanteesNome(){
+    fetch(urlForn,{
+        method: 'GET',
+        redirect: 'follow'
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            let select = document.getElementById('Fabricante_idFabricante');
+            
+            listaFor = json.listaFabricante;
+            if (Array.isArray(listaFor)) {
+                if (listaFor.length > 0) {
+                    for (let i = 0; i < listaFor.length; i++) {
+                        let fabricante = listaFor[i];
+                        let option = document.createElement('option');
+                        option.text = fabricante.f_nome;
+                        option.value = fabricante.idFabricante;
+                        select.appendChild(option);
+                    }
+                }
+                else {
+                    select.innerHTML = `<option>Erro Fabricantees</option>`;
+                }
+            }
+        })
+        .catch((erro) => {
+            exibirMensagem('Não foi possível recuperar os fabricantees do backend: ' + erro.message);
+        });
+}
+
+//retornar lista geral
+function listaNomeFor(dado){
+    const urlNome = `${urlForn}/${dado}`;
+    fetch(urlNome,{
+        method: 'GET',
+        redirect: 'follow'
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            listaNome = json.listaFabricante;
+            if (Array.isArray(listaNome)) {
+              nome = listaNome[0];
+              return nome.f_nome;
+            }
+            else
+                return null;
+        })
+        .catch((erro) => {
+            exibirMensagem('Não foi possível recuperar os fabricantes do backend: ' + erro.message);
+        });
+
+}
+
 function exibirProdutos() {
-    fetch(urlBase, {
+    //chamar func lista
+    fetch(urlBase,{
         method: 'GET',
         redirect: 'follow'
     })
@@ -138,8 +197,8 @@ function exibirProdutos() {
                     cabecalho.innerHTML = `
                     <tr>
                         <th>Código Produto</th>
-                        <th>Código Fornecedor</th>
-                        <th>Nome</th>
+                        <th>Produto</th>
+                        <th>Fabricante</th>
                         <th>Valor</th>
                     </tr>
                     `;
@@ -150,8 +209,8 @@ function exibirProdutos() {
                         let produto = listaProdutos[i];
                         linha.innerHTML = `
                         <td>${produto.prod_ID}</td>
-                        <td>${produto.Fornecedor_idFornecedor}</td>
                         <td>${produto.nome}</td>
+                        <td>${produto.Fabricante_idFabricante}</td>
                         <td>${produto.valor_custo}</td>
                         <td>
                             <button class="btn btn-danger" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'excluir')">
@@ -185,7 +244,7 @@ function exibirProdutos() {
 }
 
 function gerarParametrosProduto(produto) {
-    return `'${produto.prod_ID}','${produto.Fornecedor_idFornecedor}','${produto.nome}',
+    return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
     '${produto.psicotropico}','${produto.valor_custo}','${formataData(produto.ultima_compra)}',
     '${formataData(produto.ultima_saida)}','${produto.observacao}','${produto.descricao_uso}',
     '${produto.quantidade_total}','${produto.tipo}'`;
@@ -224,10 +283,10 @@ function dataAtualFormatada(){
     return dataFormatada;
 }
 
-function selecionarProduto(prod_ID,Fornecedor_idFornecedor, nome, psicotropico, valor_custo, ultima_compra, ultima_saida,  observacao, descricao_uso, quantidade_total, tipo, modo) {
+function selecionarProduto(prod_ID,Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida,  observacao, descricao_uso, quantidade_total, tipo, modo) {
    
         document.getElementById('prod_ID').value = prod_ID;
-        document.getElementById('Fornecedor_idFornecedor').value = Fornecedor_idFornecedor;
+        document.getElementById('Fabricante_idFabricante').value = Fabricante_idFabricante;
         document.getElementById('nome').value = nome;
         document.getElementById('psicotropico').value = psicotropico;
         document.getElementById('valor_custo').value = valor_custo;
@@ -251,7 +310,7 @@ function selecionarProduto(prod_ID,Fornecedor_idFornecedor, nome, psicotropico, 
 
 function limparFormulario() {
     document.getElementById('prod_ID').value = '';
-    document.getElementById('Fornecedor_idFornecedor').value = '';
+    document.getElementById('Fabricante_idFabricante').value = '';
     document.getElementById('nome').value = '';
     document.getElementById('psicotropico').value = '';
     document.getElementById('valor_custo').value = '';
@@ -275,4 +334,15 @@ function exibirMensagem(mensagem) {
     setTimeout(() => {
         elemMensagem.innerHTML = '';
     }, 7000);//7 Segundos
+}
+
+function stringParaDecimal(stringValor) {
+    // Remove todos os caracteres que não são números ou pontos
+    var valorLimpo = stringValor.replace(/\./g, "");
+    
+    valorLimpo = valorLimpo.replace(/,/g, ".");
+    // Converte a string para um número decimal
+    var numeroDecimal = parseFloat(valorLimpo);
+
+    return numeroDecimal;
 }

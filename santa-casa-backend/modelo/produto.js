@@ -2,7 +2,7 @@ import ProdutoDAO from "../persistencia/produtoDAO.js";
 
 export default class Produto {
     #prod_ID
-    #Fornecedor_idFornecedor 
+    #Fabricante_idFabricante 
     #nome
     #psicotropico
     #valor_custo
@@ -14,9 +14,9 @@ export default class Produto {
     #tipo
     
 
-    constructor(prod_ID=0,Fornecedor_idFornecedor=0,nome="",psicotropico="",valor_custo=0,ultima_compra="",ultima_saida="",observacao="", descricao_uso="", quantidade_total=0, tipo="") {
+    constructor(prod_ID=0,Fabricante_idFabricante=0,nome="",psicotropico="",valor_custo=0,ultima_compra="",ultima_saida="",observacao="", descricao_uso="", quantidade_total=0, tipo="") {
         this.#prod_ID = prod_ID;
-        this.#Fornecedor_idFornecedor = Fornecedor_idFornecedor;
+        this.#Fabricante_idFabricante = Fabricante_idFabricante;
         this.#nome = nome;
         this.#psicotropico = psicotropico;
         this.#valor_custo = valor_custo;
@@ -38,14 +38,14 @@ export default class Produto {
     this.#prod_ID = value;
     }
 
-    // getter for Fornecedor_idFornecedor
-    get Fornecedor_idFornecedor() {
-    return this.#Fornecedor_idFornecedor;
+    // getter for Fabricante_idFabricante
+    get Fabricante_idFabricante() {
+    return this.#Fabricante_idFabricante;
     }
 
-    // setter for Fornecedor_idFornecedor
-    set Fornecedor_idFornecedor(value) {
-    this.#Fornecedor_idFornecedor = value;
+    // setter for Fabricante_idFabricante
+    set Fabricante_idFabricante(value) {
+    this.#Fabricante_idFabricante = value;
     }
 
     // getter for nome
@@ -141,7 +141,7 @@ export default class Produto {
     toJSON(){
         return{
             prod_ID: this.#prod_ID,
-            Fornecedor_idFornecedor: this.#Fornecedor_idFornecedor,
+            Fabricante_idFabricante: this.#Fabricante_idFabricante,
             nome: this.#nome,
             psicotropico: this.#psicotropico,
             valor_custo: this.#valor_custo,
