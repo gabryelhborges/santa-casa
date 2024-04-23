@@ -92,11 +92,14 @@ insert into pacientes values(2,'999.999.999-99','Fulano da Silva Sauro','pardo',
 insert into pacientes values(null,'396.354.698-02','Yago Akio', 'preto','viuvo','feminino','1500-02-30','Rua do arco-iris','Bairro do unicornio','(69) 96969-6969','Garoto de Programa','','69','Complemento A','12345-123','Japonês','Ricardo','Gabryel H Borges','Liria','Suzane Von Richthofen','S','Petista',3);
 -- select * from pacientes;
 
+-- insert nos funcionários
 insert into funcionarios values(null, 'Gabryel H Borges', 'S','','478.067.288-05','(18) 99808-2343');
 insert into funcionarios values(null, 'Aglae Pereira Zaupa','N','SP-12345-6','069.916.188-61','(11) 95555-5999');
 insert into funcionarios values(null, 'Gabriel Carrocini', 'N','','999.999.999-99','(18) 10101-0011');
 --  * from funcionarios;
 
+
+-- insert nos fabricantes
 insert into fabricante values(null, '54.516.661/0001-01','Johnson & Johnson','Av. Pres. Juscelino Kubitschek',2041,'','Vila Nova Conceição','São Paulo','SP','0800 703 6363');
 insert into fabricante values(null, '56.994.502/0001-30','Novartis','Av. Professor Vicente Rao',90,'','Cidade Monções','Sao Paulo','SP','0800 020 7758');
 insert into fabricante values(null, '33.009.945/0001-23','Roche','R. Dr. Rubens Gomes Bueno',691,'','Santo Amaro','Sao Paulo','SP','0800 772 0295');
