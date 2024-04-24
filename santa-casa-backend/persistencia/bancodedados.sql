@@ -113,9 +113,7 @@ insert into fabricante values(null, '15.670.288/0002-60','Gilead Sciences','Av. 
 -- select * from fabricante;
 
 -- insert nas unidades
-insert into unidade values(null,'Quilograma(kg)');
 insert into unidade values(null,'Grama(g)');
-insert into unidade values(null,'litro(l)');
 insert into unidade values(null,'mililitro(ml)');
 insert into unidade values(null,'gotas(gt)');
 insert into unidade values(null,'Unidade Internacional(UI)');
