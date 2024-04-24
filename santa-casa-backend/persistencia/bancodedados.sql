@@ -129,7 +129,7 @@ insert into formafarmaceutica values(null,'pastilha');
 insert into formafarmaceutica values(null,'supositório');
 insert into formafarmaceutica values(null,'pomada');
 insert into formafarmaceutica values(null,'gel');
-insert into formafarmaceutica values(null,'cremes');
+insert into formafarmaceutica values(null,'creme');
 insert into formafarmaceutica values(null,'xarope');
 insert into formafarmaceutica values(null,'gota');
 insert into formafarmaceutica values(null,'solução nasal');
