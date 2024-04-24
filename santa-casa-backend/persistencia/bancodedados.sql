@@ -111,3 +111,30 @@ insert into fabricante values(null, '60.318.797/0001-00','AstraZeneca','Rodovia 
 insert into fabricante values(null, '18.459.628/0001-15','Bayer','R. Domingos Jorge',1100,'','Vila Socorro','Sao Paulo', 'SP','(11) 5694-5166');
 insert into fabricante values(null, '15.670.288/0002-60','Gilead Sciences','Av. Dr. Chucri Zaidan',1240,'','Morumbi', 'Sao Paulo', 'SP','0800 771 0744');
 -- select * from fabricante;
+
+-- insert nas unidades
+insert into unidade values(null,'Quilograma(kg)');
+insert into unidade values(null,'Grama(g)');
+insert into unidade values(null,'litro(l)');
+insert into unidade values(null,'mililitro(ml)');
+insert into unidade values(null,'gotas(gt)');
+insert into unidade values(null,'Unidade Internacional(UI)');
+-- select * from unidade;
+
+-- insert nas formas farmacêuticas
+insert into formafarmaceutica values(null,'comprimido');
+insert into formafarmaceutica values(null,'cápsula');
+insert into formafarmaceutica values(null,'drágea');
+insert into formafarmaceutica values(null,'pastilha');
+insert into formafarmaceutica values(null,'supositório');
+insert into formafarmaceutica values(null,'pomada');
+insert into formafarmaceutica values(null,'gel');
+insert into formafarmaceutica values(null,'cremes');
+insert into formafarmaceutica values(null,'xarope');
+insert into formafarmaceutica values(null,'gota');
+insert into formafarmaceutica values(null,'solução nasal');
+insert into formafarmaceutica values(null,'oftálmica');
+insert into formafarmaceutica values(null,'injetável');
+insert into formafarmaceutica values(null,'spray');
+insert into formafarmaceutica values(null,'aerossol');
+-- select * from formafarmaceutica;
