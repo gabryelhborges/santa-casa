@@ -96,9 +96,28 @@ create table lote(
     unidade_un_cod integer not null,
     total_conteudo integer not null,
     constraint pk_codigo primary key (codigo),
-    constraint fk_prod_ID  foreign key (produto_prod_ID) referencesproduto(prod_ID), 
+    constraint fk_prod_ID  foreign key (produto_prod_ID) references produtos(prod_ID), 
     constraint fk_ffa_cod foreign key (formafarmaceutica_ffa_cod) references formafarmaceutica(ffa_cod),  
     constraint fk_un_cod foreign key (unidade_un_cod) references unidade(un_cod)
+);
+
+create table consumo(
+	cons_id integer not null,
+    cons_pac_id integer not null,
+    cons_func_id integer not null,
+    cons_dataConsumo datetime,
+    constraint pk_cons_id primary key (cons_id),
+    constraint fk_cons_pac_id foreign key (cons_pac_id) references Pacientes(id_paciente),
+    constraint fk_cons_func_id foreign key (cons_func_id) references Funcionarios(idFuncionario)
+);
+
+create table itensConsumo(
+	ic_cons_id integer not null,
+    ic_lote_codigo varchar(15) not null,
+    ic_qtdeConteudoUtilizado integer not null,
+    constraint pk_ic primary key (ic_cons_id, ic_lote_codigo),
+    constraint fk_ic_cons_id foreign key (ic_cons_id) references Consumo(cons_id),
+    constraint fk_ic_lote_codigo foreign key (ic_lote_codigo) references Lote(codigo)
 );
 
 -- insert nos pacientes
