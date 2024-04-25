@@ -16,6 +16,7 @@ export default class ConsumoCtrl{
             if(paciente instanceof Paciente && funcionario instanceof Funcionario && itensConsumo.length > 0 && dataConsumo){
                 const cons = new Consumo(0, paciente, funcionario, itensConsumo, dataConsumo);
                 const conexao = await conectar();
+                //conexao.beginTransaction()
                 cons.gravar(conexao).then(()=>{
                     resposta.status(200).json({
                         "status": true,
