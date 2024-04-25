@@ -9,7 +9,6 @@ export default class ConsumoDAO{
             const retorno = await conexao.execute(sql, parametros);
             consumo.idConsumo = retorno[0].insertId;
             //releaseConnection deve ser feita no final do controle
-            
         }
     }
 
