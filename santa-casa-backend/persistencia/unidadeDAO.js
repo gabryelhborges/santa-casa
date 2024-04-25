@@ -9,7 +9,7 @@ export default class UnidadeDAO{
             unidade (unidade) VALUES(?);`;
             const parametros = [
                 unidade.unidade
-            ]
+            ];
             const conexao = await conectar();
             const retorno = await conexao.execute(sql, parametros);
             unidade.un_cod = retorno[0].insertId;

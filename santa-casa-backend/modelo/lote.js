@@ -1,4 +1,7 @@
-import LoteCtrl from "../controle/loteCtrl.js";
+import LoteDAO from "../controle/loteCtrl.js";
+import Produto from "./produto.js";
+import FormaFarmaceutica from "./formaFarmaceutica.js";
+import Unidade from "./unidade.js";
 
 export default class Lote{
     #codigo;
@@ -12,10 +15,10 @@ export default class Lote{
 
     constructor(codigo = 0 ,
                 data_validade = "",
-                quantidade = "",
+                quantidade = 0,
                 produto = null, 
                 formaFarmaceutica = null,
-                conteudo_frasco = "",
+                conteudo_frasco = 0,
                 unidade = null,
                 total_conteudo = 0
     ){
