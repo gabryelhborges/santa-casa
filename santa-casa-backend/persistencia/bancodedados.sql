@@ -35,6 +35,9 @@ create table funcionarios(
     coren               varchar(14),
     cpf                 varchar(14) not null unique,
     telefone_funcionario varchar(20),
+    login varchar(30) not null,
+    senha varchar(30) not null,
+    nivel_de_acesso decimal(1,0),
     constraint pfFuncionario primary key (idFuncionario)
 );
 
@@ -107,10 +110,11 @@ insert into pacientes values(2,'999.999.999-99','Fulano da Silva Sauro','pardo',
 insert into pacientes values(null,'396.354.698-02','Yago Akio', 'preto','v','f','1500-02-28','Rua do arco-iris','Bairro do unicornio','(69) 96969-6969','Garoto de Programa',null,'69','Complemento A','12345-123','Japonês','Ricardo','Gabryel H Borges','Liria','Suzane Von Richthofen','S','Petista',3);
 -- select * from pacientes;
 
+-- nivel de acesso: 1->NA, 2-> enfermeiro 3-> farmaceutico, 4-> gestor
 -- insert nos funcionários
-insert into funcionarios values(null, 'Gabryel H Borges', 'S','','478.067.288-05','(18) 99808-2343');
-insert into funcionarios values(null, 'Aglae Pereira Zaupa','N','SP-12345-6','069.916.188-61','(11) 95555-5999');
-insert into funcionarios values(null, 'Gabriel Carrocini', 'N','','999.999.999-99','(18) 10101-0011');
+insert into funcionarios values(null, 'Gabryel H Borges', 'S','','478.067.288-05','(18) 99808-2343','gabbor','gg',3);
+insert into funcionarios values(null, 'Aglae Pereira Zaupa','N','SP-12345-6','069.916.188-61','(11) 95555-5999','aglaep','aa',2);
+insert into funcionarios values(null, 'Gabriel Carrocini', 'N','','999.999.999-99','(18) 10101-0011','carroca','cc',4);
 --  * from funcionarios;
 
 
@@ -151,3 +155,11 @@ insert into formafarmaceutica values(null,'injetável');
 insert into formafarmaceutica values(null,'spray');
 insert into formafarmaceutica values(null,'aerossol');
 -- select * from formafarmaceutica;
+
+-- insert nos produtos
+insert into produtos values(1,1,'shampoo','N',25.00,'2024-04-20',null,'','usar na cabeça');
+-- select * from produtos;
+
+-- insert nos lotes
+insert into lote values('001','2024-12-31',50,1,1,125,2,6250);
+-- select * from lote;
