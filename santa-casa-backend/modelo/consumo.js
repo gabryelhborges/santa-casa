@@ -80,6 +80,6 @@ export default class Consumo{
 
     async consultar(termo, conexao){
         const consDAO = new ConsumoDAO();
-        return awaitconsDAO.consultar(termo, conexao);
+        return await consDAO.consultar(termo, conexao);
     }
 }

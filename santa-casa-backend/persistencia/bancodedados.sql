@@ -86,6 +86,21 @@ create table formafarmaceutica(
     constraint pk_ffa primary key(ffa_cod)
 );
 
+create table lote(
+    codigo varchar(15) not null,
+    data_validade date not null,
+    quantidade integer not null,
+    produto_prod_ID integer not null,
+    formafarmaceutica_ffa_cod integer  not null,
+    conteudo_frasco integer not null,
+    unidade_un_cod integer not null,
+    total_conteudo integer not null,
+    constraint pk_codigo primary key (codigo),
+    constraint fk_prod_ID  foreign key (produto_prod_ID) references produtos(prod_ID), 
+    constraint fk_ffa_cod foreign key (formafarmaceutica_ffa_cod) references formafarmaceutica(ffa_cod),  
+    constraint fk_un_cod foreign key (unidade_un_cod) references unidade(un_cod)
+);
+
 -- insert nos pacientes
 insert into pacientes values(1,'526.217.888-07','Leon B Ronchi', 'branco','solteiro','masculino','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
 insert into pacientes values(2,'999.999.999-99','Fulano da Silva Sauro','pardo','casado','masculino','1997-10-13','Rua tal','Bairro X','(99) 99998-9999','marceneiro','','9999','complemento X','00000-000','Testeiro','Fulanão','Fulaninho','Fulanona','Robson','N','Catolico',3);
