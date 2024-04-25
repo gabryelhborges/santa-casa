@@ -96,7 +96,7 @@ create table lote(
     unidade_un_cod integer not null,
     total_conteudo integer not null,
     constraint pk_codigo primary key (codigo),
-    constraint fk_prod_ID  foreign key (produto_prod_ID) referencesproduto(prod_ID), 
+    constraint fk_prod_ID  foreign key (produto_prod_ID) references produtos(prod_ID), 
     constraint fk_ffa_cod foreign key (formafarmaceutica_ffa_cod) references formafarmaceutica(ffa_cod),  
     constraint fk_un_cod foreign key (unidade_un_cod) references unidade(un_cod)
 );
