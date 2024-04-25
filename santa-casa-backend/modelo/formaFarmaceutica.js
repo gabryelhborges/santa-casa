@@ -1,4 +1,4 @@
-import FormaFarmaceuticaDAO from "../persistencia/formaFaramaceutica.js";
+import FormaFarmaceuticaDAO from "../persistencia/formaFaramaceuticaDAO.js";
 
 export default class FormaFarmaceutica{
     #ffa_cod;

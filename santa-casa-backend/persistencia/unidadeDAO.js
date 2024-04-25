@@ -9,7 +9,7 @@ export default class UnidadeDAO{
             unidade (unidade) VALUES(?);`;
             const parametros = [
                 unidade.unidade
-            ]
+            ];
             const conexao = await conectar();
             const retorno = await conexao.execute(sql, parametros);
             unidade.un_cod = retorno[0].insertId;
@@ -18,7 +18,7 @@ export default class UnidadeDAO{
         }
     }
 
-    async atualizaar(unidade){
+    async atualizar(unidade){
         if(unidade instanceof Unidade){
             let sql = 'UPDATE unidade SET unidade = ? WHERE un_cod = ?';
             const parametros = [
@@ -34,7 +34,7 @@ export default class UnidadeDAO{
     async excluir(unidade){
         if(unidade instanceof Unidade){
             const  sql= `DELETE FROM
-             unidade WHERE un_cod = ?'
+             unidade WHERE un_cod = ?
             `;
             const parametros=[
                unidade.un_cod
@@ -56,12 +56,12 @@ export default class UnidadeDAO{
             if(!termo){
                 termo = "";
             }
-            sql = "SELECT * FROM unidade WHERE  unidade LIKE ?";
+            sql = "SELECT * FROM unidade WHERE unidade LIKE ?  ORDER BY un_cod";
             parametros = ["%" + termo + "%"];
         }
         const conexao = await  conectar();
         const [registros, campos] =await conexao.execute(sql , parametros);
-        let listaUnidades = new Unidade(registros.un_cod,registros.unidade);
+        let listaUnidades = [];
         for(const registro of registros){
             let unidade = new Unidade(registro.un_cod,registro.unidade);
             listaUnidades.push(unidade);

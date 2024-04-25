@@ -47,8 +47,8 @@ export default class Unidade{
         await unidadeDAO.excluir(this);
     }
 
-    async consultar(){
+    async consultar(termo){
         const unidadeDAO = new UnidadeDAO();
-        return await unidadeDAO.consultar(this);
+        return await unidadeDAO.consultar(termo);
     }
 }
