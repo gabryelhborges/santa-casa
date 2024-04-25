@@ -1,5 +1,6 @@
 import Fabricante from "../modelo/fabricante.js";
 import conectar from "./conexao.js";
+
 export default class FabricanteDAO{
     async gravar(fabricante){
         if(fabricante instanceof Fabricante){
