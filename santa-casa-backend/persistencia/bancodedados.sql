@@ -121,9 +121,9 @@ create table itensConsumo(
 );
 
 -- insert nos pacientes
-insert into pacientes values(1,'526.217.888-07','Leon B Ronchi', 'branco','solteiro','masculino','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
-insert into pacientes values(2,'999.999.999-99','Fulano da Silva Sauro','pardo','casado','masculino','1997-10-13','Rua tal','Bairro X','(99) 99998-9999','marceneiro','','9999','complemento X','00000-000','Testeiro','Fulanão','Fulaninho','Fulanona','Robson','N','Catolico',3);
-insert into pacientes values(null,'396.354.698-02','Yago Akio', 'preto','viuvo','feminino','1500-02-30','Rua do arco-iris','Bairro do unicornio','(69) 96969-6969','Garoto de Programa','','69','Complemento A','12345-123','Japonês','Ricardo','Gabryel H Borges','Liria','Suzane Von Richthofen','S','Petista',3);
+insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('526.217.888-07','Leon B Ronchi', 'branco','solteiro','masculino','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
+insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('999.999.999-99','Fulano da Silva Sauro','pardo','casado','masculino','1997-10-13','Rua tal','Bairro X','(99) 99998-9999','marceneiro','9999','complemento X','00000-000','Testeiro','Fulanão','Fulaninho','Fulanona','Robson','N','Catolico',3);
+insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('396.354.698-02','Yago Akio', 'preto','viuvo','feminino','1500-02-30','Rua do arco-iris','Bairro do unicornio','(69) 96969-6969','Garoto de Programa','69','Complemento A','12345-123','Japonês','Ricardo','Gabryel H Borges','Liria','Suzane Von Richthofen','S','Petista',3);
 -- select * from pacientes;
 
 -- insert nos funcionários
@@ -147,9 +147,7 @@ insert into fabricante values(null, '15.670.288/0002-60','Gilead Sciences','Av. 
 -- select * from fabricante;
 
 -- insert nas unidades
-insert into unidade values(null,'Quilograma(kg)');
 insert into unidade values(null,'Grama(g)');
-insert into unidade values(null,'litro(l)');
 insert into unidade values(null,'mililitro(ml)');
 insert into unidade values(null,'gotas(gt)');
 insert into unidade values(null,'Unidade Internacional(UI)');
