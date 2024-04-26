@@ -287,4 +287,6 @@ export default class Paciente {
         const pacDAO = new PacienteDAO();
         return await pacDAO.consultar(termo);
     }
+
+    
 }
