@@ -102,7 +102,7 @@ create table lote(
 );
 
 create table consumo(
-	cons_id integer not null,
+	cons_id integer not null auto_increment,
     cons_pac_id integer not null,
     cons_func_id integer not null,
     cons_dataConsumo datetime,
@@ -114,11 +114,11 @@ create table consumo(
 create table itensConsumo(
 	ic_cons_id integer not null,
     ic_lote_codigo varchar(15) not null,
-    ic_qtdeConteudoUtilizado integer not null,
     ic_prod_id integer not null,
+    ic_qtdeConteudoUtilizado integer not null,
     constraint pk_ic primary key (ic_cons_id, ic_lote_codigo, ic_prod_id),
     constraint fk_ic_cons_id foreign key (ic_cons_id) references Consumo(cons_id),
-    constraint fk_ic_lote_codigo foreign key (ic_lote_codigo) references Lote(codigo)
+    constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
 );
 
 -- insert nos pacientes
@@ -184,3 +184,9 @@ insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmac
 
 -- insert consumo
 insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(1,1,'2024-04-26');
+insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(2,2,'2026-07-30');
+
+-- insert itens consumo
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 54321, 1, 11);
+-- insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES();
+-- insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES();
