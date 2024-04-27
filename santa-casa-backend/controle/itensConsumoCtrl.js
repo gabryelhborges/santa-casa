@@ -115,8 +115,12 @@ export default class ItensConsumoCtrl {
     async consultar(requisicao, resposta) {
         resposta.type('application/json');
         const dados= requisicao.body;
-        let consumo = new Consumo(dados.consumo.idConsumo);
-        let lote = new Lote(dados.lote.codigo);
+        let idConsumo= dados.consumo.idConsumo;
+        let consumo;
+        idConsumo ? consumo = new Consumo(idConsumo) : consumo = null;
+        let codigoLote;
+        let lote;
+        codigoLote ? lote = new Lote(codigoLote) : lote = null;
         if(requisicao.method === "GET"){
             const ic = new ItensConsumo(consumo, lote);
             const conexao = await conectar();

@@ -32,9 +32,19 @@ export default class ItensConsumoDAO{
     async consultar(itemConsumo, conexao){
         let sql = ``;
         let parametros = [];
-        if(itemConsumo.consumo.idConsumo && itemConsumo.lote.codigo){
+        if(itemConsumo.consumo && itemConsumo.lote){
             sql = "SELECT * FROM ItensConsumo WHERE ic_cons_id = ? AND ic_lote_codigo = ?";
             parametros = [itemConsumo.consumo.idConsumo, itemConsumo.lote.codigo];
+        }
+        else if(itemConsumo.consumo || itemConsumo.lote){
+            if(itemConsumo.consumo){
+                sql = "SELECT * FROM ItensConsumo WHERE ic_cons_id = ?";
+                parametros = [itemConsumo.consumo.idConsumo];
+            }
+            else{
+                sql = "SELECT * FROM ItensConsumo WHERE ic_lote_codigo = ?";
+                parametros = [itemConsumo.lote.codigo];
+            }
         }
         else{
             sql = "SELECT * FROM ItensConsumo;"
@@ -42,12 +52,16 @@ export default class ItensConsumoDAO{
         const [registros, campos]= await conexao.execute(sql, parametros);
         let listaItensConsumo= [];
         for(const registro of registros){
-            let consumo = new Consumo();
+            let consumo = new Consumo(registro.ic_cons_id);
+            /*
+            Ta entrando em loop
             await consumo.consultar(registro.ic_cons_id, conexao).then((listaCons)=>{
                 consumo = listaCons.pop();
             });
-            let lote = new Lote();
-            await lote.consultar(registro.ic_lote_codigo).then((listaLote)=>{
+            */
+            let lote = new Lote(registro.ic_lote_codigo);
+            await lote.consultar().then((listaLote)=>{
+                //Alterar LoteDAO para que possa ser pesquisado lotes a partir de seus codigos
                 lote= listaLote.pop();
             });
             let novoItCons = new ItensConsumo(consumo, lote, registro.ic_qtdeConteudoUtilizado);
