@@ -7,6 +7,7 @@ import rotaFabricante from "./rotas/rotaFabricante.js";
 import rotaUnidade from "./rotas/rotaUnidade.js";
 import rotaForma from "./rotas/rotaForma.js";
 import rotaLote from "./rotas/rotaLote.js";
+import rotaConsumo from "./rotas/rotaConsumo.js";
 
 //Aplicação HTTP pronta, bastando parametrizá-la
 const host = "0.0.0.0";
@@ -23,6 +24,7 @@ app.use('/produto', rotaProduto);
 app.use('/fabricante',rotaFabricante);
 app.use('/unidade',rotaUnidade);
 app.use('/forma',rotaForma);
+app.use('/consumo', rotaConsumo);
 app.use( '/lote', rotaLote);
 
 app.listen(porta, host, ()=>{
