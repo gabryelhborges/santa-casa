@@ -95,7 +95,7 @@ create table lote(
     conteudo_frasco integer not null,
     unidade_un_cod integer not null,
     total_conteudo integer not null,
-    constraint pk_codigo primary key (codigo),
+    constraint pk_codigo primary key (codigo, produto_prod_ID),
     constraint fk_prod_ID  foreign key (produto_prod_ID) references produtos(prod_ID), 
     constraint fk_ffa_cod foreign key (formafarmaceutica_ffa_cod) references formafarmaceutica(ffa_cod),  
     constraint fk_un_cod foreign key (unidade_un_cod) references unidade(un_cod)
@@ -115,7 +115,8 @@ create table itensConsumo(
 	ic_cons_id integer not null,
     ic_lote_codigo varchar(15) not null,
     ic_qtdeConteudoUtilizado integer not null,
-    constraint pk_ic primary key (ic_cons_id, ic_lote_codigo),
+    ic_prod_id integer not null,
+    constraint pk_ic primary key (ic_cons_id, ic_lote_codigo, ic_prod_id),
     constraint fk_ic_cons_id foreign key (ic_cons_id) references Consumo(cons_id),
     constraint fk_ic_lote_codigo foreign key (ic_lote_codigo) references Lote(codigo)
 );
@@ -127,46 +128,59 @@ insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, ende
 -- select * from pacientes;
 
 -- insert nos funcionários
-insert into funcionarios values(null, 'Gabryel H Borges', 'S','','478.067.288-05','(18) 99808-2343');
-insert into funcionarios values(null, 'Aglae Pereira Zaupa','N','SP-12345-6','069.916.188-61','(11) 95555-5999');
-insert into funcionarios values(null, 'Gabriel Carrocini', 'N','','999.999.999-99','(18) 10101-0011');
+insert into funcionarios values(default, 'Gabryel H Borges', 'S','','478.067.288-05','(18) 99808-2343');
+insert into funcionarios values(default, 'Aglae Pereira Zaupa','N','SP-12345-6','069.916.188-61','(11) 95555-5999');
+insert into funcionarios values(default, 'Gabriel Carrocini', 'N','','999.999.999-99','(18) 10101-0011');
 --  * from funcionarios;
 
 
 -- insert nos fabricantes
-insert into fabricante values(null, '54.516.661/0001-01','Johnson & Johnson','Av. Pres. Juscelino Kubitschek',2041,'','Vila Nova Conceição','São Paulo','SP','0800 703 6363');
-insert into fabricante values(null, '56.994.502/0001-30','Novartis','Av. Professor Vicente Rao',90,'','Cidade Monções','Sao Paulo','SP','0800 020 7758');
-insert into fabricante values(null, '33.009.945/0001-23','Roche','R. Dr. Rubens Gomes Bueno',691,'','Santo Amaro','Sao Paulo','SP','0800 772 0295');
-insert into fabricante values(null, '61.072.393/0001-33','Pfizer','R. Alexandre Dumas',1860,'','Santo Amaro','Sao Paulo','SP','(11) 5185-8500');
-insert into fabricante values(null, '02.685.377/0001-57','Sanofi', 'Av. das Nações Unidas',14401,'Zona Sul','Chácara Santo Antônio', 'Sao Paulo', 'SP', '(11) 2889-3800');
-insert into fabricante values(null, '33.069.212/0001-84','Merck', 'Av. das Nações Unidas',12995,'30 andar','Pinheiros','Sao Paulo', 'SP', '(11) 3346-8507');
-insert into fabricante values(null, '33.247.743/0001-10','GSK (GlaxoSmithKline)','R. Carneiro da Cunha',303,'','Vila da Saúde','Sao Paulo','SP','(11) 2276-2183');
-insert into fabricante values(null, '60.318.797/0001-00','AstraZeneca','Rodovia Raposo Tavares',0,'KM 26.9 S/N','Moinho Velho','Cotia', 'SP', '(11) 3737-1200');
-insert into fabricante values(null, '18.459.628/0001-15','Bayer','R. Domingos Jorge',1100,'','Vila Socorro','Sao Paulo', 'SP','(11) 5694-5166');
-insert into fabricante values(null, '15.670.288/0002-60','Gilead Sciences','Av. Dr. Chucri Zaidan',1240,'','Morumbi', 'Sao Paulo', 'SP','0800 771 0744');
+insert into fabricante values(default, '54.516.661/0001-01','Johnson & Johnson','Av. Pres. Juscelino Kubitschek',2041,'','Vila Nova Conceição','São Paulo','SP','0800 703 6363');
+insert into fabricante values(default, '56.994.502/0001-30','Novartis','Av. Professor Vicente Rao',90,'','Cidade Monções','Sao Paulo','SP','0800 020 7758');
+insert into fabricante values(default, '33.009.945/0001-23','Roche','R. Dr. Rubens Gomes Bueno',691,'','Santo Amaro','Sao Paulo','SP','0800 772 0295');
+insert into fabricante values(default, '61.072.393/0001-33','Pfizer','R. Alexandre Dumas',1860,'','Santo Amaro','Sao Paulo','SP','(11) 5185-8500');
+insert into fabricante values(default, '02.685.377/0001-57','Sanofi', 'Av. das Nações Unidas',14401,'Zona Sul','Chácara Santo Antônio', 'Sao Paulo', 'SP', '(11) 2889-3800');
+insert into fabricante values(default, '33.069.212/0001-84','Merck', 'Av. das Nações Unidas',12995,'30 andar','Pinheiros','Sao Paulo', 'SP', '(11) 3346-8507');
+insert into fabricante values(default, '33.247.743/0001-10','GSK (GlaxoSmithKline)','R. Carneiro da Cunha',303,'','Vila da Saúde','Sao Paulo','SP','(11) 2276-2183');
+insert into fabricante values(default, '60.318.797/0001-00','AstraZeneca','Rodovia Raposo Tavares',0,'KM 26.9 S/N','Moinho Velho','Cotia', 'SP', '(11) 3737-1200');
+insert into fabricante values(default, '18.459.628/0001-15','Bayer','R. Domingos Jorge',1100,'','Vila Socorro','Sao Paulo', 'SP','(11) 5694-5166');
+insert into fabricante values(default, '15.670.288/0002-60','Gilead Sciences','Av. Dr. Chucri Zaidan',1240,'','Morumbi', 'Sao Paulo', 'SP','0800 771 0744');
 -- select * from fabricante;
 
 -- insert nas unidades
-insert into unidade values(null,'Grama(g)');
-insert into unidade values(null,'mililitro(ml)');
-insert into unidade values(null,'gotas(gt)');
-insert into unidade values(null,'Unidade Internacional(UI)');
+insert into unidade values(default,'Grama(g)');
+insert into unidade values(default,'mililitro(ml)');
+insert into unidade values(default,'gotas(gt)');
+insert into unidade values(default,'Unidade Internacional(UI)');
 -- select * from unidade;
 
 -- insert nas formas farmacêuticas
-insert into formafarmaceutica values(null,'comprimido');
-insert into formafarmaceutica values(null,'cápsula');
-insert into formafarmaceutica values(null,'drágea');
-insert into formafarmaceutica values(null,'pastilha');
-insert into formafarmaceutica values(null,'supositório');
-insert into formafarmaceutica values(null,'pomada');
-insert into formafarmaceutica values(null,'gel');
-insert into formafarmaceutica values(null,'creme');
-insert into formafarmaceutica values(null,'xarope');
-insert into formafarmaceutica values(null,'gota');
-insert into formafarmaceutica values(null,'solução nasal');
-insert into formafarmaceutica values(null,'oftálmica');
-insert into formafarmaceutica values(null,'injetável');
-insert into formafarmaceutica values(null,'spray');
-insert into formafarmaceutica values(null,'aerossol');
+insert into formafarmaceutica values(default,'comprimido');
+insert into formafarmaceutica values(default,'cápsula');
+insert into formafarmaceutica values(default,'drágea');
+insert into formafarmaceutica values(default,'pastilha');
+insert into formafarmaceutica values(default,'supositório');
+insert into formafarmaceutica values(default,'pomada');
+insert into formafarmaceutica values(default,'gel');
+insert into formafarmaceutica values(default,'creme');
+insert into formafarmaceutica values(default,'xarope');
+insert into formafarmaceutica values(default,'gota');
+insert into formafarmaceutica values(default,'solução nasal');
+insert into formafarmaceutica values(default,'oftálmica');
+insert into formafarmaceutica values(default,'injetável');
+insert into formafarmaceutica values(default,'spray');
+insert into formafarmaceutica values(default,'aerossol');
 -- select * from formafarmaceutica;
+
+-- insert produtos
+INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo)
+VALUES (1, 1, 'Produto A', 'N', 10.50, '2024-04-27', NULL, 'Observação sobre o Produto A', 'Descrição de uso do Produto A', 100, 'Tipo A'),
+(2, 2, 'Produto B', 'S', 15.75, '2024-04-25', NULL, 'Observação sobre o Produto B', 'Descrição de uso do Produto B', 50, 'Tipo B'),
+(3, 3, 'Produto C', 'N', 20.00, '2024-04-26', NULL, 'Observação sobre o Produto C', 'Descrição de uso do Produto C', 75, 'Tipo C');
+
+-- insert lote
+insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo) VALUES('12345', '2024-07-13', 100, 1, 2, 125, 2, 12500);
+insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo) VALUES('54321', '2024-08-20', 200, 2, 2, 150, 2, 30000);
+
+-- insert consumo
+insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(1,1,'2024-04-26');
