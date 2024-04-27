@@ -1,5 +1,6 @@
 import Consumo from "../modelo/consumo.js";
 import Funcionario from "../modelo/funcionario.js";
+import ItensConsumo from "../modelo/itensConsumo.js";
 import Paciente from "../modelo/paciente.js";
 
 export default class ConsumoDAO{
@@ -52,12 +53,20 @@ export default class ConsumoDAO{
             await paciente.consultar(registro.cons_pac_id).then((listaPac) =>{
                 paciente = listaPac.pop();
             });
+            
             let funcionario = new Funcionario();
             await funcionario.consultar(registro.cons_func_id).then((listaFunc)=>{
                 funcionario = listaFunc.pop();
             });
-            
-            let consumo = new Consumo(registro.cons_id, paciente, funcionario, null, registro.cons_dataConsumo);//acessar registro com o nome da variavel no banco
+
+            let consumo = new Consumo(registro.cons_id, paciente, funcionario, [], registro.cons_dataConsumo);
+            let listaItensConsumo = [];
+            let ic = new ItensConsumo(consumo);
+            await ic.consultar(conexao).then((listaIC)=>{
+                listaItensConsumo = listaIC;
+            })
+            consumo.itensConsumo= listaItensConsumo;
+
             listaConsumos.push(consumo);
         }
         return listaConsumos;
