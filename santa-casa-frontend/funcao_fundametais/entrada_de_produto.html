@@ -26,86 +26,74 @@
                       <h4 class="u-align-center u-text u-text-default u-text-1">ENTRADA DE PRODUTO</h4>
                     </div>
                   </div>
-                  <div class="u-container-style u-expanded-width u-group u-palette-1-light-2 u-group-2">
-                    <div class="u-container-layout u-container-layout-3">
-                      <div class="u-carousel u-carousel-duration-250 u-carousel-fade u-form u-form-1" data-interval="0" data-u-ride="false" id="carousel-1e88">
-                        <form id="entrada_produto" action="https://forms.nicepagesrv.com/v2/form/process" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 0px;">
-                          <div class="u-carousel-inner" role="listbox">
-                            <div class="u-carousel-item u-form-step u-slide u-active">
-                              <div class="u-form-group u-form-name u-form-partition-factor-2">
-                                <label for="name-1002" class="u-label u-label-1">*Produto</label>
-                                <input id="cod_prod" type="text" placeholder="Código do Produto" id="name-1002" name="name" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-1" required="">
-                              </div>
-                              <div class="u-form-group u-form-partition-factor-2 u-form-group-2">
-                                <label for="text-a9ce" class="u-label u-label-2">*Lote</label>
-                                <input id="lote" type="text" id="text-a9ce" name="text" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-2" placeholder="Código de Lote">
-                              </div>
-                              <div class="u-form-date u-form-group u-form-partition-factor-2 u-form-group-3">
-                                <label for="date-e120" class="u-label u-label-3">Validade</label>
-                                <input id="validade" type="text" placeholder="DD/MM/YYYY" id="date-e120" name="date" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" required="" data-date-format="dd/mm/yyyy">
-                              </div>
-                              <div class="u-form-group u-form-number u-form-number-layout-number u-form-partition-factor-2 u-form-group-4">
-                                <label for="number-e05b" class="u-label u-label-4">Quantidade</label>
-                                <div class="u-input-row" data-value="0">
-                                  <input id="quantidade" value="0" min="0" max="100" step="1" type="number" placeholder="" id="number-e05b" name="Quantidade" class="u-border-2 u-border-black u-input u-input-rectangle u-number u-radius u-text-black u-input-4">
-                                </div>
-                              </div>
+                  <div class="u-container-align-center u-container-style u-expanded-width u-group u-palette-1-light-2 u-group-2">
+                    <div class="u-container-layout u-valign-middle u-container-layout-3">
+                      <div class="u-align-center u-form u-form-1" id="carousel-2159">
+                        <form action="https://forms.nicepagesrv.com/v2/form/process" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 0px;">
+                          <div class="u-form-group u-form-name u-form-partition-factor-3 u-label-top">
+                            <label for="name-1002" class="u-label u-label-1">*Produto</label>
+                            <input id="id_produto" type="text" placeholder="Código do Produto" id="name-1002" name="name" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-1" required="">
+                          </div>
+                          <div class="u-form-group u-form-partition-factor-3 u-label-top u-form-group-2">
+                            <label for="text-3c1f" class="u-label u-label-2">Nome Produto</label>
+                            <input id="nome_produto" type="text" id="text-3c1f" name="nomeProduto" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-2">
+                          </div>
+                          <div class="u-form-group u-form-partition-factor-3 u-label-top u-form-group-3">
+                            <label for="text-70bd" class="u-label u-label-3">Fabricante</label>
+                            <input id="nome_fabricante" type="text" placeholder="" id="text-70bd" name="text-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
+                          </div>
+                          <div class="u-form-group u-form-partition-factor-2 u-label-top u-form-group-4">
+                            <label for="text-a9ce" class="u-label u-label-4">*Lote</label>
+                            <input id="codigo_lote" type="text" id="text-a9ce" name="text" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-4" placeholder="Código de Lote">
+                          </div>
+                          <div class="u-form-date u-form-group u-form-partition-factor-2 u-label-top u-form-group-5">
+                            <label for="date-e120" class="u-label u-label-5">*Validade</label>
+                            <input id = "validade" type="text" placeholder="DD/MM/YYYY" id="date-e120" name="date" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-5" required="" data-date-format="dd/mm/yyyy">
+                          </div>
+                          <div class="u-form-group u-form-partition-factor-2 u-form-select u-label-top u-form-group-6">
+                            <label for="select-0d05" class="u-label u-label-6">Unidade</label>
+                            <div class="u-form-select-wrapper">
+                              <select id="unidade" name="select-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-6">
+                                <option value="Item 1">Item 1</option>
+                                <option value="Item 2">Item 2</option>
+                                <option value="Item 3">Item 3</option>
+                              </select>
+                              <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
                             </div>
-                            <div class="u-carousel-item u-form-step u-slide"></div>
                           </div>
-                          <div class="u-align-left u-form-group u-form-submit">
-                            <a href="#" class="u-active-custom-color-2 u-border-none u-btn u-btn-round u-btn-step u-btn-step-prev u-button-style u-hover-palette-1-light-3 u-palette-1-base u-radius u-hidden u-btn-1">Voltar</a>
-                            <a href="#" class="u-active-custom-color-2 u-border-none u-btn u-btn-round u-btn-step u-btn-step-next u-button-style u-hover-palette-1-light-3 u-palette-1-base u-radius u-btn-1">Próximo</a>
-                            <a href="#" class="u-active-custom-color-2 u-border-none u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-1-light-3 u-palette-1-base u-radius u-hidden u-btn-1">ADICIONAR </a>
+                          <div class="u-form-group u-form-partition-factor-2 u-form-select u-label-top u-form-group-7">
+                            <label for="select-2ed7" class="u-label u-label-7">Forma Farmaceutica</label>
+                            <div class="u-form-select-wrapper">
+                              <select id="forma_farmaceutica" name="select-2" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-7">
+                                <option value="Item 1">Item 1</option>
+                                <option value="Item 2">Item 2</option>
+                                <option value="Item 3">Item 3</option>
+                              </select>
+                              <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
+                            </div>
+                          </div>
+                          <div class="u-form-group u-form-number u-form-number-layout-number u-form-partition-factor-2 u-label-top u-form-group-8">
+                            <label for="number-e05b" class="u-label u-label-8">Quantidade</label>
+                            <div class="u-input-row" data-value="0">
+                              <input id="quantidade" value="0" min="0" max="100" step="1" type="number" placeholder="" id="number-e05b" name="Quantidade" class="u-border-2 u-border-black u-input u-input-rectangle u-number u-radius u-text-black u-input-8">
+                            </div>
+                          </div>
+                          <div class="u-form-group u-form-number u-form-number-layout-number u-form-partition-factor-2 u-label-top u-form-group-9">
+                            <label for="number-b061" class="u-label u-label-9">Capacidade</label>
+                            <div class="u-input-row" data-value="0">
+                              <input id="capacidade" value="0" min="0" max="100" step="1" type="number" placeholder="" id="number-b061" name="number" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-text-black u-input-9">
+                            </div>
+                          </div>
+                          <div class="u-form-group u-form-submit u-label-top">
+                            <label class="u-form-control-hidden u-label u-label-10"></label>
                             <input type="submit" value="submit" class="u-form-control-hidden">
+                            
+                            <button type="submit" value="submit" class="u-active-custom-color-2 u-border-none u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-1-light-3 u-palette-1-base u-radius u-btn-1">
+                              ADICIONAR
+                            </button>
                           </div>
-                          <div class="u-form-send-message u-form-send-success"> Obrigado! A sua mensagem foi enviada. </div>
-                          <div class="u-form-send-error u-form-send-message"> Não foi possível enviar a sua mensagem. Por favor, corrija os erros e tente novamente. </div>
-                          <input type="hidden" value="" name="recaptchaResponse">
-                          <input type="hidden" name="formServices" value="e2d82db3-668e-debc-c44e-2e1cd608cc6a">
                         </form>
                       </div>
-                      <div class="custom-expanded u-container-style u-group u-palette-1-dark-1 u-radius u-shape-round u-group-3">
-                        <div class="u-container-layout u-container-layout-4">
-                          <h6 class="u-align-center u-text u-text-default u-text-2">LISTA PRODUTO<br>
-                          </h6>
-                        </div>
-                      </div>
-                      <div class="u-expanded-width u-table u-table-responsive u-table-1">
-                        <table class="u-table-entity">
-                          <colgroup>
-                            <col width="20%">
-                            <col width="20%">
-                            <col width="20%">
-                            <col width="20%">
-                            <col width="20%">
-                          </colgroup>
-                          <tbody class="u-table-body">
-                            <tr style="height: 46px;">
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-1"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-2"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-3"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-4"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-5"></td>
-                            </tr>
-                            <tr style="height: 46px;">
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-6"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-7"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-8"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-9"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-10"></td>
-                            </tr>
-                            <tr style="height: 46px;">
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-11"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-12"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-13"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-14"></td>
-                              <td class="u-border-1 u-border-grey-dark-1 u-table-cell u-table-cell-15"></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <a href="#" class="u-active-custom-color-2 u-btn u-btn-round u-button-style u-hover-palette-1-light-3 u-palette-1-base u-radius u-btn-4" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">ENVIAR </a>
                     </div>
                   </div>
                 </div>

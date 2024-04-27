@@ -24,8 +24,8 @@ app.use('/produto', rotaProduto);
 app.use('/fabricante',rotaFabricante);
 app.use('/unidade',rotaUnidade);
 app.use('/forma',rotaForma);
-app.use( '/lotes', rotaLote);
 app.use('/consumo', rotaConsumo);
+app.use( '/lote', rotaLote);
 
 app.listen(porta, host, ()=>{
     console.log(`API do sistema em execução: ${host}:${porta}`);

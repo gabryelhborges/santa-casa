@@ -2,7 +2,7 @@ import Lote from "../modelo/lote.js";
 
 
 export default class LoteCtrl{
-    async gravar(requisicao, resposta){
+    gravar(requisicao, resposta){
         resposta.type('application/json');
         if(requisicao.method === "POST" && requisicao.is("application/json")){
             const dados = requisicao.body;
@@ -10,18 +10,18 @@ export default class LoteCtrl{
             const data_validade = dados.data_validade;
             const quantidade = dados.quantidade;
             const produto = dados.produto;
-            const formaFaramaceutica = dados.formaFaramaceutica;
+            const formaFarmaceutica = dados.formaFarmaceutica;
             const conteudo_frasco = dados.conteudo_frasco;
-            const unidade = dados.conteudo_frasco;
+            const unidade = dados.unidade;
             const total_conteudo = dados.total_conteudo;
 
             if(
             codigo && data_validade && quantidade 
-            && produto && formaFaramaceutica && conteudo_frasco
+            && produto && formaFarmaceutica && conteudo_frasco
             && unidade  && total_conteudo
             ) {  
                 const lote = new Lote( codigo, data_validade, quantidade, 
-                produto, formaFaramaceutica, conteudo_frasco, 
+                produto, formaFarmaceutica, conteudo_frasco, 
                 unidade , total_conteudo);
                 lote.gravar().then(()=>{
                     resposta.status(200).json({
@@ -52,14 +52,108 @@ export default class LoteCtrl{
     }
 
     async atualizar(requisicao, resposta){
-        
+        resposta.type('application/json');
+        if ((requisicao.method === "PUT" || requisicao.method === "PATCH") && requisicao.is("application/json")){
+            const dados = requisicao.body;
+            const codigo = dados.codigo;
+            const data_validade = dados.data_validade;
+            const quantidade = dados.quantidade;
+            const produto = dados.produto;
+            const formaFarmaceutica = dados.formaFarmaceutica;
+            const conteudo_frasco = dados.conteudo_frasco;
+            const unidade = dados.unidade;
+            const total_conteudo = dados.total_conteudo;
+            if(
+                codigo && data_validade && quantidade 
+                && produto && formaFarmaceutica && conteudo_frasco
+                && unidade  && total_conteudo
+                ) {  
+                    const lote = new Lote( codigo, data_validade, quantidade, 
+                    produto, formaFarmaceutica, conteudo_frasco, 
+                    unidade , total_conteudo);
+                    lote.atualizar().then(()=>{
+                        resposta.status(200).json({
+                            "status": true,
+                            "mensagem": "Lote atualizado com sucesso!"
+                        
+                        })
+                    }).catch((erro) => {
+                        resposta.status(500).json({
+                            "status": false,
+                            "mensagem": "Houve um erro ao atualizar um lote: " + erro.message
+                        });
+                    });
+                }
+                else{
+                    resposta.status(400).json({
+                        "status": false,
+                        "mensagem": "Informe o lote!"
+                    });
+                }
+            }
+            else{
+                resposta.status(400).json({
+                    "status": false,
+                    "mensagem": "Utilize o método POST ou PATCH para atualizar um lote!"
+                });
+            }
     }
 
     async excluir(requisicao, resposta){
-        
+        resposta.type('application/json');
+        if (requisicao.method === "DELETE" && requisicao.is("application/json")){
+            const codigo = requisicao.body.codigo;
+            const produto= requisicao.body.produto;
+            if(codigo && produto){
+                const lote = new Lote(codigo,null,null,produto);
+                lote.excluir().then(()=>{
+                    resposta.status(200).json({
+                        "status": true,
+                        "mensagem": "Lote excluído com sucesso!"
+                    });
+                }).catch((erro)=>{
+                    resposta.status(500).json({
+                        "status": false,
+                        "mensagem": "Erro ao excluir um lote: " + erro.message
+                    });
+                });
+            }
+            else{
+                resposta.status(400).json({
+                    "status": false,
+                    "mensagem": "Informe o código do lote!"
+                });
+            }
+        }
     }
 
-    async consultar(requisicao, resposta){
-        
+    consultar(requisicao, resposta) {
+        resposta.type('application/json');
+        if(requisicao.method === "GET"){
+            let codigo = requisicao.body.codigo;
+            let produto= requisicao.body.produto;
+            if(!codigo)
+                codigo = 0;
+            if(!produto)
+                produto = null;
+            const lote = new Lote(codigo,null,null,produto);
+            lote.consultar().then((listaLotes)=>{
+                resposta.status(200).json({
+                    "status": true,
+                    "listaLotes": listaLotes
+                });
+            }).catch((erro)=>{
+                resposta.status(500).json({
+                    "status": false,
+                    "mensagem": "Erro ao consultar lote(s): " + erro.message
+                });
+            });
+        }
+        else{
+            resposta.status(400).json({
+                "status": false,
+                "mensagem": "Utilize o método GET para consultar algum lote!"
+            });
+        }
     }
 }
