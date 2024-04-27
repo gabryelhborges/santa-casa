@@ -1,4 +1,4 @@
-import LoteDAO from "../controle/loteCtrl.js";
+import LoteDAO from "../persistencia/loteDAO.js";
 import Produto from "./produto.js";
 import FormaFarmaceutica from "./formaFarmaceutica.js";
 import Unidade from "./unidade.js";
@@ -109,23 +109,23 @@ export default class Lote{
         };
     }
 
-    async gravar(conexao){
-        const  loteDAO = new LoteDAO();
-        await loteDAO.gravar(this,conexao);
+    async gravar(){
+        const loteDAO = new LoteDAO();
+        await loteDAO.gravar(this);
     }
 
-    async atualizar(conexao){
+    async atualizar(){
         const  loteDAO = new LoteDAO();
-        await loteDAO.atualizar(this,conexao);
+        await loteDAO.atualizar(this);
     }
 
-    async excluir(conexao){
+    async excluir(){
         const  loteDAO = new LoteDAO();
-        await loteDAO.excluir(this,conexao);
+        await loteDAO.excluir(this);
     }
 
-    async consultar(conexao){
+    async consultar(){
         const  loteDAO = new LoteDAO();
-        await loteDAO.consultar(this,conexao);
+        return await loteDAO.consultar(this);
     }
 }
