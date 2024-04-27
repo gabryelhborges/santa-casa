@@ -138,7 +138,7 @@ export default class ConsumoCtrl {
                 .catch((erro) => {
                     resposta.status(500).json({
                         "status": false,
-                        "mensagem": "Ocorreu um erro ao consultar os consumos: " + erro.message + "\n" + erro.stack
+                        "mensagem": "Ocorreu um erro ao consultar os consumos: " + erro.message + "         Stack:" + erro.stack
                     });
                 });
             global.poolConexoes.releaseConnection(conexao);

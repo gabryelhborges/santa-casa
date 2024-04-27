@@ -42,18 +42,21 @@ export default class ConsumoDAO{
             if(!termo){
                 termo= "";
             }
-            sql = "SELECT * FROM Consumo";
-            parametros = ['%'+termo+'%'];
+            sql = "SELECT * FROM Consumo ORDER BY cons_dataConsumo ASC";
+            parametros = [];
         }
         const [registros, campos]= await conexao.execute(sql, parametros);
         let listaConsumos = [];
         for(const registro of registros){
             let paciente = new Paciente();
-            paciente.consultar(registro.cons_pac_id).then((pacEncontrado) =>{
-                paciente = pacEncontrado[0];
+            await paciente.consultar(registro.cons_pac_id).then((listaPac) =>{
+                paciente = listaPac.pop();
             });
-            //terminar
-            let funcionario = new Funcionario(registro.cons_func_id);
+            let funcionario = new Funcionario();
+            await funcionario.consultar(registro.cons_func_id).then((listaFunc)=>{
+                funcionario = listaFunc.pop();
+            });
+            
             let consumo = new Consumo(registro.cons_id, paciente, funcionario, null, registro.cons_dataConsumo);//acessar registro com o nome da variavel no banco
             listaConsumos.push(consumo);
         }
