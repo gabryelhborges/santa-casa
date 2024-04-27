@@ -2,6 +2,7 @@ import Consumo from "../modelo/consumo.js";
 import Paciente from "../modelo/paciente.js";
 import conectar from "../persistencia/conexao.js";
 import Funcionario from "../modelo/funcionario.js";
+import ItensConsumo from "../modelo/itensConsumo.js";
 
 
 export default class ConsumoCtrl {
@@ -13,23 +14,28 @@ export default class ConsumoCtrl {
             const funcionario = new Funcionario(dados.funcionario.idFuncionario);//já recebo um objeto? ou devo instanciá-lo aqui?
             const dataConsumo = dados.dataConsumo;
             const itensConsumo = dados.itensConsumo;
-            if (paciente instanceof Paciente && funcionario instanceof Funcionario && dataConsumo) {//&& itensConsumo.length > 0
+            if (paciente instanceof Paciente && funcionario instanceof Funcionario && dataConsumo && itensConsumo.length > 0) {//&& itensConsumo.length > 0
                 const cons = new Consumo(0, paciente, funcionario, itensConsumo, dataConsumo);
                 const conexao = await conectar();
                 //conexao.beginTransaction()
                 cons.gravar(conexao).then(() => {
+                    //Gravou consumo,e entao gravar os itens
+                    for(const item of itensConsumo){
+                        let itemConsumo = new ItensConsumo(cons, item.lote, item.produto, item.qtdeConteudoUtilizado);
+                        itemConsumo.gravar(conexao);
+                    }
                     resposta.status(200).json({
                         "status": true,
                         "codigoGerado": cons.idConsumo,
                         "mensagem": "Consumo cadastrado com sucesso!"
-                    })
-                        .catch((erro) => {
-                            resposta.status(500).json({
-                                "status": false,
-                                "mensagem": "Houve um erro ao cadastrar um consumo: " + erro.message
-                            });
+                    });
+                })
+                    .catch((erro) => {
+                        resposta.status(500).json({
+                            "status": false,
+                            "mensagem": "Houve um erro ao cadastrar um consumo: " + erro.message
                         });
-                });
+                    });
                 //Onde cadastrar os itensConsumo?
                 global.poolConexoes.releaseConnection(conexao);
             }

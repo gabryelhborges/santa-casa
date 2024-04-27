@@ -1,6 +1,7 @@
 import Consumo from "../modelo/consumo.js";
 import ItensConsumo from "../modelo/itensConsumo.js";
 import Lote from "../modelo/lote.js";
+import Produto from "../modelo/produto.js";
 import conectar from "../persistencia/conexao.js";
 
 export default class ItensConsumoCtrl {
@@ -9,10 +10,11 @@ export default class ItensConsumoCtrl {
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
             const dados = requisicao.body;
             let consumo = new Consumo(dados.consumo.idConsumo);
+            let produto = new Produto(dados.produto.prod_ID);
             let lote = new Lote(dados.lote.codigo);
             let qtdeConteudoUtilizado = dados.qtdeConteudoUtilizado;
             if (consumo instanceof Consumo && lote instanceof Lote && qtdeConteudoUtilizado) {
-                const ic = new ItensConsumo(consumo, lote, qtdeConteudoUtilizado);
+                const ic = new ItensConsumo(consumo, lote, produto, qtdeConteudoUtilizado);
                 const conexao = await conectar();
                 ic.gravar(conexao).then(() => {
                     resposta.status(200).json({
@@ -47,9 +49,10 @@ export default class ItensConsumoCtrl {
             const dados = requisicao.body;
             let consumo = new Consumo(dados.consumo.idConsumo);
             let lote = new Lote(dados.lote.codigo);
+            let produto = new Produto(dados.produto.prod_ID);
             let qtdeConteudoUtilizado = dados.qtdeConteudoUtilizado;
             if (consumo instanceof Consumo && lote instanceof Lote && qtdeConteudoUtilizado) {
-                const ic = new ItensConsumo(consumo, lote, qtdeConteudoUtilizado);
+                const ic = new ItensConsumo(consumo, lote, produto, qtdeConteudoUtilizado);
                 const conexao = await conectar();
                 ic.atualizar(conexao).then(()=>{
                     resposta.status(200).json({
@@ -118,11 +121,14 @@ export default class ItensConsumoCtrl {
         let idConsumo= dados.consumo.idConsumo;
         let consumo;
         idConsumo ? consumo = new Consumo(idConsumo) : consumo = null;
-        let codigoLote;
+        let codigoLote= dados.lote.codigo;
         let lote;
         codigoLote ? lote = new Lote(codigoLote) : lote = null;
+        let codigoProduto = dados.produto.prod_ID;
+        let produto;
+        codigoProduto ? produto = new Produto(codigoProduto) : produto = null;
         if(requisicao.method === "GET"){
-            const ic = new ItensConsumo(consumo, lote);
+            const ic = new ItensConsumo(consumo, lote, produto);
             const conexao = await conectar();
             ic.consultar(conexao).then((listaItensConsumo)=>{
                 resposta.status(200).json({

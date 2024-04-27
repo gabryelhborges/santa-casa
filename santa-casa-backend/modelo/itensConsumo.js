@@ -3,11 +3,13 @@ import ItensConsumoDAO from "../persistencia/itensConsumoDAO.js";
 export default class ItensConsumo{
     #consumo;
     #lote;
+    #produto;
     #qtdeConteudoUtilizado;
 
-    constructor(consumo= null, lote= null, qtdeConteudoUtilizado= 0){
+    constructor(consumo= null, lote= null, produto= null, qtdeConteudoUtilizado= 0){
         this.#consumo= consumo;
         this.#lote= lote;
+        this.#produto= produto;
         this.#qtdeConteudoUtilizado= qtdeConteudoUtilizado;
     }
 
@@ -25,6 +27,13 @@ export default class ItensConsumo{
         this.#lote = novolote;
     }
 
+    get produto(){
+        return this.#produto;
+    }
+    set produto(novoproduto){
+        this.#produto= novoproduto;
+    }
+
     get qtdeConteudoUtilizado(){
         return this.#qtdeConteudoUtilizado;
     }
@@ -36,6 +45,7 @@ export default class ItensConsumo{
         return {
             consumo: this.#consumo,
             lote: this.#lote,
+            produto: this.#produto,
             qtdeConteudoUtilizado: this.#qtdeConteudoUtilizado
         };
     }
