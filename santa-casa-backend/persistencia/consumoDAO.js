@@ -16,7 +16,9 @@ export default class ConsumoDAO{
 
     async atualizar(consumo, conexao){
         if(consumo instanceof Consumo){
-
+            const sql = "UPDATE Consumo SET cons_pac_id = ?, cons_func_id = ?, cons_dataConsumo = ? WHERE cons_id = ?";
+            const parametros = [consumo.paciente.idPaciente, consumo.funcionario.idFuncionario, consumo.dataConsumo, consumo.idConsumo];
+            await conexao.execute(sql, parametros);
         }
     }
 
@@ -40,13 +42,16 @@ export default class ConsumoDAO{
             if(!termo){
                 termo= "";
             }
-            sql = "SELECT * FROM Consumo WHERE cons_dataConsumo = ?";
-            parametros = [termo];
+            sql = "SELECT * FROM Consumo";
+            parametros = ['%'+termo+'%'];
         }
         const [registros, campos]= await conexao.execute(sql, parametros);
         let listaConsumos = [];
         for(const registro of registros){
             let paciente = new Paciente();
+            paciente.consultar(registro.cons_pac_id).then((pacEncontrado) =>{
+                paciente = pacEncontrado[0];
+            });
             //terminar
             let funcionario = new Funcionario(registro.cons_func_id);
             let consumo = new Consumo(registro.cons_id, paciente, funcionario, null, registro.cons_dataConsumo);//acessar registro com o nome da variavel no banco
