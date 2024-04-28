@@ -187,6 +187,6 @@ insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(1,1,'202
 insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(2,2,'2026-07-30');
 
 -- insert itens consumo
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 54321, 1, 11);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 54321, 2, 11);
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 12345, 1, 6);
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 12345, 1, 2);
