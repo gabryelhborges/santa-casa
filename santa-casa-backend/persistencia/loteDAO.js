@@ -95,15 +95,15 @@ export default class LoteDAO{
         //Preenchendo a lista com cada registro retornado
         for(const registro of registros){
             let produto = new Produto(registro.produto_prod_ID);
-            await produto.consultar().then((listaProdutos)=>{
+            await produto.consultar(registro.produto_prod_ID).then((listaProdutos)=>{
                 produto = listaProdutos.pop();
             });
             let formaFarmaceutica = new FormaFarmaceutica(registro.formafarmaceutica_ffa_cod);
-            await formaFarmaceutica.consultar().then((listaFormaFaramaceuticas)=>{
+            await formaFarmaceutica.consultar(registro.formafarmaceutica_ffa_cod).then((listaFormaFaramaceuticas)=>{
                 formaFarmaceutica = listaFormaFaramaceuticas.pop();
             });
             let unidade = new Unidade(registro.unidade_un_cod);
-            await unidade.consultar().then((listaUnidades)=>{
+            await unidade.consultar(registro.unidade_un_cod).then((listaUnidades)=>{
                 unidade = listaUnidades.pop();
             });
             
