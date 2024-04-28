@@ -37,8 +37,8 @@ export default class Loc{
         const locDAO = new LocalDAO();
         await locDAO.excluir(this);
     }
-    async consultar(){
+    async consultar(termo){
         const locDAO = new LocalDAO();
-        return await locDAO.consultar(this);
+        return await locDAO.consultar(termo);
     }
 }

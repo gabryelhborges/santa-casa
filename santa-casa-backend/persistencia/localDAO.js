@@ -50,7 +50,7 @@ export default class LocalDAO{
             if(!termo){
                 termo="";
             }
-            sql = "SELECT * FROM loc WHERE loc_nome  LIKE ? ORDER BY loc_nome";
+            sql = `SELECT * FROM loc WHERE loc_nome LIKE ? ORDER BY loc_nome`;
             parametros=["%"+termo+"%"];
         }
         const conexao = await conectar();
