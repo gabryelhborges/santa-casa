@@ -1,4 +1,3 @@
-import { format } from "mysql2";
 import Lote from "../modelo/lote.js";
 import conectar from "./conexao.js";
 import FormaFarmaceutica from "../modelo/formaFarmaceutica.js";
@@ -95,18 +94,21 @@ export default class LoteDAO{
         let listaLotes = [];
         //Preenchendo a lista com cada registro retornado
         for(const registro of registros){
-            let prod = new Produto();
-            prod.consultar(registro.produto_prod_id);
-            let prduto = prod[0];
-            let forma = new FormaFarmaceutica();
-            forma.consultar(registro.formaFarmaceutica_ffa_cod);
-            let formaFarmaceutica = forma[0];
-            let uni = new Unidade();
-            uni.consultar(registro.unidademedida_um_cod);
-            let unidade = uni[0];
+            let produto = new Produto(registro.produto_prod_ID);
+            await produto.consultar().then((listaProdutos)=>{
+                produto = listaProdutos.pop();
+            });
+            let formaFarmaceutica = new FormaFarmaceutica(registro.formafarmaceutica_ffa_cod);
+            await formaFarmaceutica.consultar().then((listaFormaFaramaceuticas)=>{
+                formaFarmaceutica = listaFormaFaramaceuticas.pop();
+            });
+            let unidade = new Unidade(registro.unidade_un_cod);
+            await unidade.consultar().then((listaUnidades)=>{
+                unidade = listaUnidades.pop();
+            });
             
-            const lote = new Lote(registro.codigo,registro.data_validade,
-                registro.quantidade,prduto,formaFarmaceutica,registro.conteudo_frasco,
+            let lote = new Lote(registro.codigo,registro.data_validade,
+                registro.quantidade,produto,formaFarmaceutica,registro.conteudo_frasco,
                 unidade,registro.total_conteudo
             );
             listaLotes.push(lote);
