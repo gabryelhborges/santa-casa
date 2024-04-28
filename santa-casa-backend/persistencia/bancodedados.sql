@@ -121,10 +121,17 @@ create table itensConsumo(
     constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
 );
 
+create table loc(
+    loc_id integer not null auto_increment,
+    loc_nome varchar(30) not null,
+    constraint pk_loc primary key (loc_id)
+);
+
+
 -- insert nos pacientes
-insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('526.217.888-07','Leon B Ronchi', 'branco','solteiro','masculino','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
-insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('999.999.999-99','Fulano da Silva Sauro','pardo','casado','masculino','1997-10-13','Rua tal','Bairro X','(99) 99998-9999','marceneiro','9999','complemento X','00000-000','Testeiro','Fulanão','Fulaninho','Fulanona','Robson','N','Catolico',3);
-insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('396.354.698-02','Yago Akio', 'preto','viuvo','feminino','1500-02-30','Rua do arco-iris','Bairro do unicornio','(69) 96969-6969','Garoto de Programa','69','Complemento A','12345-123','Japonês','Ricardo','Gabryel H Borges','Liria','Suzane Von Richthofen','S','Petista',3);
+insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('526.217.888-07','Leon B Ronchi', 'branco','s','m','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
+insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('999.999.999-99','Fulano da Silva Sauro','pardo','c','m','1997-10-13','Rua tal','Bairro X','(99) 99998-9999','marceneiro','9999','complemento X','00000-000','Testeiro','Fulanão','Fulaninho','Fulanona','Robson','N','Catolico',3);
+insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('396.354.698-02','Yago Akio', 'preto','v','f','1500-02-28','Rua do arco-iris','Bairro do unicornio','(69) 96969-6969','Garoto de Programa','69','Complemento A','12345-123','Japonês','Ricardo','Gabryel H Borges','Liria','Suzane Von Richthofen','S','Petista',3);
 -- select * from pacientes;
 
 -- insert nos funcionários
@@ -190,3 +197,7 @@ insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(2,2,'202
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 54321, 2, 11);
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 12345, 1, 6);
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 12345, 1, 2);
+
+-- insert nos locais
+insert into loc(loc_nome) values('farmacia');
+insert into loc(loc_nome) values('sala de medicação');
