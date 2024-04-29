@@ -9,6 +9,7 @@ import rotaForma from "./rotas/rotaForma.js";
 import rotaLote from "./rotas/rotaLote.js";
 import rotaConsumo from "./rotas/rotaConsumo.js";
 import rotaItensConsumo from "./rotas/rotaItensConsumo.js";
+import rotaNomeFarmaco from "./rotas/rotaNomeFarmacologico.js";
 import rotaLocal from "./rotas/rotaLocal.js"
 
 //Aplicação HTTP pronta, bastando parametrizá-la
@@ -27,6 +28,7 @@ app.use('/fabricante',rotaFabricante);
 app.use('/unidade',rotaUnidade);
 app.use('/forma',rotaForma);
 app.use('/consumo', rotaConsumo);
+app.use('/nomeFarmaco', rotaNomeFarmaco);
 app.use('/lote', rotaLote);
 app.use('/itensconsumo', rotaItensConsumo);
 app.use('/local', rotaLocal);
