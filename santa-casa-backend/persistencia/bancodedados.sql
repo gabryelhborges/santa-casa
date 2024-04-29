@@ -58,14 +58,17 @@ create table produtos(
     nome varchar(45) not null,
     psicotropico varchar(1) not null,
     valor_custo decimal(5,2) not null,
-    ultima_compra date,
-    ultima_saida date,
+    far_cod integer not null, -- nome farmacologico
+    ffa_cod integer not null, -- forma farmaceutica
+    uni_cod integer not null, -- unidade
     observacao varchar(300),
     descricao_uso varchar(300) not null,
-    quantidade_total integer not null,
     tipo varchar(50) not null,
     constraint pk_prod primary key (prod_ID),
-    constraint fk_pf foreign key (Fabricante_idFabricante) references fabricante(idFabricante)
+    constraint fk_pf foreign key (Fabricante_idFabricante) references fabricante(idFabricante),
+    constraint fk_far foreign key (far_cod) references nomefarmacologico(far_cod),
+    constraint fk_pf foreign key (uni_cod) references unidade(un_cod),
+    constraint fk_pf foreign key (ffa_cod) references formafarmaceutica(ffa_cod)
 );
 
 create table unidade(

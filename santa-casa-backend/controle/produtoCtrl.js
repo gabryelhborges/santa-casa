@@ -10,16 +10,16 @@ export default class ProdutoCtrl {
             const nome = dados.nome;
             const psicotropico = dados.psicotropico;
             const valor_custo = dados.valor_custo;
-            const ultima_compra = dados.ultima_compra || null;
-            const ultima_saida = dados.ultima_saida || null;
+            const far_cod = dados.far_cod;
+            const ffa_cod = dados.ffa_cod;
+            const uni_cod = dados.uni_cod;
             const observacao = dados.observacao || null;
             const descricao_uso = dados.descricao_uso || null;
-            const quantidade_total = dados.quantidade_total ;
             const tipo = dados.tipo ;
             
             //Validar apenas os atributos que são NOT NULL?
-            if (prod_ID && Fabricante_idFabricante && nome && psicotropico && valor_custo && tipo && quantidade_total) {
-                const produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
+            if (prod_ID && Fabricante_idFabricante && nome && psicotropico && valor_custo && tipo && ffa_cod && far_cod && uni_cod) {
+                const produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo);
                 produto.gravar().then(() => {
                     resposta.status(200).json({
                         "status": true,
@@ -57,14 +57,14 @@ export default class ProdutoCtrl {
             const nome = dados.nome;
             const psicotropico = dados.psicotropico;
             const valor_custo = dados.valor_custo;
-            const ultima_compra = dados.ultima_compra;
-            const ultima_saida = dados.ultima_saida;
-            const observacao = dados.observacao;
-            const descricao_uso = dados.descricao_uso;
-            const quantidade_total = dados.quantidade_total;
-            const tipo = dados.tipo;
-            if(Fabricante_idFabricante && nome && psicotropico && valor_custo && tipo && quantidade_total){
-                const produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
+            const far_cod = dados.far_cod;
+            const ffa_cod = dados.ffa_cod;
+            const uni_cod = dados.uni_cod;
+            const observacao = dados.observacao || null;
+            const descricao_uso = dados.descricao_uso || null;
+            const tipo = dados.tipo ;
+            if(Fabricante_idFabricante && nome && psicotropico && valor_custo && tipo && ffa_cod && far_cod && uni_cod){
+                const produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo);
                 produto.atualizar().then(()=>{
                     resposta.status(200).json({
                         "status": true,

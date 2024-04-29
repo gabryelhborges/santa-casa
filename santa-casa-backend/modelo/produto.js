@@ -6,25 +6,25 @@ export default class Produto {
     #nome
     #psicotropico
     #valor_custo
-    #ultima_compra
-    #ultima_saida
+    #far_cod
+    #ffa_cod
+    #uni_cod
     #observacao
     #descricao_uso
-    #quantidade_total
     #tipo
     
 
-    constructor(prod_ID=0,Fabricante_idFabricante=0,nome="",psicotropico="",valor_custo=0,ultima_compra="",ultima_saida="",observacao="", descricao_uso="", quantidade_total=0, tipo="") {
+    constructor(prod_ID=0,Fabricante_idFabricante=0,nome="",psicotropico="",valor_custo=0,far_cod=0,ffa_cod=0,uni_cod=0,observacao="", descricao_uso="", tipo="") {
         this.#prod_ID = prod_ID;
         this.#Fabricante_idFabricante = Fabricante_idFabricante;
         this.#nome = nome;
         this.#psicotropico = psicotropico;
         this.#valor_custo = valor_custo;
-        this.#ultima_compra = ultima_compra;
-        this.#ultima_saida = ultima_saida;
+        this.#far_cod = far_cod;
+        this.#ffa_cod = ffa_cod;
+        this.#uni_cod = uni_cod;
         this.#observacao = observacao;
         this.#descricao_uso= descricao_uso; 
-        this.#quantidade_total = quantidade_total;
         this.#tipo = tipo;
     }
 
@@ -78,34 +78,32 @@ export default class Produto {
         this.#valor_custo = value;
     }
 
-    // getter for ultima_compra
-    get ultima_compra() {
-        return this.#ultima_compra;
+    // getter for far_cod
+    get far_cod() {
+        return this.#far_cod;
     }
 
-    // setter for ultima_compra
-    set ultima_compra(value) {
-        this.#ultima_compra = value;
+    // setter for far_cod
+    set far_cod(value) {
+        this.#far_cod = value;
     }
 
-    // getter for ultima_saida
-    get ultima_saida() {
-        return this.#ultima_saida;
+    // getter for ffa_cod
+    get ffa_cod() {
+        return this.#ffa_cod;
     }
 
-    // setter for ultima_saida
-    set ultima_saida(value) {
-        this.#ultima_saida = value;
+    // setter for ffa_cod
+    set ffa_cod(value) {
+        this.#ffa_cod = value;
     }
 
-    // getter for quantidade_total
-    get quantidade_total() {
-        return this.#quantidade_total;
+    get uni_cod(){
+        return this.#uni_cod;
     }
 
-    // setter for quantidade_total
-    set quantidade_total(value) {
-        this.#quantidade_total = value;
+    set uni_cod(value){
+        this.#uni_cod = value;
     }
 
     // getter for observacao
@@ -145,11 +143,11 @@ export default class Produto {
             nome: this.#nome,
             psicotropico: this.#psicotropico,
             valor_custo: this.#valor_custo,
-            ultima_compra: this.#ultima_compra,
-            ultima_saida: this.#ultima_saida,
+            far_cod: this.#far_cod,
+            ffa_cod: this.#ffa_cod,
+            uni_cod: this.#uni_cod,
             observacao: this.#observacao,
             descricao_uso: this.#descricao_uso,
-            quantidade_total: this.#quantidade_total,
             tipo: this.#tipo
         };
     }

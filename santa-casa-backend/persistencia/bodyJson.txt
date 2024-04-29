@@ -54,14 +54,14 @@ PRODUTOS
 
 {
     "prod_ID": 1,
-    "Fabricante_idFabricante": 1,
-    "nome": "Produto Exemplo",
+    "Fabricante_idFabricante": 2,
+    "nome": "Novalgina",
     "psicotropico": "N",
-    "valor_custo": 100.00,
-    "ultima_compra": "2024-04-16",
-    "ultima_saida": "2024-04-16",
-    "observacao": "Este é um produto de exemplo.",
-    "descricao_uso": "Esta é uma descrição de uso de exemplo.",
-    "quantidade_total": 50,
-    "tipo": "Remedio"
+    "valor_custo": 11.50,
+    "far_cod": 2,
+    "ffa_cod": 2,
+    "uni_cod": 2,
+    "observacao": "Evitar o uso prolongado.",
+    "descricao_uso": "Anti-gripal.",
+    "tipo": "Medicamento"
 }

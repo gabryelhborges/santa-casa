@@ -1,11 +1,21 @@
 const urlBase = 'http://localhost:4040/produto';
-const urlForn = 'http://localhost:4040/fabricante';
+const urlFab = 'http://localhost:4040/fabricante';
+const urlForma = 'http://localhost:4040/forma';
+const urlUnidade = 'http://localhost:4040/unidade';
+const urlNomeFarmaco = 'http://localhost:4040/nomeFarmaco';
 var formProd = document.getElementById('formProduto');
+
+
+
 formProd.reset();
 formProd.onsubmit = validarFormulario;
 
-inputFabricanteesNome();
+inpuNomeFarmaco();
+inpuUnidade();
+inpuForma();
+inputFabricantesNome();
 exibirProdutos();
+PreencheFabricantes();
 var acao = 'cadastrar';
 
 function validarFormulario(evento) {
@@ -15,14 +25,14 @@ function validarFormulario(evento) {
         let nome = document.getElementById('nome').value;
         let psicotropico = document.getElementById('psicotropico').value;
         let valor_custo = stringParaDecimal(document.getElementById('valor_custo').value);
-        let ultima_compra = document.getElementById('ultima_compra').value;
-        let ultima_saida = document.getElementById('ultima_saida').value;
+        let far_cod = document.getElementById('far_cod').value;
+        let ffa_cod = document.getElementById('ffa_cod').value;
+        let uni_cod = document.getElementById("uni_cod").value;
         let observacao = document.getElementById('observacao').value;
         let descricao_uso = document.getElementById('descricao_uso').value;
-        let quantidade_total = document.getElementById('quantidade_total').value;
         let tipo = document.getElementById('tipo').value;
-        let produto = new Produto(prod_ID,Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida,  observacao, descricao_uso, quantidade_total, tipo);
-        
+        let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo);
+
         if (acao === 'cadastrar') {
             fetch(urlBase, {
                 method: 'POST',
@@ -55,13 +65,13 @@ function validarFormulario(evento) {
                 let nome = document.getElementById('nome').value;
                 let psicotropico = document.getElementById('psicotropico').value;
                 let valor_custo = stringParaDecimal(document.getElementById('valor_custo').value);
-                let ultima_compra = document.getElementById('ultima_compra').value;
-                let ultima_saida = document.getElementById('ultima_saida').value;
+                let far_cod = document.getElementById('far_cod').value;
+                let ffa_cod = document.getElementById('ffa_cod').value;
+                let uni_cod = document.getElementById("uni_cod").value;
                 let observacao = document.getElementById('observacao').value;
                 let descricao_uso = document.getElementById('descricao_uso').value;
-                let quantidade_total = document.getElementById('quantidade_total').value;
                 let tipo = document.getElementById('tipo').value;
-                let produto = new Produto(prod_ID,Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo);
+                let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo);
                 fetch(urlBase, {
                     method: 'PATCH',
                     headers: {
@@ -119,8 +129,8 @@ function validarFormulario(evento) {
     evento.stopPropagation();
 }
 
-function inputFabricanteesNome(){
-    fetch(urlForn,{
+function inputFabricantesNome() {
+    fetch(urlFab, {
         method: 'GET',
         redirect: 'follow'
     })
@@ -129,7 +139,7 @@ function inputFabricanteesNome(){
         })
         .then((json) => {
             let select = document.getElementById('Fabricante_idFabricante');
-            
+
             listaFor = json.listaFabricante;
             if (Array.isArray(listaFor)) {
                 if (listaFor.length > 0) {
@@ -151,10 +161,8 @@ function inputFabricanteesNome(){
         });
 }
 
-//retornar lista geral
-function listaNomeFor(dado){
-    const urlNome = `${urlForn}/${dado}`;
-    fetch(urlNome,{
+function inpuForma() {
+    fetch(urlForma, {
         method: 'GET',
         redirect: 'follow'
     })
@@ -162,23 +170,125 @@ function listaNomeFor(dado){
             return resposta.json();
         })
         .then((json) => {
-            listaNome = json.listaFabricante;
-            if (Array.isArray(listaNome)) {
-              nome = listaNome[0];
-              return nome.f_nome;
+            let select = document.getElementById('ffa_cod');
+
+            listaForma = json.listaFormaFaramaceuticas;
+            if (Array.isArray(listaForma)) {
+                if (listaForma.length > 0) {
+                    for (let i = 0; i < listaForma.length; i++) {
+                        let forma = listaForma[i];
+                        let option = document.createElement('option');
+                        option.text = forma.forma;
+                        option.value = forma.ffa_cod;
+                        select.appendChild(option);
+                    }
+                }
+                else {
+                    select.innerHTML = `<option>Erro Formas Farmaceuticas</option>`;
+                }
             }
-            else
-                return null;
         })
         .catch((erro) => {
-            exibirMensagem('Não foi possível recuperar os fabricantes do backend: ' + erro.message);
+            exibirMensagem('Não foi possível recuperar as formas farmacêuticas do backend: ' + erro.message);
         });
-
 }
+
+function inpuUnidade() {
+    fetch(urlUnidade, {
+        method: 'GET',
+        redirect: 'follow'
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            let select = document.getElementById('uni_cod');
+
+            listaUni = json.listaUnidades;
+            if (Array.isArray(listaUni)) {
+                if (listaUni.length > 0) {
+                    for (let i = 0; i < listaUni.length; i++) {
+                        let unidade = listaUni[i];
+                        let option = document.createElement('option');
+                        option.text = unidade.unidade;
+                        option.value = unidade.un_cod;
+                        select.appendChild(option);
+                    }
+                }
+                else {
+                    select.innerHTML = `<option>Erro Formas Farmaceuticas</option>`;
+                }
+            }
+        })
+        .catch((erro) => {
+            exibirMensagem('Não foi possível recuperar as formas farmacêuticas do backend: ' + erro.message);
+        });
+}
+
+function inpuNomeFarmaco() {
+    fetch(urlNomeFarmaco, {
+        method: 'GET',
+        redirect: 'follow'
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            let select = document.getElementById('far_cod');
+
+            listaNomeFar = json.listaNomeFarmacologico;
+            if (Array.isArray(listaNomeFar)) {
+                if (listaNomeFar.length > 0) {
+                    for (let i = 0; i < listaNomeFar.length; i++) {
+                        let nomeFarmaco = listaNomeFar[i];
+                        let option = document.createElement('option');
+                        option.text = nomeFarmaco.nome_far;
+                        option.value = nomeFarmaco.far_cod;
+                        select.appendChild(option);
+                    }
+                }
+                else {
+                    select.innerHTML = `<option>Erro Formas Farmaceuticas</option>`;
+                }
+            }
+        })
+        .catch((erro) => {
+            exibirMensagem('Não foi possível recuperar as formas farmacêuticas do backend: ' + erro.message);
+        });
+}
+
+//retornar lista geral
+async function listaNomeFab() {
+    return await fetch(urlFab, {
+        method: 'GET',
+        redirect: 'follow'
+    })
+        .then((resposta) => {
+            if (!resposta.ok) {
+                throw new Error('Erro na requisição: ' + resposta.status);
+            }
+            return resposta.json();
+        })
+        .then((json) => {
+            let listaNome = [];
+            listaNome = json.listaFabricante;
+            if (Array.isArray(listaNome)) {
+                console.log(listaNome);
+                return listaNome; // Retorna a lista de fabricantes
+            } else {
+                throw new Error('Dados inválidos do backend: lista não é um array.');
+            }
+        })
+        .catch((erro) => {
+            console.error('Erro ao recuperar os fabricantes do backend:', erro.message);
+            throw erro; // Propaga o erro para quem chamou a função
+        });
+}
+
 
 function exibirProdutos() {
     //chamar func lista
-    fetch(urlBase,{
+    fetch(urlBase, {
         method: 'GET',
         redirect: 'follow'
     })
@@ -205,15 +315,17 @@ function exibirProdutos() {
                     tabela.appendChild(cabecalho);
                     let corpo = document.createElement('tbody');
                     for (let i = 0; i < listaProdutos.length; i++) {
+
                         let linha = document.createElement('tr');
                         let produto = listaProdutos[i];
+
                         linha.innerHTML = `
                         <td>${produto.prod_ID}</td>
                         <td>${produto.nome}</td>
-                        <td>${produto.Fabricante_idFabricante}</td>
+                        <td id="${produto.Fabricante_idFabricante}" value="${produto.Fabricante_idFabricante}"></td>
                         <td>${produto.valor_custo}</td>
                         <td>
-                            <button class="btn btn-danger" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'excluir')">
+                            <button class="btn btn-danger☺" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'excluir')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -243,59 +355,36 @@ function exibirProdutos() {
         });
 }
 
+async function PreencheFabricantes() {
+    let listaNomes = await listaNomeFab();
+    for (const fabricante of listaNomes) {
+        idFabricanteProcurado = document.getElementById(fabricante.idFabricante);
+        if (idFabricanteProcurado) 
+             idFabricanteProcurado.innerHTML = fabricante.f_nome;
+    }
+}
+
 function gerarParametrosProduto(produto) {
     return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
-    '${produto.psicotropico}','${produto.valor_custo}','${formataData(produto.ultima_compra)}',
-    '${formataData(produto.ultima_saida)}','${produto.observacao}','${produto.descricao_uso}',
-    '${produto.quantidade_total}','${produto.tipo}'`;
+    '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}',
+    '${produto.ffa_cod}','${produto.uni_cod}','${produto.observacao}','${produto.descricao_uso}',
+    '${produto.tipo}'`;
 }
 
-function formataData(dataParametro){
-    // Convertendo a string em um objeto Date
-    let data = new Date(dataParametro);
 
-    // Obtendo o ano, mês e dia
-    let ano = data.getFullYear();
-    let mes = ('0' + (data.getMonth() + 1)).slice(-2); // Adicionando 1 porque os meses são zero indexados
-    let dia = ('0' + data.getDate()).slice(-2);
+function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo, modo) {
 
-    // Formatando a data no formato esperado pelo input tipo date
-    let dataFormatada = ano + '-' + mes + '-' + dia;
-
-    // Atribuindo a data formatada ao campo de data
-    return dataFormatada;
-}
-
-function dataAtualFormatada(){
-    let dataAtual = new Date();
-
-    // Obtendo o ano, mês, dia, hora, minuto, segundo e milissegundo da data atual
-    let ano = dataAtual.getFullYear();
-    let mes = ('0' + (dataAtual.getMonth() + 1)).slice(-2); // Adicionando 1 porque os meses são zero indexados
-    let dia = ('0' + dataAtual.getDate()).slice(-2);
-    let hora = ('0' + dataAtual.getHours()).slice(-2);
-    let minuto = ('0' + dataAtual.getMinutes()).slice(-2);
-    let segundo = ('0' + dataAtual.getSeconds()).slice(-2);
-    let milissegundo = ('00' + dataAtual.getMilliseconds()).slice(-3);
-
-    // Formatando a data atual no formato ISO 8601
-    let dataFormatada = `${ano}-${mes}-${dia}T${hora}:${minuto}:${segundo}.${milissegundo}Z`;
-    return dataFormatada;
-}
-
-function selecionarProduto(prod_ID,Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida,  observacao, descricao_uso, quantidade_total, tipo, modo) {
-   
-        document.getElementById('prod_ID').value = prod_ID;
-        document.getElementById('Fabricante_idFabricante').value = Fabricante_idFabricante;
-        document.getElementById('nome').value = nome;
-        document.getElementById('psicotropico').value = psicotropico;
-        document.getElementById('valor_custo').value = valor_custo;
-        document.getElementById('ultima_compra').value = ultima_compra;
-        document.getElementById('ultima_saida').value = ultima_saida;
-        document.getElementById('observacao').value = observacao;
-        document.getElementById('descricao_uso').value = descricao_uso;
-        document.getElementById('quantidade_total').value = quantidade_total;
-        document.getElementById('tipo').value = tipo;
+    document.getElementById('prod_ID').value = prod_ID;
+    document.getElementById('Fabricante_idFabricante').value = Fabricante_idFabricante;
+    document.getElementById('nome').value = nome;
+    document.getElementById('psicotropico').value = psicotropico;
+    document.getElementById('valor_custo').value = valor_custo;
+    document.getElementById('far_cod').value = far_cod;
+    document.getElementById('ffa_cod').value = ffa_cod;
+    document.getElementById('uni_cod').value = uni_cod;
+    document.getElementById('observacao').value = observacao;
+    document.getElementById('descricao_uso').value = descricao_uso;
+    document.getElementById('tipo').value = tipo;
 
     let bttForm = document.getElementById('bttForm');
     if (modo == 'alterar') {
@@ -314,11 +403,11 @@ function limparFormulario() {
     document.getElementById('nome').value = '';
     document.getElementById('psicotropico').value = '';
     document.getElementById('valor_custo').value = '';
-    document.getElementById('ultima_compra').value = '';
-    document.getElementById('ultima_saida').value = '';
+    document.getElementById('far_cod').value = '';
+    document.getElementById('ffa_cod').value = '';
+    document.getElementById('uni_cod').value = '';
     document.getElementById('observacao').value = '';
     document.getElementById('descricao_uso').value = '';
-    document.getElementById('quantidade_total').value = '';
     document.getElementById('tipo').value = '';
 
     acao = "cadastrar";
@@ -339,7 +428,7 @@ function exibirMensagem(mensagem) {
 function stringParaDecimal(stringValor) {
     // Remove todos os caracteres que não são números ou pontos
     var valorLimpo = stringValor.replace(/\./g, "");
-    
+
     valorLimpo = valorLimpo.replace(/,/g, ".");
     // Converte a string para um número decimal
     var numeroDecimal = parseFloat(valorLimpo);

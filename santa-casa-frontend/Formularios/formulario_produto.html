@@ -40,12 +40,11 @@
                 </div>
                 <div class="triple-input-container">
                     <div class="dual-input-container">
-                        <label>Quantidade <strong style="color: red;">*</strong></label>
+                        <label>Unidade<strong style="color: red;">*</strong></label>
                         <label>Tipo do Produto</label>
                         <label>Valor de Custo <strong style="color: red;">*</strong></label>
                     </div>
-                    <input id="quantidade_total" type="number" class="input-style" placeholder="Quantidade total"
-                        name="quantidade_total" min="0" max="1000" step="1" required>
+                    <select id="uni_cod" name="selectUnidade" class="input-style" required> </select>
                     <div>
                         <select id="tipo" name="select" class="input-style">
                             <option value="Remedio" selected> Remedio </option>
@@ -55,19 +54,17 @@
                     <input oninput="mascaraValor(this)" id="valor_custo" type="text" class="input-style" placeholder="R$ 0,00" name="valor_custo" required>
                 </div>
                 <div class="dual-input-container">
-                    <label>Ultima Compra<strong style="color: red;">*</strong></label>
-                    <label>Ultima Saida<strong style="color: red;">*</strong></label>
+                    <label>Nome Farmacológico<strong style="color: red;">*</strong></label>
+                    <label>Forma Farmacêutica<strong style="color: red;">*</strong></label>
                 </div>
                 <div class="dual-input-container">
-                    <input id="ultima_compra" type="date" class="input-style" value="2022-01-01" name="ultima_compra"
-                        required data-date-format="dd/mm/yyyy" required>
-                    <input id="ultima_saida" type="date" class="input-style" value="2022-02-01" name="ultima_saida"
-                        required data-date-format="dd/mm/yyyy" required>
+                    <select id="far_cod" name="selectNomeFar" class="input-style" required> </select>
+                    <select id="ffa_cod" name="selectForma" class="input-style" required> </select>
                 </div>
                 <div>
                     <label>&nbsp;&nbsp;&nbsp;Descrição de uso<strong style="color: red;">*</strong></label>
                     <textarea id="descricao_uso" class="input-style" rows="4" cols="50" name="descricao_uso"
-                        placeholder="Descrição dde uso" maxlength="2000" required></textarea>
+                        placeholder="Descrição de uso" maxlength="2000" required></textarea>
                 </div>
                 <div>
                     <label>&nbsp;&nbsp;&nbsp;Observações</label>

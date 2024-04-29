@@ -27,8 +27,6 @@ function mascaraValor(input) {
 }
 
 
-
-
 function mascaraTelefone(input) {
     // Remove qualquer caractere que não seja número
     let telefone = input.value.replace(/\D/g, '');

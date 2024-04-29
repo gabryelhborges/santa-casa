@@ -1,38 +1,38 @@
-import FormaFarmaceutica from "../modelo/formaFarmaceutica.js";
+import NomeFarmacologico from "../modelo/nomeFarmacologico.js";
 
-export default class FormaFarmaceuticaCtrl{
+export default class NomeFarmacologicoCtrl{
     gravar(requisicao,resposta){
         resposta.type('application/json');
         if(requisicao.method === "POST" && requisicao.is("application/json")){
             const dados = requisicao.body;
-            const forma = dados.forma;
-            if(forma){
-                const formaFaramaceutica = new FormaFarmaceutica(0,forma);
-                formaFaramaceutica.gravar().then(()=>{
+            const nome_far = dados.nome_far;
+            if(nome_far){
+                const nomeFarmacologico = new NomeFarmacologico(0,nome_far);
+                nomeFarmacologico.gravar().then(()=>{
                     resposta.status(200).json({
                         "status": true,
-                        "codigoGerado": formaFaramaceutica.ffa_cod,
-                        "mensagem": "Forma farmaceutica cadastrado com sucesso!"
+                        "codigoGerado": nomeFarmacologico.far_cod,
+                        "mensagem": "Nome farmacologico cadastrado com sucesso!"
                     
                     })
                 }).catch((erro) => {
                     resposta.status(500).json({
                         "status": false,
-                        "mensagem": "Houve um erro ao cadastrar uma forma farmaceutica: " + erro.message
+                        "mensagem": "Houve um erro ao cadastrar um Nome farmacologico: " + erro.message
                     });
                 });
             }
             else{
                 resposta.status(400).json({
                     "status": false,
-                    "mensagem": "Informe a forma formaceutica!"
+                    "mensagem": "Informe o nome farmacologico!"
                 });
             }
         }
         else{
             resposta.status(400).json({
                 "status": false,
-                "mensagem": "Utilize o método POST para cadastrar uma forma farmaceutica!"
+                "mensagem": "Utilize o método POST para cadastrar um Nome farmacologico!"
             });
         }
     }
@@ -41,34 +41,34 @@ export default class FormaFarmaceuticaCtrl{
         resposta.type('application/json');
         if(requisicao.method === "PATCH" || requisicao.method === "PUT" && requisicao.is("application/json")){
             const dados = requisicao.body;
-            const  id = dados.ffa_cod;
-            const forma = dados.forma;
-            if(forma){
-                const formaFaramaceutica = new FormaFarmaceutica(id,forma);
-                formaFaramaceutica.atualizar().then(()=>{
+            const  id = dados.far_cod;
+            const nome_far = dados.nome_far;
+            if(nome_far){
+                const nomeFarmacologico = new NomeFarmacologico(id,nome_far);
+                nomeFarmacologico.atualizar().then(()=>{
                     resposta.status(200).json({
                         "status": true,
-                        "mensagem": "forma faramaceutica atualizada com sucesso!"
+                        "mensagem": "nome farmacologico atualizada com sucesso!"
                     
                     })
                 }).catch((erro) => {
                     resposta.status(500).json({
                         "status": false,
-                        "mensagem": "Houve um erro ao atualizar uma forma faramaceutica: " + erro.message
+                        "mensagem": "Houve um erro ao atualizar um nome farmacologico: " + erro.message
                     });
                 });
             }
             else{
                 resposta.status(400).json({
                     "status": false,
-                    "mensagem": "Informe a forma faramaceutica!"
+                    "mensagem": "Informe o nome farmacologico!"
                 });
             }
         }
         else{
             resposta.status(400).json({
                 "status": false,
-                "mensagem": "Utilize o método POST ou PATCH para atualizar uma forma faramaceutica!"
+                "mensagem": "Utilize o método POST ou PATCH para atualizar um nome farmacologico"
             });
         }
     }
@@ -76,33 +76,33 @@ export default class FormaFarmaceuticaCtrl{
     excluir(requisicao,resposta){
         resposta.type('application/json');
         if(requisicao.method === "DELETE" && requisicao.is("application/json")){
-            const id = requisicao.body.ffa_cod;
+            const id = requisicao.body.far_cod;
             if(id){
-                const formaFaramaceutica = new FormaFarmaceutica(id);
-                formaFaramaceutica.excluir().then(()=>{
+                const nomeFarmacologico = new NomeFarmacologico(id);
+                nomeFarmacologico.excluir().then(()=>{
                     resposta.status(200).json({
                         "status": true,
-                        "mensagem": "forma farmaceutica excluida com sucesso!"
+                        "mensagem": "Nome farmacologico excluido com sucesso!"
                     
                     })
                 }).catch((erro) => {
                     resposta.status(500).json({
                         "status": false,
-                        "mensagem": "Houve um erro ao excluir uma forma farmaceutica: " + erro.message
+                        "mensagem": "Houve um erro ao excluir um Nome farmacologico: " + erro.message
                     });
                 });
             }
             else{
                 resposta.status(400).json({
                     "status": false,
-                    "mensagem": "Informe a forma farmaceutica!"
+                    "mensagem": "Informe um Nome farmacologico!"
                 });
             }
         }
         else{
             resposta.status(400).json({
                 "status": false,
-                "mensagem": "Utilize o método DELETE para deletear uma forma farmaceutica!"
+                "mensagem": "Utilize o método DELETE para deletear um Nome farmacologico!"
             });
         }
     }
@@ -114,23 +114,23 @@ export default class FormaFarmaceuticaCtrl{
             termo="";
         }
         if(requisicao.method === "GET"){
-            const formaFaramaceutica = new FormaFarmaceutica();
-            formaFaramaceutica.consultar(termo).then((listaFormaFaramaceuticas)=>{
+            const nomeFarmacologico = new NomeFarmacologico();
+            nomeFarmacologico.consultar(termo).then((listaNomeFarmacologico)=>{
                 resposta.status(200).json({
                     "status": true,
-                    "listaFormaFaramaceuticas": listaFormaFaramaceuticas
+                    "listaNomeFarmacologico": listaNomeFarmacologico
                 });
             }).catch((erro)=>{
                 resposta.status(500).json({
                     "status": false,
-                    "mensagem": "Erro ao consultar unidade(s): " + erro.message
+                    "mensagem": "Erro ao consultar nome(s): " + erro.message
                 });
             });
         }
         else{
             resposta.status(400).json({
                 "status": false,
-                "mensagem": "Utilize o método GET para consultar alguma unidade!"
+                "mensagem": "Utilize o método GET para consultar algum nome!"
             });
         }
     }
