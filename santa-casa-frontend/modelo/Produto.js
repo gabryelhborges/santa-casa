@@ -5,8 +5,6 @@ class Produto{
     #psicotropico
     #valor_custo
     #far_cod
-    #ffa_cod
-    #uni_cod
     #observacao
     #descricao_uso
     #tipo
@@ -19,8 +17,6 @@ class Produto{
         this.#psicotropico = psicotropico;
         this.#valor_custo = valor_custo;
         this.#far_cod = far_cod;
-        this.#ffa_cod = ffa_cod;
-        this.#uni_cod = uni_cod;
         this.#observacao = observacao;
         this.#descricao_uso= descricao_uso; 
         this.#tipo = tipo;
@@ -85,25 +81,6 @@ class Produto{
     set far_cod(value) {
         this.#far_cod = value;
     }
-
-    // getter for ffa_cod
-    get ffa_cod() {
-        return this.#ffa_cod;
-    }
-
-    // setter for ffa_cod
-    set ffa_cod(value) {
-        this.#ffa_cod = value;
-    }
-
-    get uni_cod(){
-        return this.#uni_cod;
-    }
-
-    set uni_cod(value){
-        this.#uni_cod = value;
-    }
-
     // getter for observacao
     get observacao() {
         return this.#observacao;
@@ -142,8 +119,6 @@ class Produto{
             psicotropico: this.#psicotropico,
             valor_custo: this.#valor_custo,
             far_cod: this.#far_cod,
-            ffa_cod: this.#ffa_cod,
-            uni_cod: this.#uni_cod,
             observacao: this.#observacao,
             descricao_uso: this.#descricao_uso,
             tipo: this.#tipo

@@ -1,26 +1,68 @@
-const urlBase = 'http://localhost:4040/produto';
+const urlBase = 'http://localhost:4040';
 
-var entradaProd = document.getElementById('entrada_produto');
-entradaProd.reset();
-entradaProd.onsubmit = validarEntrada;
-
-function validarEntrada(evento){
-    if(entradaProd.checkValidity()){
-        
-    }
-    evento.preventDefault();
-    evento.stopPropagation();
-}
+adicinar();
 
 var pesquisa = document.getElementById('form_pesquisa_produto');
 pesquisa.reset();
 pesquisa.onsubmit = validarFormulario;
 
+
+var uni = document.getElementById("unidade");
+
+// var entradaProd = document.getElementById('entrada_produto');
+// entradaProd.reset();
+// entradaProd.onsubmit = validarEntrada;
+
+// function validarEntrada(evento){
+//     if(entradaProd.checkValidity()){
+        
+//     }
+//     evento.preventDefault();
+//     evento.stopPropagation();
+// }
+
+
+function adicinar(evento){
+    fetch(urlBase + "/unidade",{
+        method: "GET",
+        redirect: "follow"
+    }).then((resposta) => { 
+       return resposta.json();
+    }).then((json) => {  
+        let select = document.getElementById("unidade");
+        listaUnidades = json.listaUnidades;
+        if(Array.isArray(listaUnidades)){
+            for (let i=0 ;i < listaUnidades.length; i++){  
+                let option = document.createElement("option")  ;
+                option.value = listaUnidades[i].un_cod;
+                option.text = listaUnidades[i].unidade;
+                select.appendChild(option);                      
+            };
+        }
+    });
+    fetch(urlBase + "/forma",{
+        method:"GET"
+    }).then((response)=>{
+        return response.json()
+    }).then((json)=>{
+        let select = document.getElementById("forma_farmaceutica");
+        listaFormaFaramaceuticas = json.listaFormaFaramaceuticas;
+        if(Array.isArray(listaFormaFaramaceuticas)){
+            for (let i=0 ;i < listaFormaFaramaceuticas.length; i++){  
+                let option = document.createElement("option")  ;
+                option.value = listaFormaFaramaceuticas[i].ffa_cod;
+                option.text = listaFormaFaramaceuticas[i].forma;
+                select.appendChild(option);                      
+            };
+        }
+    });
+};
+
 function validarFormulario(evento) {
     if (pesquisa.checkValidity()) {
         let prod_ID = document.getElementById('pesquisa_produto').value;
 
-        fetch(urlBase + "/" + prod_ID, {
+        fetch(urlBase + "/produto" + "/" + prod_ID, {
             method: "GET"
         })
         .then(resposta => {
@@ -41,7 +83,7 @@ function validarFormulario(evento) {
                     cabecalho.innerHTML = `
                     <tr>
                         <th>Nome</th>
-                        <th>Fornecedor</th>
+                        <th>Fabricante</th>
                         <th>Valor</th>
                     </tr>
                     `;
@@ -52,14 +94,10 @@ function validarFormulario(evento) {
                         let produto = listaProdutos[i];
                         linha.innerHTML = `
                         <td>${produto.nome}</td>
-                        <td>${produto.Fornecedor_idFornecedor}</td>
-                        <td>${produto.valor_custo}</td>
+                        <td>${produto.Fabricante_idFabricante}</td>
+                        <td>${produto.psicotropico}</td>
                         <td>
-                            <button class="btn btn-danger" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'adicionar')">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                                </svg>
+                            <button class="" onclick="selecionarProduto(${gerarParametrosProduto(produto)})">  
                             </button>
                         </td>
                         `;
@@ -86,14 +124,6 @@ function validarFormulario(evento) {
     evento.stopPropagation();
 }
 
-
-function gerarParametrosProduto(produto) {
-    return `'${produto.prod_ID}','${produto.Fornecedor_idFornecedor}','${produto.nome}',
-    '${produto.psicotropico}','${produto.valor_custo}','${formataData(produto.ultima_compra)}',
-    '${formataData(produto.ultima_saida)}','${produto.observacao}','${produto.descricao_uso}',
-    '${produto.quantidade_total}','${produto.tipo}'`;
-}
-
 function formataData(dataParametro){
     // Convertendo a string em um objeto Date
     let data = new Date(dataParametro);
@@ -109,6 +139,8 @@ function formataData(dataParametro){
     // Atribuindo a data formatada ao campo de data
     return dataFormatada;
 }
+
+
 
 function dataAtualFormatada(){
     let dataAtual = new Date();
@@ -127,10 +159,83 @@ function dataAtualFormatada(){
     return dataFormatada;
 }
 
-function selecionarProduto(prod_ID) {
-   
-        document.getElementById('cod_prod').value = prod_ID;
+function gerarParametrosProduto(produto) {
+    return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
+    '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}',
+    '${produto.observacao}','${produto.tipo}'`;
+}
 
+function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso,tipo) {
+    document.getElementById('id_produto').value = prod_ID;
+    document.getElementById('nome_produto').value = nome;
+    fetch(urlBase + "/fabricante" + "/" + Fabricante_idFabricante, {
+        method: "GET"
+    }).then((resposta) => {
+        return resposta.json();
+    })
+    .then((json) => {
+        listaFabricante = json.listaFabricante;
+        document.getElementById('nome_fabricante').value = listaFabricante[0].f_nome;
+    });
+    adicionarLote(prod_ID);
+}
+
+function adicionarLote(produto){
+    fetch(urlBase + "/lote" + "?" + "produto=" + produto, {
+        method: "GET"
+    }).then((resposta) => {
+        return resposta.json();
+    })
+    .then((json) => {
+        let select = document.getElementById("codigo_lote");
+        listaLotes = json.listaLotes;
+        if(Array.isArray(listaLotes)){
+            for (let i=0 ;i < listaLotes.length; i++){  
+                let lit = listaLotes[i]
+                let option = document.createElement("option");
+                option.value = lit.codigo + "/" + lit.data_validade
+                 + "/" + lit.conteudo_frasco;
+                option.text = lit.codigo + "/" + produto;
+                select.appendChild(option);                      
+            };
+            let criarNovo = document.createElement("option");
+            criarNovo.textContent = "Criar Novo Lote"; // Correção: usar textContent em vez de text
+            criarNovo.value = "criarNovo";// Correção: adicionar evento de click corretamente
+            select.appendChild(criarNovo);
+        }
+    });
+}
+
+function separarPorHifen(str) {
+    if (str.includes('/')) {
+        const partes = str.split('/');
+        
+        return {
+            parte1: partes[0],
+            parte2: partes[1],
+            parte3: partes[2]
+        };
+    } else {
+        return null; // ou throw new Error('A string não contém um hífen.');
+    }
+}
+
+document.getElementById("codigo_lote").addEventListener("change", function() {
+    if (this.value === "criarNovo") { // Se a opção "Criar Novo Lote" for selecionada
+        criarLote(); // Chama a função criarLote
+    }else{
+        let valor = separarPorHifen(this.value);
+        let capacidadeInteiro = parseInt(valor.parte3); // Acessa a propriedade corretamente
+        document.getElementById('capacidade').value = capacidadeInteiro;
+        document.getElementById('validade').value = valor.parte2;
+    }
+});
+
+function criarLote(){
+    document.getElementById('codigo_lote').style.display = 'none';
+    document.getElementById('seta_selec').style.display = 'none';
+    document.getElementById('criar_codigo_lote').style.display = "block";
+    document.getElementById('btn-select').style.display = "block";
 }
 
 function exibirMensagem(mensagem) {

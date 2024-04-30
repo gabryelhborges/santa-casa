@@ -8,7 +8,7 @@ export default async function conectar(){
             host: 'localhost',//localhost
             port: '3306',
             user: 'root',
-            password: '!Gabi2110',
+            password: '1234',
             database: 'santa_casa',
             waitForConnections: true,
             connectionLimit: 10,
