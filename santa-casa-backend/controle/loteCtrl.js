@@ -1,4 +1,5 @@
 import Lote from "../modelo/lote.js";
+import Produto from "../modelo/produto.js";
 
 
 export default class LoteCtrl{
@@ -130,11 +131,14 @@ export default class LoteCtrl{
     consultar(requisicao, resposta) {
         resposta.type('application/json');
         if(requisicao.method === "GET"){
-            let codigo = requisicao.body.codigo;
-            let produto= requisicao.body.produto;
+            let codigo = requisicao.query.codigo;
+            let prod = requisicao.query.produto;
+            let produto;
             if(!codigo)
-                codigo = 0;
-            if(!produto)
+                codigo = "";
+            if(prod)
+                produto = new Produto(prod);
+            else
                 produto = null;
             const lote = new Lote(codigo,null,null,produto);
             lote.consultar().then((listaLotes)=>{

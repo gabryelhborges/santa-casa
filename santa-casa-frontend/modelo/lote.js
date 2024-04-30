@@ -1,6 +1,4 @@
-import LoteDAO from "../persistencia/loteDAO.js";
-
-export default class Lote{
+class Lote{
     #codigo;
     #data_validade;
     #quantidade;
@@ -104,25 +102,5 @@ export default class Lote{
             unidade: this.#unidade,
             total_conteudo: this.#total_conteudo
         };
-    }
-
-    async gravar(){
-        const loteDAO = new LoteDAO();
-        await loteDAO.gravar(this);
-    }
-
-    async atualizar(){
-        const  loteDAO = new LoteDAO();
-        await loteDAO.atualizar(this);
-    }
-
-    async excluir(){
-        const  loteDAO = new LoteDAO();
-        await loteDAO.excluir(this);
-    }
-
-    async consultar(){
-        const  loteDAO = new LoteDAO();
-        return await loteDAO.consultar(this);
     }
 }
