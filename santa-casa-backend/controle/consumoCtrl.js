@@ -6,6 +6,8 @@ import ItensConsumo from "../modelo/itensConsumo.js";
 
 
 export default class ConsumoCtrl {
+    //variável statica dela mesma
+    //get instance
     async gravar(requisicao, resposta) {
         resposta.type('application/json');
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
@@ -23,6 +25,7 @@ export default class ConsumoCtrl {
                     for(const item of itensConsumo){
                         let itemConsumo = new ItensConsumo(cons, item.lote, item.produto, item.qtdeConteudoUtilizado);
                         itemConsumo.gravar(conexao);
+                        
                     }
                     resposta.status(200).json({
                         "status": true,
