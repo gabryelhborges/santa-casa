@@ -31,7 +31,7 @@
                         <form id="form_entrada" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 0px;">
                           <div class="u-form-group u-form-name u-form-partition-factor-3 u-label-top">
                             <label for="name-1002" class="u-label u-label-1">*Produto</label>
-                            <input id="id_produto" type="text" placeholder="Código do Produto" id="name-1002" name="name" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-1" required="">
+                            <input readonly id="id_produto" type="text" placeholder="Código do Produto" id="name-1002" name="name" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-1" required="">
                           </div>
                           <div class="u-form-group u-form-partition-factor-3 u-label-top u-form-group-2">
                             <label for="text-3c1f" class="u-label u-label-2">Nome Produto</label>
@@ -45,7 +45,6 @@
                             <label for="text-a9ce" class="u-label u-label-4">*Lote</label>
                             <div class="u-form-select-wrapper">
                               <select id="codigo_lote" name="select-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-6">
-                                
                               </select>
                               <svg id="seta_selec" class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
                             </div>
@@ -59,7 +58,7 @@
                             <label for="select-0d05" class="u-label u-label-6">Unidade</label>
                             <div class="u-form-select-wrapper">
                               <select id="unidade" name="select-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-6">
-                                
+                                <option>Selecione a Unidade</option>
                               </select>
                               <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
                             </div>
@@ -68,7 +67,7 @@
                             <label for="select-2ed7" class="u-label u-label-7">Forma Farmaceutica</label>
                             <div class="u-form-select-wrapper">
                               <select id="forma_farmaceutica" name="select-2" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-7">
-                                
+                                <option>Selecione a Forma Farmaceutica</option>
                               </select>
                               <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
                             </div>
@@ -133,6 +132,8 @@
       </div>
     </section>
   </body>
+  <script src="../modelo/unidade.js"></script>
+  <script src="../modelo/formaFarmaceutica.js"></script>
   <script src="../modelo/Produto.js"></script>
   <script src="../modelo/lote.js"></script>
   <script src="../controle/entrada_produto.js"></script>
