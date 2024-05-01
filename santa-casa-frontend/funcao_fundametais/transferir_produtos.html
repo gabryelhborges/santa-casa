@@ -6,6 +6,7 @@
     <meta name="description" content="">
     <title>Página Inicial</title>
     <link rel="stylesheet" href="../estilização/nicepage.css" media="screen">
+    <link rel="stylesheet" href="../estilização/transferir_produtos2.css" media="screen">
     <link rel="stylesheet" href="../estilização/transferir_produtos.css" media="screen">
     <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
@@ -42,15 +43,24 @@
                       <form action="https://forms.nicepagesrv.com/v2/form/process" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 10px;">
                         <div class="u-form-group u-form-name u-form-partition-factor-3">
                           <label for="name-e9ff" class="u-label">Origem:</label>
-                          <input type="text" placeholder="Insira seu Nome" id="name-e9ff" name="name" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-1" required="">
+                          <div class="u-form-select-wrapper">
+                            <select id="select-3a21" name="select-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-1" required="required"></select>
+                            <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
+                          </div>
                         </div>
                         <div class="u-form-group u-form-partition-factor-3 u-form-group-2">
                           <label for="text-83a0" class="u-label">Fabricante</label>
-                          <input type="text" placeholder="" id="text-83a0" name="text" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-2">
+                          <div class="u-form-select-wrapper">
+                            <select id="select-4f15" name="select-2" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-2"></select>
+                            <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
+                          </div>
                         </div>
                         <div class="u-form-group u-form-partition-factor-3 u-form-group-3">
                           <label for="text-adc3" class="u-label">Destino:</label>
-                          <input type="text" placeholder="" id="text-adc3" name="text-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
+                          <div class="u-form-select-wrapper">
+                            <select id="select-0894" name="select-3" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" required="required"></select>
+                            <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
+                          </div>
                         </div>
                         <div class="u-form-group u-form-group-4">
                           <label for="text-4ec2" class="u-label">Produto</label>
@@ -86,18 +96,44 @@
                         </div>
                       </div>
                     </div>
-                    <a href="https://nicepage.com/website-builder" class="u-align-right u-border-none u-btn u-btn-round u-button-style u-palette-2-base u-radius u-btn-2">CANCELAR</a>
-                    <a href="https://nicepage.com/website-builder" class="u-align-center u-border-none u-btn u-btn-round u-button-style u-palette-1-light-1 u-radius u-btn-3">TRANSFERIR</a>
-                    <a href="https://nicepage.com/html5-template" class="u-align-left u-border-none u-btn u-btn-round u-button-style u-custom-color-3 u-radius u-btn-4">ADICIONAR</a>
+                    <button id="btnCancelar" type="submit" class="u-align-right u-border-none u-btn u-btn-round u-button-style u-palette-2-base u-radius u-btn-2">CANCELAR</button>
+                    <button id="btnConfirmar" class="u-align-center u-border-none u-btn u-btn-round u-button-style u-palette-1-light-1 u-radius u-btn-3">TRANSFERIR</button>
+                    <button id="btnAdicionar" class="u-align-left u-border-none u-btn u-btn-round u-button-style u-custom-color-3 u-radius u-btn-4">ADICIONAR</button>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="u-container-style u-layout-cell u-size-26 u-layout-cell-2">
-              <div class="u-container-layout u-container-layout-7"></div>
+            <div class="u-container-align-center u-container-style u-layout-cell u-size-19 u-layout-cell-2">
+              <div class="u-container-layout u-container-layout-7">
+                <div class="u-container-align-center u-container-style u-expanded-width u-group u-palette-1-dark-1 u-group-6">
+                  <div class="u-container-layout u-container-layout-8">
+                    <p class="u-align-center u-text u-text-default u-text-3">PESQUISA DE PRODUTO</p>
+                  </div>
+                </div>
+                <div class="u-container-style u-expanded-width u-group u-palette-1-light-2 u-group-7">
+                  <div class="u-container-layout u-container-layout-9">
+                    <form action="#" method="get" class="u-border-2 u-border-grey-90 u-expanded-width u-radius u-search u-search-left u-white u-search-1">
+                      <button class="u-search-button" type="submit">
+                        <span class="u-search-icon u-spacing-10">
+                          <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-2030"></use></svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-2030" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content"><path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"></path></svg>
+                        </span>
+                      </button>
+                      <input id="pesquisa_produto" class="u-search-input" type="text" name="search" value="" placeholder="pesquisar produto">
+                    </form>
+                    <div class="u-container-style u-expanded-width u-group u-shape-rectangle u-group-6">
+                      <div id="tabela">
+                      </div>
+                      <div id="mensagem">
+                      </div>
+                    <div class="u-container-layout u-container-layout-8"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-</body></html>
+</body>
+</html>
