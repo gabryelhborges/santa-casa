@@ -16,7 +16,7 @@ export default class ConsumoCtrl {
             const funcionario = new Funcionario(dados.funcionario.idFuncionario);//já recebo um objeto? ou devo instanciá-lo aqui?
             const dataConsumo = dados.dataConsumo;
             const itensConsumo = dados.itensConsumo;
-            if (paciente instanceof Paciente && funcionario instanceof Funcionario && dataConsumo && itensConsumo.length > 0) {//&& itensConsumo.length > 0
+            if (paciente instanceof Paciente && funcionario instanceof Funcionario && itensConsumo.length > 0) {//&& itensConsumo.length > 0
                 const cons = new Consumo(0, paciente, funcionario, itensConsumo, dataConsumo);
                 const conexao = await conectar();
                 //conexao.beginTransaction()
@@ -25,7 +25,7 @@ export default class ConsumoCtrl {
                     for(const item of itensConsumo){
                         let itemConsumo = new ItensConsumo(cons, item.lote, item.produto, item.qtdeConteudoUtilizado);
                         itemConsumo.gravar(conexao);
-                        
+                        //decrementar o lote
                     }
                     resposta.status(200).json({
                         "status": true,

@@ -15,15 +15,16 @@ export default class LoteCtrl{
             const conteudo_frasco = dados.conteudo_frasco;
             const unidade = dados.unidade;
             const total_conteudo = dados.total_conteudo;
+            const local = dados.local;
 
             if(
             codigo && data_validade && quantidade 
             && produto && formaFarmaceutica && conteudo_frasco
-            && unidade  && total_conteudo
+            && unidade  && total_conteudo &&  local
             ) {  
                 const lote = new Lote( codigo, data_validade, quantidade, 
                 produto, formaFarmaceutica, conteudo_frasco, 
-                unidade , total_conteudo);
+                unidade , total_conteudo, local);
                 lote.gravar().then(()=>{
                     resposta.status(200).json({
                         "status": true,
@@ -64,14 +65,16 @@ export default class LoteCtrl{
             const conteudo_frasco = dados.conteudo_frasco;
             const unidade = dados.unidade;
             const total_conteudo = dados.total_conteudo;
+            const local = dados.local;
+
             if(
                 codigo && data_validade && quantidade 
                 && produto && formaFarmaceutica && conteudo_frasco
-                && unidade  && total_conteudo
+                && unidade  && total_conteudo && local
                 ) {  
                     const lote = new Lote( codigo, data_validade, quantidade, 
                     produto, formaFarmaceutica, conteudo_frasco, 
-                    unidade , total_conteudo);
+                    unidade , total_conteudo,local);
                     lote.atualizar().then(()=>{
                         resposta.status(200).json({
                             "status": true,
