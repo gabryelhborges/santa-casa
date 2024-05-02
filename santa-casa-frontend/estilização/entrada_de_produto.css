@@ -440,3 +440,13 @@
     min-height: 523px;
   }
 }
+
+.tabelaItens{
+  margin: 0;
+  padding: 0;
+  max-height: 520px;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

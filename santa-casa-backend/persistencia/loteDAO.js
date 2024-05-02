@@ -3,6 +3,7 @@ import conectar from "./conexao.js";
 import FormaFarmaceutica from "../modelo/formaFarmaceutica.js";
 import Unidade from "../modelo/unidade.js";
 import Produto from "../modelo/produto.js";
+import Local from "../modelo/local.js";
 
 
 export default class LoteDAO{
@@ -16,8 +17,9 @@ export default class LoteDAO{
                         formafarmaceutica_ffa_cod,
                         conteudo_frasco,
                         unidade_un_cod,
-                        total_conteudo
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+                        total_conteudo,
+                        loc
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             const parametros = [
                 lote.codigo,
                 lote.data_validade,
@@ -26,12 +28,24 @@ export default class LoteDAO{
                 lote.formaFarmaceutica.ffa_cod,
                 lote.conteudo_frasco,  
                 lote.unidade.un_cod,  
-                lote.total_conteudo
+                lote.total_conteudo,
+                lote.local.loc_id
             ];
             const conexao = await conectar();
             await conexao.execute(sql,parametros);
             global.poolConexoes.releaseConnection(conexao);
         }
+    }
+
+    async verificarExistenciaLote(lote) {
+        const sql = `SELECT * FROM lote WHERE codigo = ? AND produto_prod_ID = ?`;
+        const parametros = [lote.codigo, lote.produto.prod_ID];
+        const conexao = await conectar();
+        const lot = await conexao.execute(sql, parametros);
+        global.poolConexoes.releaseConnection(conexao);
+        if(lot == null) 
+            return true;
+        return false;
     }
 
     async atualizar(lote){
@@ -42,7 +56,8 @@ export default class LoteDAO{
                 formafarmaceutica_ffa_cod = ?,
                 conteudo_frasco = ?,
                 unidade_un_cod = ?,
-                total_conteudo = ?
+                total_conteudo = ?,
+                loc = ?
                 WHERE codigo = ? AND produto_prod_ID = ?`;
             const parametros = [
                 lote.data_validade,
@@ -51,6 +66,7 @@ export default class LoteDAO{
                 lote.conteudo_frasco,  
                 lote.unidade.un_cod,  
                 lote.total_conteudo,
+                lote.local.loc_id,
                 lote.codigo,
                 lote.produto.prod_ID
             ];
@@ -106,16 +122,21 @@ export default class LoteDAO{
             await unidade.consultar(registro.unidade_un_cod).then((listaUnidades)=>{
                 unidade = listaUnidades.pop();
             });
+            let local = new Local(registro.local_loc_id);
+            await local.consultar(registro.local_loc_id).then((listaLocais)=>{
+                local = listaLocais.pop();
+            });
             
             let lote = new Lote(registro.codigo,registro.data_validade,
                 registro.quantidade,produto,formaFarmaceutica,registro.conteudo_frasco,
-                unidade,registro.total_conteudo
+                unidade,registro.total_conteudo,local
             );
             listaLotes.push(lote);
         }
         global.poolConexoes.releaseConnection(conexao);
         return listaLotes;
     }
+
 
 }
 

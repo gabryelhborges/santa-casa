@@ -7,6 +7,7 @@ class Lote{
     #conteudo_frasco;
     #unidade;
     #total_conteudo;
+    #local;
 
     constructor(codigo = "" ,
                 data_validade = "",
@@ -15,7 +16,8 @@ class Lote{
                 formaFarmaceutica = null,
                 conteudo_frasco = 0,
                 unidade = null,
-                total_conteudo = 0
+                total_conteudo = 0,
+                local = null
     ){
         this.#codigo = codigo;
         this.#data_validade = data_validade;
@@ -25,6 +27,7 @@ class Lote{
         this.#conteudo_frasco = conteudo_frasco;
         this.#unidade = unidade;
         this.#total_conteudo = total_conteudo;
+        this.#local = local;
     }
 
     get codigo(){
@@ -91,6 +94,14 @@ class Lote{
         this.#total_conteudo= novo;
     }
 
+    get local(){
+        return this.#local;
+    }
+
+    set local(novo){
+        this.#local = novo;
+    }
+
     toJSON(){
         return{
             codigo: this.#codigo,
@@ -100,7 +111,8 @@ class Lote{
             formaFarmaceutica: this.#formaFarmaceutica,
             conteudo_frasco: this.#conteudo_frasco,
             unidade: this.#unidade,
-            total_conteudo: this.#total_conteudo
+            total_conteudo: this.#total_conteudo,
+            local: this.#local
         };
     }
 }
