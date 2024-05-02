@@ -84,15 +84,16 @@ function validarFormulario(evento) {
                     for (let i = 0; i < listaProdutos.length; i++) {
                         let linha = document.createElement('tr');
                         let produto = listaProdutos[i];
+
                         linha.innerHTML = `
-                        <td>${produto.nome}</td>
-                        <td>${produto.Fabricante_idFabricante}</td>
-                        <td>${produto.psicotropico}</td>
-                        <td>
-                            <button class="" onclick="selecionarProduto(${gerarParametrosProduto(produto)})">  
-                            </button>
-                        </td>
-                        `;
+                            <td>${produto.nome}</td>
+                            <td>${produto.Fabricante_idFabricante}</td>
+                            <td>${produto.psicotropico}</td>
+                            <td>
+                                <button class="" style="border-radius:50%" onclick="selecionarProduto(${gerarParametrosProduto(produto)})"><img src="../image/icon-add.png">
+                                </button>
+                            </td>
+                            `;
                         corpo.appendChild(linha);
                     }
                     tabela.appendChild(corpo);
@@ -115,6 +116,74 @@ function validarFormulario(evento) {
     evento.preventDefault();
     evento.stopPropagation();
 }
+
+function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso,tipo) {
+    document.getElementById('iProd').value = nome;
+    fetch(urlBase + "/fabricante" + "/" + Fabricante_idFabricante, {
+        method: "GET"
+    }).then((resposta) => {
+        return resposta.json();
+    })
+    .then((json) => {
+        listaFabricante = json.listaFabricante;
+        document.getElementById('selectFabricante').value = listaFabricante[0].f_nome;
+    });
+    adicionarLote(prod_ID);
+}
+
+function adicionarLote(produto){
+    fetch(urlBase + "/lote" + "?" + "produto=" + produto, {
+        method: "GET"
+    }).then((resposta) => {
+        return resposta.json();
+    })
+    .then((json) => {
+        let select = document.getElementById("iLote");
+        select.appendChild(op);
+        listaLotes = json.listaLotes;
+        if(Array.isArray(listaLotes)){
+            for (let i=0 ;i < listaLotes.length; i++){  
+                let lit = listaLotes[i]
+                let option = document.createElement("option");
+                option.value = lit.codigo + "/" + lit.data_validade
+                 + "/" + lit.conteudo_frasco + "/" + lit.formaFarmaceutica.ffa_cod
+                 + "/" + lit.unidade.un_cod  + "/" + lit.quantidade + 
+                 "/" + lit.total_conteudo; 
+                option.text = lit.codigo + "/" + produto;
+                select.appendChild(option);                      
+            };
+        }
+    });
+}
+
+function separarPorHifen(str) {
+    if (str.includes('/')) {
+        const partes = str.split('/');
+        
+        return {
+            parte1: partes[0],
+            parte2: partes[1],
+            parte3: partes[2],
+            parte4: partes[3],
+            parte5: partes[4],
+            parte6: partes[5],
+            parte7: partes[6]
+        };
+    } else {
+        return null; // ou throw new Error('A string não contém um hífen.');
+    }
+}
+
+document.getElementById("iLote").addEventListener("change", function() {
+    if(document.getElementById('iData').value)
+        disabled_able();
+    criarLimpar();
+    if(!this.value){
+        criarLimpar();
+    }else{
+        disabled_able();
+    }
+});
 
 function adicionarDestino(){
     fetch(urlBase + "/local",{
@@ -164,22 +233,6 @@ function formataData(dataParametro){
     return dataFormatada;
 }
 
-function dataAtualFormatada(){
-    let dataAtual = new Date();
-
-    // Obtendo o ano, mês, dia, hora, minuto, segundo e milissegundo da data atual
-    let ano = dataAtual.getFullYear();
-    let mes = ('0' + (dataAtual.getMonth() + 1)).slice(-2); // Adicionando 1 porque os meses são zero indexados
-    let dia = ('0' + dataAtual.getDate()).slice(-2);
-    let hora = ('0' + dataAtual.getHours()).slice(-2);
-    let minuto = ('0' + dataAtual.getMinutes()).slice(-2);
-    let segundo = ('0' + dataAtual.getSeconds()).slice(-2);
-    let milissegundo = ('00' + dataAtual.getMilliseconds()).slice(-3);
-
-    // Formatando a data atual no formato ISO 8601
-    let dataFormatada = `${ano}-${mes}-${dia}T${hora}:${minuto}:${segundo}.${milissegundo}Z`;
-    return dataFormatada;
-}
 
 function gerarParametrosProduto(produto) {
     return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
@@ -189,7 +242,7 @@ function gerarParametrosProduto(produto) {
 
 function disabled_able() {
     let a = document.getElementById('capacidade').disabled;
-    let inputs = ['iData', 'iMedida', 'iLote'];
+    let inputs = ['iData', 'iMedida', 'iLote', 'selectFabricante'];
     
     for (let i = 0; i < inputs.length; i++) {
         let input = document.getElementById(inputs[i]);
