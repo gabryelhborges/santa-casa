@@ -1,7 +1,7 @@
 const urlBase = 'http://localhost:4040';
 
-adicinar();
-
+adicionar();
+carregaProdutos();
 var pesquisa = document.getElementById('form_pesquisa_produto');
 pesquisa.reset();
 pesquisa.onsubmit = validarFormulario;
@@ -12,7 +12,7 @@ var uni = document.getElementById("unidade");
 
 
 
-function adicinar(){
+function adicionar(){
     fetch(urlBase + "/unidade",{
         method: "GET",
         redirect: "follow"
@@ -46,7 +46,73 @@ function adicinar(){
             };
         }
     });
-};
+    
+}
+
+function carregaProdutos() {
+    let pesquisa = document.getElementById("pesquisaProduto").value;
+    fetch(urlBase + '/produto' + '/' + pesquisa, {
+        method: "GET"
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            let divTabProduto = document.getElementById("tabelaProduto");
+            if (json.status) {
+                divTabProduto.innerHTML = "";
+                listaProdutos = json.listaProdutos;
+                if (Array.isArray(listaProdutos)) {
+                    if (listaProdutos.length > 0) {
+                        let tabela = document.createElement('table');
+                        tabela.style.borderCollapse = 'collapse';
+                        tabela.style.width = '95%';
+                        tabela.style.borderBottom = '1px solid';
+                        //tabela.className = 'table table-striped table-hover';
+                        let cabecalho = document.createElement('thead');
+                        cabecalho.style.borderBottom = '1px solid';
+                        cabecalho.innerHTML = `
+                    <tr>
+                        <th>Nome</th>
+                        <th>Fabricante</th>
+                        <th>Psicotropico</th>
+                    </tr>
+                    `;
+                        tabela.appendChild(cabecalho);
+                        let corpo = document.createElement('tbody');
+                        for (let i = 0; i < listaProdutos.length; i++) {
+                            let linha = document.createElement('tr');
+                            let produto = listaProdutos[i];
+                            linha.innerHTML = `
+                        <td>${produto.nome}</td>
+                        <td>${produto.Fabricante_idFabricante}</td>
+                        <td>${produto.psicotropico}</td>
+                        <td>
+                            <button class="" onclick="selecionarProduto(${gerarParametrosProduto(produto)})">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="10px" viewBox="0 0 24 24">
+                                    <path d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"></path>
+                                </svg>
+                            </button>
+                        </td>
+                        `;
+                            linha.style.borderBottom = '1px solid';
+                            corpo.appendChild(linha);
+                        }
+                        tabela.appendChild(corpo);
+                        divTabProduto.appendChild(tabela);
+                    }
+                    else {
+                        divTabProduto.innerHTML = `<div> 
+                                    Não existem produtos com essa descrição
+                                </div>`;
+                    }
+                }
+            }
+            else {
+                divTabProduto.innerHTML = "Não foi possível consultar os produtos";
+            }
+        })
+}
 
 function validarFormulario(evento) {
     if (pesquisa.checkValidity()) {
@@ -243,8 +309,8 @@ document.getElementById("codigo_lote").addEventListener("change", function() {
         disabled_able();
     criarLimpar();
     if (this.value === "criarNovo") { // Se a opção "Criar Novo Lote" for selecionada
-        
         criarLote();
+        document.getElementById("criar_codigo_lote").focus();
     }else if(!this.value){
         criarLimpar();
     }else{
@@ -258,11 +324,19 @@ document.getElementById("codigo_lote").addEventListener("change", function() {
     }
 });
 
+document.getElementById("criar_codigo_lote").addEventListener("blur", function() {
+    if(document.getElementById('criar_codigo_lote').value == ""){
+        document.getElementById('criar_codigo_lote').style.display = "none";
+        document.getElementById('codigo_lote').style.display = 'block';
+        document.getElementById('seta_selec').style.display = 'block';
+    }
+});
+
 function criarLote(){
     document.getElementById('codigo_lote').style.display = 'none';
     document.getElementById('seta_selec').style.display = 'none';
     document.getElementById('criar_codigo_lote').style.display = "block";
-    document.getElementById('btn-select').style.display = "block";
+
 }
 
 function exibirMensagem(mensagem) {
@@ -294,7 +368,7 @@ function limparFormulario(){
     document.getElementById('nome_fabricante').value = "";
     document.getElementById('codigo_lote').value = "";
     document.getElementById('quantidade').value = "";
-
+    document.getElementById('criar_codigo_lote').value = "";
     excluirLote();
 }
 
@@ -316,6 +390,7 @@ function validarFormularioEntrada(evento){
 
     if(entrada_prod.checkValidity()){
         let valor = null;
+        let local = new Local("1");
         if(document.getElementById('validade').disabled == true){
             valor = separarPorHifen(document.getElementById('codigo_lote').value);
             let qtd  = parseInt(document.getElementById('quantidade').value) + parseInt(valor.parte6);
@@ -331,7 +406,8 @@ function validarFormularioEntrada(evento){
                 forma,
                 valor.parte3,
                 uni,
-                tot
+                tot,
+                local
             );
             fetch(urlBase + "/lote",{
                 method: "PUT",
@@ -345,6 +421,7 @@ function validarFormularioEntrada(evento){
                 if (dados.mensagem) {
                     limparFormulario();
                     exibirMensagem(dados.mensagem);
+                    disabled_able();
                 }
                 else {
                     exibirMensagem(dados.mensagem);
@@ -354,8 +431,20 @@ function validarFormularioEntrada(evento){
                 exibirMensagem('Não foi possível realizar a operação: ' + erro.message);
             });
         }else{
+            let prod = new Produto(document.getElementById('id_produto').value);
+            let forma = new FormaFarmaceutica(document.getElementById('forma_farmaceutica').value);
+            let uni = new Unidade(document.getElementById('unidade').value);
+            let tot = (parseInt(document.getElementById('quantidade').value)*parseInt(document.getElementById('capacidade').value,));
             let lote = new Lote(
-                document.getElementById().value,
+                document.getElementById('criar_codigo_lote').value,
+                formataData(document.getElementById('validade').value),
+                document.getElementById('quantidade').value,
+                prod,
+                forma,
+                document.getElementById('capacidade').value,
+                uni,
+                tot,
+                local
             );
             fetch(urlBase + "/lote",{
                 method: "POST",
@@ -369,6 +458,10 @@ function validarFormularioEntrada(evento){
                 if (dados.mensagem) {
                     limparFormulario();
                     exibirMensagem(dados.mensagem);
+                    document.getElementById('criar_codigo_lote').style.display = "none";
+                    document.getElementById('codigo_lote').style.display = 'block';
+                    document.getElementById('seta_selec').style.display = 'block';
+                    
                 }
                 else {
                     exibirMensagem(dados.mensagem);
@@ -382,6 +475,8 @@ function validarFormularioEntrada(evento){
     }else{
         formFor.classList.add('was-validated');
     }
+    document.getElementById('pesquisaProduto').value = "";
+    carregaProdutos();
     evento.preventDefault();
     evento.stopPropagation();
 }

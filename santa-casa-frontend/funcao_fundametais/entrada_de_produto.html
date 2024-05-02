@@ -52,13 +52,12 @@
                           </div>
                           <div class="u-form-date u-form-group u-form-partition-factor-2 u-label-top u-form-group-5">
                             <label for="date-e120" class="u-label u-label-5">*Validade</label>
-                            <input id = "validade" type="text" placeholder="DD/MM/YYYY" id="date-e120" name="date" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-5" required="" data-date-format="dd/mm/yyyy">
+                            <input id = "validade" type="date" placeholder="DD/MM/YYYY" id="date-e120" name="date" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-5" required="" data-date-format="dd/mm/yyyy">
                           </div>
                           <div class="u-form-group u-form-partition-factor-2 u-form-select u-label-top u-form-group-6">
                             <label for="select-0d05" class="u-label u-label-6">Unidade</label>
                             <div class="u-form-select-wrapper">
                               <select id="unidade" name="select-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-6">
-                                <option>Selecione a Unidade</option>
                               </select>
                               <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
                             </div>
@@ -67,21 +66,20 @@
                             <label for="select-2ed7" class="u-label u-label-7">Forma Farmaceutica</label>
                             <div class="u-form-select-wrapper">
                               <select id="forma_farmaceutica" name="select-2" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-7">
-                                <option>Selecione a Forma Farmaceutica</option>
                               </select>
                               <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
                             </div>
                           </div>
                           <div class="u-form-group u-form-number u-form-number-layout-number u-form-partition-factor-2 u-label-top u-form-group-8">
-                            <label for="number-e05b" class="u-label u-label-8">Quantidade</label>
+                            <label for="number-e05b" class="u-label u-label-8">*Quantidade</label>
                             <div class="u-input-row" data-value="0">
-                              <input id="quantidade" value="" min="0" max="100000" step="1" type="number" placeholder="" name="Quantidade" class="u-border-2 u-border-black u-input u-input-rectangle u-number u-radius u-text-black u-input-8">
+                              <input id="quantidade" value="" min="1" max="100000" step="1" type="number" placeholder="" name="Quantidade" class="u-border-2 u-border-black u-input u-input-rectangle u-number u-radius u-text-black u-input-8" required>
                             </div>
                           </div>
                           <div class="u-form-group u-form-number u-form-number-layout-number u-form-partition-factor-2 u-label-top u-form-group-9">
-                            <label for="number-b061" class="u-label u-label-9">Capacidade</label>
+                            <label for="number-b061" class="u-label u-label-9">*Capacidade</label>
                             <div class="u-input-row" data-value="0">
-                              <input id="capacidade" value="" min="0" max="100000" step="1" type="number" placeholder="" name="number" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-text-black u-input-9">
+                              <input id="capacidade" value="" min="1" max="100000" step="1" type="number" placeholder="" name="number" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-text-black u-input-9" required>
                             </div>
                           </div>
                           <div class="u-form-group u-form-submit u-label-top">
@@ -113,13 +111,12 @@
                                         <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966"><use xlink:href="#svg-4666"></use></svg>
                                     </span>
                                 </button>
-                                <input id="pesquisa_produto" class="u-search-input" type="text" name="search" value="" placeholder="pesquisar produto">
+                                <input id="pesquisaProduto" oninput="carregaProdutos()" class="u-search-input" type="text" name="search" value="" placeholder="pesquisar produto">
                             </form>
                             <div class="u-container-style u-expanded-width u-group u-shape-rectangle u-group-6">
-                              <div id="tabela">
+                              <div id="tabelaProduto" class="tabelaItens">
                               </div>
-                              <div id="mensagem">
-                              </div>
+                              
                             <div class="u-container-layout u-container-layout-8"></div>
                         </div>
                     </div>
@@ -131,7 +128,10 @@
         </div>
       </div>
     </section>
+    <div id="mensagem">
+    </div>
   </body>
+  <script src="../modelo/local.js"></script>
   <script src="../modelo/unidade.js"></script>
   <script src="../modelo/formaFarmaceutica.js"></script>
   <script src="../modelo/Produto.js"></script>
