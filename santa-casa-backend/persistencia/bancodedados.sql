@@ -52,6 +52,12 @@ create table fabricante(
     constraint pk_fabricante primary  key (idFabricante)
 );
 
+create table nomefarmacologico(
+    far_cod integer not null auto_increment,
+    nome_far varchar(70) not null, -- novalgina = diporona
+    constraint pk_far primary key (far_cod)
+);
+
 create table produtos(
     prod_ID integer not null,
     Fabricante_idFabricante integer not null,
@@ -73,18 +79,19 @@ create table unidade(
     constraint pk_un primary key (un_cod)
 );
 
-create table nomefarmacologico(
-    far_cod integer not null auto_increment,
-    nome_far varchar(70) not null, -- novalgina = diporona
-    constraint pk_far primary key (far_cod)
-);
-
 create table formafarmaceutica(
     ffa_cod integer not null auto_increment,
     forma varchar(40) not null, -- solução oral, comprimido, capsula, dragea 
     constraint pk_ffa primary key(ffa_cod)
 );
 
+create table loc(
+    loc_id integer not null auto_increment,
+    loc_nome varchar(30) not null,
+    constraint pk_loc primary key (loc_id)
+);
+
+-- drop table lote;
 create table lote(
     codigo varchar(15) not null,
     data_validade date not null,
@@ -94,10 +101,12 @@ create table lote(
     conteudo_frasco integer not null,
     unidade_un_cod integer not null,
     total_conteudo integer not null,
-    constraint pk_codigo primary key (codigo, produto_prod_ID),
+    loc integer not null,
+    constraint pk_codigo primary key (codigo, produto_prod_ID, loc),
     constraint fk_prod_ID  foreign key (produto_prod_ID) references produtos(prod_ID), 
     constraint fk_ffa_cod foreign key (formafarmaceutica_ffa_cod) references formafarmaceutica(ffa_cod),  
-    constraint fk_un_cod foreign key (unidade_un_cod) references unidade(un_cod)
+    constraint fk_un_cod foreign key (unidade_un_cod) references unidade(un_cod),
+    constraint fk_loc foreign key (loc) references loc(loc_id)
 );
 
 create table consumo(
@@ -120,12 +129,6 @@ create table itensConsumo(
     constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
 );
 
-create table loc(
-    loc_id integer not null auto_increment,
-    loc_nome varchar(30) not null,
-    constraint pk_loc primary key (loc_id)
-);
-
     
 -- insert nos pacientes
 insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('526.217.888-07','Leon B Ronchi', 'branco','s','m','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
@@ -139,6 +142,9 @@ insert into funcionarios values(default, 'Aglae Pereira Zaupa','N','SP-12345-6',
 insert into funcionarios values(default, 'Gabriel Carrocini', 'N','','999.999.999-99','(18) 10101-0011');
 --  * from funcionarios;
 
+-- insert nos locais
+insert into loc(loc_nome) values('farmacia');
+insert into loc(loc_nome) values('sala de medicação');
 
 -- insert nos fabricantes
 insert into fabricante values(default, '54.516.661/0001-01','Johnson & Johnson','Av. Pres. Juscelino Kubitschek',2041,'','Vila Nova Conceição','São Paulo','SP','0800 703 6363');
@@ -179,14 +185,13 @@ insert into formafarmaceutica values(default,'aerossol');
 -- select * from formafarmaceutica;
 
 -- insert produtos
-INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, ultima_compra, ultima_saida, observacao, descricao_uso, quantidade_total, tipo)
-VALUES (1, 1, 'Produto A', 'N', 10.50, '2024-04-27', NULL, 'Observação sobre o Produto A', 'Descrição de uso do Produto A', 100, 'Tipo A'),
-(2, 2, 'Produto B', 'S', 15.75, '2024-04-25', NULL, 'Observação sobre o Produto B', 'Descrição de uso do Produto B', 50, 'Tipo B'),
-(3, 3, 'Produto C', 'N', 20.00, '2024-04-26', NULL, 'Observação sobre o Produto C', 'Descrição de uso do Produto C', 75, 'Tipo C');
+insert into produtos values (1, 1, 'Produto A', 'N', 10.50, 'Observação sobre o Produto A', 'Descrição de uso do Produto A','Tipo A');
+insert into produtos values(2, 2, 'Produto B', 'S', 15.75, 'Observação sobre o Produto B', 'Descrição de uso do Produto B', 'Tipo B');
+insert into produtos values(3, 3, 'Produto C', 'N', 20.00, 'Observação sobre o Produto C', 'Descrição de uso do Produto C', 'Tipo C');
 
 -- insert lote
-insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo) VALUES('12345', '2024-07-13', 100, 1, 2, 125, 2, 12500);
-insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo) VALUES('54321', '2024-08-20', 200, 2, 2, 150, 2, 30000);
+insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc) VALUES('12345', '2024-07-13', 100, 1, 2, 125, 2, 12500, 1);
+insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc) VALUES('54321', '2024-08-20', 200, 2, 2, 150, 2, 30000, 1);
 
 -- insert consumo
 insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(1,1,'2024-04-26');
@@ -196,8 +201,3 @@ insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(2,2,'202
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 54321, 2, 11);
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 12345, 1, 6);
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 12345, 1, 2);
-
--- insert nos locais
-insert into loc(loc_nome) values('farmacia');
-insert into loc(loc_nome) values('sala de medicação');
-
