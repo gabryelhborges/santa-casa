@@ -3,6 +3,8 @@ import Paciente from "../modelo/paciente.js";
 import conectar from "../persistencia/conexao.js";
 import Funcionario from "../modelo/funcionario.js";
 import ItensConsumo from "../modelo/itensConsumo.js";
+import Lote from "../modelo/lote.js";
+import Loc from "../modelo/local.js";
 
 
 export default class ConsumoCtrl {
@@ -26,6 +28,9 @@ export default class ConsumoCtrl {
                         let itemConsumo = new ItensConsumo(cons, item.lote, item.produto, item.qtdeConteudoUtilizado);
                         itemConsumo.gravar(conexao);
                         //decrementar o lote
+                        let lote = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto,item.lote.formaFarmaceutica,item.lote.conteudo_frasco,item.lote.unidade,item.lote.total_conteudo, new Loc(1));
+                        lote.total_conteudo= lote.total_conteudo - item.qtdeConteudoUtilizado;
+                        lote.atualizar().then(()=>{});
                     }
                     resposta.status(200).json({
                         "status": true,
