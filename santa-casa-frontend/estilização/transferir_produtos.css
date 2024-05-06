@@ -282,3 +282,12 @@
     padding-right: 10px;
   }
 }
+
+
+.tabelaItens{
+  max-height: 220px;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

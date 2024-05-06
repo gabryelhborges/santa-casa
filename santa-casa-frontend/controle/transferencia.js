@@ -1,13 +1,18 @@
 const urlBase = 'http://localhost:4040';
 
 var pesquisa = document.getElementById('form_pesquisa_produto');
+var listaItensTransferencia = [];
+var listaLot = [];
+var valormedida;
 pesquisa.reset();
-pesquisa.onsubmit = validarFormulario;
+pesquisa.onsubmit = PesquisaProd;
 
 adicionarOrigem();
 adicionarDestino();
+exibirListaItensTransferencia();
 
 function limparFormulario(){
+    document.getElementById('codProd').value=""
     document.getElementById('selectOrigem').value = "";
     document.getElementById('selectFabricante').value = "";
     document.getElementById('selectDestino').value = "";
@@ -50,7 +55,7 @@ function adicionarOrigem(){
         });
 }
 
-function validarFormulario(evento) {
+function PesquisaProd(evento) {
     if (pesquisa.checkValidity()) {
         let prod_ID = document.getElementById('pesquisa_produto').value;
 
@@ -59,66 +64,84 @@ function validarFormulario(evento) {
         })
         .then(resposta => {
             if (!resposta.ok) {
-                throw new Error(`HTTP error! status: ${resposta.status}`);
+                throw new Error(`Erro HTTP! status: ${resposta.status}`);
             }
             return resposta.json();
         })
         .then((json) => {
             let divTabela = document.getElementById('tabela');
             divTabela.innerHTML = '';
-            listaProdutos = json.listaProdutos;
-            if (Array.isArray(listaProdutos)) {
-                if (listaProdutos.length > 0) {
-                    let tabela = document.createElement('table');
-                    tabela.className = 'table table-striped table-hover';
-                    let cabecalho = document.createElement('thead');
-                    cabecalho.innerHTML = `
+            let listaProdutos = json.listaProdutos;
+            if (Array.isArray(listaProdutos) && listaProdutos.length > 0) {
+                let tabela = document.createElement('table');
+                tabela.style.borderCollapse = 'collapse';
+                tabela.style.width = '95%';
+                tabela.style.borderBottom = '1px solid';
+                let cabecalho = document.createElement('thead');
+                cabecalho.style.borderBottom = '1px solid';
+                cabecalho.innerHTML = `
                     <tr>
                         <th>Nome</th>
                         <th>Fabricante</th>
                         <th>Psicotropico</th>
+                        <th>Selecionar</th>
                     </tr>
-                    `;
-                    tabela.appendChild(cabecalho);
-                    let corpo = document.createElement('tbody');
-                    for (let i = 0; i < listaProdutos.length; i++) {
-                        let linha = document.createElement('tr');
-                        let produto = listaProdutos[i];
+                `;
+                tabela.appendChild(cabecalho);
+                let corpo = document.createElement('tbody');
 
+                listaProdutos.forEach(produto => {
+                    fetch(urlBase + "/fabricante/" + produto.Fabricante_idFabricante)
+                    .then(respostaFab => {
+                        if (!respostaFab.ok) {
+                            throw new Error(`Erro HTTP! status: ${respostaFab.status}`);
+                        }
+                        return respostaFab.json();
+                    })
+                    .then(jsonFab => {
+                        let linha = document.createElement('tr');
                         linha.innerHTML = `
                             <td>${produto.nome}</td>
-                            <td>${produto.Fabricante_idFabricante}</td>
+                            <td>${jsonFab.f_nome}</td>
                             <td>${produto.psicotropico}</td>
                             <td>
-                                <button class="" style="border-radius:50%" onclick="selecionarProduto(${gerarParametrosProduto(produto)})"><img src="../image/icon-add.png">
+                                <button class="" style="border-radius:50%" onclick="selecionarProduto(${gerarParametrosProduto(produto)})">
+                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="10px" viewBox="0 0 24 24">
+                                        <path d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"></path>
+                                    </svg>
                                 </button>
                             </td>
-                            `;
+                        `;
+                        linha.style.borderBottom = '1px solid';
                         corpo.appendChild(linha);
-                    }
-                    tabela.appendChild(corpo);
-                    divTabela.appendChild(tabela);
-                }
-                else {
-                    divTabela.innerHTML = `<div class="alert alert-warning" role="alert"> 
+                    })
+                    .catch((erroFab) => {
+                        exibirMensagem('Não foi possível encontrar o Fabricante: ' + erroFab.message);
+                    });
+                });
+
+                tabela.appendChild(corpo);
+                divTabela.appendChild(tabela);
+            } else {
+                divTabela.innerHTML = `<div class="alert alert-warning" role="alert"> 
                                     Não existem Produtos cadastrados
                                 </div>`;
-                }
             }
         })
         .catch((erro) => {
             exibirMensagem('Não foi possível encontrar os Produtos: ' + erro.message);
         });
-    }
-    else {
+    } else {
         pesquisa.classList.add('was-validated');
     }
-    evento.preventDefault();
-    evento.stopPropagation();
+    // evento.preventDefault();
+    // evento.stopPropagation();
 }
+
 
 function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso,tipo) {
     document.getElementById('iProd').value = nome;
+    document.getElementById('codProd').value = prod_ID;
     fetch(urlBase + "/fabricante" + "/" + Fabricante_idFabricante, {
         method: "GET"
     }).then((resposta) => {
@@ -139,18 +162,22 @@ function adicionarLote(produto){
     })
     .then((json) => {
         let select = document.getElementById("iLote");
+        let op = document.createElement("option");
+        op.text = "SELECIONE UM LOTE";
         select.appendChild(op);
-        listaLotes = json.listaLotes;
+        listaLot=[];
+        let listaLotes = json.listaLotes;
         if(Array.isArray(listaLotes)){
             for (let i=0 ;i < listaLotes.length; i++){  
                 let lit = listaLotes[i]
                 let option = document.createElement("option");
                 option.value = lit.codigo + "/" + lit.data_validade
                  + "/" + lit.conteudo_frasco + "/" + lit.formaFarmaceutica.ffa_cod
-                 + "/" + lit.unidade.un_cod  + "/" + lit.quantidade + 
+                 + "/" + lit.unidade.unidade  + "/" + lit.quantidade + 
                  "/" + lit.total_conteudo; 
                 option.text = lit.codigo + "/" + produto;
-                select.appendChild(option);                      
+                select.appendChild(option);
+                listaLot.push(lit);              
             };
         }
     });
@@ -174,14 +201,17 @@ function separarPorHifen(str) {
     }
 }
 
+function criarLimpar(){
+    document.getElementById('iData').value = "";
+    document.getElementById('iMedida').value = "";
+}
+
 document.getElementById("iLote").addEventListener("change", function() {
-    if(document.getElementById('iData').value)
-        disabled_able();
-    criarLimpar();
-    if(!this.value){
-        criarLimpar();
-    }else{
-        disabled_able();
+    if(this.value){
+        let valor = separarPorHifen(this.value);
+        document.getElementById('iData').value = formataData(valor.parte2);
+        document.getElementById('iMedida').value = valor.parte3 + " " + valor.parte5;
+        valormedida = valor.parte3;
     }
 });
 
@@ -242,11 +272,128 @@ function gerarParametrosProduto(produto) {
 
 function disabled_able() {
     let a = document.getElementById('capacidade').disabled;
-    let inputs = ['iData', 'iMedida', 'iLote', 'selectFabricante'];
+    let inputs = ['iData', 'iMedida', 'selectFabricante'];
     
     for (let i = 0; i < inputs.length; i++) {
         let input = document.getElementById(inputs[i]);
         input.disabled = !a;
     }
 
+}
+
+function adicionarItemTransf() {
+    let val = separarPorHifen(document.getElementById('iLote').value);
+    let codLote = val.parte1;
+    let codProd = document.getElementById('codProd').value;
+    let loc = document.getElementById('selectOrigem').value;
+    let dest = document.getElementById('selectDestino').value;
+    let objLote = listaLot.find(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd && itemLote.local.loc_id == loc);
+    let objProd;
+    objLote ? objProd = objLote.produto : objProd = null;
+    let qtde = document.getElementById('iQtde').value * valormedida;
+    if (objLote && objProd && qtde > 0) {
+        let itemExistente = listaItensTransferencia.find(item => item.lote.codigo === objLote.codigo && item.produto.prod_ID === objProd.prod_ID);
+        // Verifica se já existe um item com o mesmo produto e lote
+        if (itemExistente) {
+            // Se existir, apenas aumenta a quantidade
+            let num = parseInt(itemExistente.qtdeConteudoUtilizado);
+            num += parseInt(qtde);
+            itemExistente.qtdeConteudoUtilizado = parseInt(num);
+        }
+        else {
+            let novoItem = {
+                lote: objLote, 
+                produto: objProd, 
+                quantidade: parseInt(qtde),
+                origem: loc,
+                destino: dest
+            };
+            listaItensTransferencia.push(novoItem);
+        }
+    }
+    else {
+        alert('Faltam dados ou dados estão incorretos.')
+    }
+    limparFormItemTransf();
+    exibirListaItensTransferencia();
+}
+
+function removerItemTransferencia(codLote, codProd, qtdeConteudoUtilizado, medidaUtilizada) {
+    listaItensTransferencia = listaItensTransferencia.filter(item => {
+        return item.lote.codigo != codLote || item.produto.prod_ID != codProd || item.qtdeConteudoUtilizado != qtdeConteudoUtilizado || item.medidaUtilizada != medidaUtilizada;
+    });
+    exibirListaItensTransferencia();
+}
+
+function limparFormItemTransf() {
+    document.getElementById('codProd').value = '';
+    document.getElementById('iProd').value = '';
+    document.getElementById('iMedida').value = '';
+    document.getElementById('iLote').value = '';
+    document.getElementById('iLote').innerHTML = '';
+    document.getElementById('iData').value = '';
+    document.getElementById('iQtde').value = '';
+    document.getElementById('selectFabricante').value = '';
+    valormedida=0;
+}
+
+function exibirListaItensTransferencia() {
+    let divItensTransf = document.getElementById("tabelaItensTransf");
+    divItensTransf.innerHTML = '';
+    if (listaItensTransferencia.length) {
+        let tabela = document.createElement('table');
+        tabela.style.borderCollapse = 'collapse';
+        tabela.style.width = '95%';
+        tabela.style.borderBottom = '1px solid';
+        tabela.style.position='relative';
+        //tabela.style.maxHeight= '100px';
+        //tabela.className = 'table table-striped table-hover';
+        let cabecalho = document.createElement('thead');
+        cabecalho.style.borderBottom = '1px solid';
+        cabecalho.style.position='sticky';
+        cabecalho.style.top='-1 px';
+        cabecalho.style.backgroundColor='grey'
+        cabecalho.innerHTML = `
+                    <tr>
+                        <th>Lote</th>
+                        <th>Produto</th>
+                        <th>Qtde</th>
+                        <th>Unidade de medida</th>
+                        <th>Origem</th>
+                        <th>Destino</th>
+                    </tr>
+                    `;
+        tabela.appendChild(cabecalho);
+        let corpo = document.createElement('tbody');
+        for (let i = 0; i < listaItensTransferencia.length; i++) {
+            let linha = document.createElement('tr');
+            let itTransf = listaItensTransferencia[i];
+            linha.innerHTML = `
+                        <td>${itTransf.lote.codigo}</td>
+                        <td>${itTransf.produto.prod_ID}</td>
+                        <td>${itTransf.qtdeConteudoUtilizado}</td>
+                        <td>${itTransf.unidade.unidade}</td>
+                        <td>${itTransf.origem}</td>
+                        <td>${itTransf.destino}</td>
+                        <td>
+                            <button class="" onclick="removerItemTransferencia(${gerarParametrosTransferencia(itTransf)})">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 64 64">
+                                    <path d="M 28 11 C 26.895 11 26 11.895 26 13 L 26 14 L 13 14 C 11.896 14 11 14.896 11 16 C 11 17.104 11.896 18 13 18 L 14.160156 18 L 16.701172 48.498047 C 16.957172 51.583047 19.585641 54 22.681641 54 L 41.318359 54 C 44.414359 54 47.041828 51.583047 47.298828 48.498047 L 49.839844 18 L 51 18 C 52.104 18 53 17.104 53 16 C 53 14.896 52.104 14 51 14 L 38 14 L 38 13 C 38 11.895 37.105 11 36 11 L 28 11 z M 18.173828 18 L 45.828125 18 L 43.3125 48.166016 C 43.2265 49.194016 42.352313 50 41.320312 50 L 22.681641 50 C 21.648641 50 20.7725 49.194016 20.6875 48.166016 L 18.173828 18 z"></path>
+                                </svg>
+                            </button>
+                        </td>
+                        `;
+            linha.style.borderBottom = '1px solid';
+            corpo.appendChild(linha);
+        }
+        tabela.appendChild(corpo);
+        divItensTransf.appendChild(tabela);
+    }
+    else {
+        divItensTransf.innerHTML = 'Nenhum produto foi utilizado';
+    }
+}
+
+function gerarParametrosTransferencia(itens) {
+    return `'${itens.lote.codigo}','${itens.produto.prod_ID}','${itens.qtdeConteudoUtilizado}','${itens.unidade.unidade}'`;
 }
