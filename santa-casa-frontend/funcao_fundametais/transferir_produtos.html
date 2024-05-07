@@ -27,65 +27,73 @@
                 </div>
                 <div class="u-container-style u-expanded-width u-group u-palette-1-light-2 u-group-2">
                   <div class="u-container-layout u-container-layout-3">
-                    <div class="custom-expanded u-form u-form-1">
-                      <form id="formTransferencia" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 10px;">
-                        <div class="u-form-group u-form-name u-form-partition-factor-3">
-                          <label for="name-e9ff" class="u-label">Origem:</label>
-                          <div class="u-form-select-wrapper">
-                            <select id="selectOrigem" name="select-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-1" required="required"></select>
-                            <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
+                    <form>
+                      <div class="custom-expanded u-form u-form-1">
+                        <div id="formTransferencia" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 10px;">
+                          <div class="u-form-group u-form-name u-form-partition-factor-3">
+                            <label for="name-e9ff" class="u-label">Origem:</label>
+                            <div class="u-form-select-wrapper">
+                              <select id="selectOrigem" name="select-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-1" required="required"></select>
+                              <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
+                            </div>
+                          </div>
+                          <div class="u-form-group u-form-partition-factor-3 u-form-group-2">
+                            <label for="text-83a0" class="u-label">Fabricante</label>
+                            <div class="u-form-select-wrapper">
+                              <input id="selectFabricante" name="select-2" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-2"></input>
+                            </div>
+                          </div>
+                          <div class="u-form-group u-form-partition-factor-3 u-form-group-3">
+                            <label for="text-adc3" class="u-label">Destino:</label>
+                            <div class="u-form-select-wrapper">
+                              <select id="selectDestino" name="select-3" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" required="required"></select>
+                              <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
+                            </div>
+                          </div>
+                          <div class="u-form-group u-form-group-4">
+                            <label for="text-4ec2" class="u-label">Produto:</label>
+                            <input style="display: none;" id="codProd">
+                            <input id="iProd" type="text" placeholder="" name="text-2" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-4">
+                          </div>
+                          <div class="u-form-group u-form-partition-factor-2 u-form-group-5">
+                            <label for="text-338c" class="u-label">Lote:</label>
+                            <select id="iLote" type="text" placeholder="" name="text-3" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-5"></select>
+                          </div>
+                          <div class="u-form-date u-form-group u-form-partition-factor-2 u-form-group-6">
+                            <label for="date-f1db" class="u-label">Data de Validade:</label>
+                            <input readonly id="iData" type="date" placeholder="MM/DD/YYYY" name="date" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-6" required="" data-date-format="mm/dd/yyyy">
+                          </div>
+                          <div class="u-form-group u-form-partition-factor-2 u-form-group-7">
+                            <label for="text-24d4" class="u-label">Quantidade:</label>
+                            <input id="iQtde" type="text" placeholder="" id="text-24d4" name="text-4" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-7">
+                          </div>
+                          <div class="u-form-group u-form-partition-factor-2 u-form-group-8">
+                            <label for="text-4ed6" class="u-label">Medida</label>
+                            <input id="iMedida" type="text" placeholder="" id="text-4ed6" name="text-5" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-8">
                           </div>
                         </div>
-                        <div class="u-form-group u-form-partition-factor-3 u-form-group-2">
-                          <label for="text-83a0" class="u-label">Fabricante</label>
-                          <div class="u-form-select-wrapper">
-                            <input id="selectFabricante" name="select-2" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-2"></input>
-                          </div>
-                        </div>
-                        <div class="u-form-group u-form-partition-factor-3 u-form-group-3">
-                          <label for="text-adc3" class="u-label">Destino:</label>
-                          <div class="u-form-select-wrapper">
-                            <select id="selectDestino" name="select-3" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" required="required"></select>
-                            <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
-                          </div>
-                        </div>
-                        <div class="u-form-group u-form-group-4">
-                          <label for="text-4ec2" class="u-label">Produto:</label>
-                          <input id="iProd" type="text" placeholder="" id="text-4ec2" name="text-2" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-4">
-                        </div>
-                        <div class="u-form-group u-form-partition-factor-2 u-form-group-5">
-                          <label for="text-338c" class="u-label">Lote:</label>
-                          <select id="iLote" type="text" placeholder="" id="text-338c" name="text-3" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-5"></select>
-                        </div>
-                        <div class="u-form-date u-form-group u-form-partition-factor-2 u-form-group-6">
-                          <label for="date-f1db" class="u-label">Data de Validade:</label>
-                          <input id="iData" type="text" placeholder="MM/DD/YYYY" id="date-f1db" name="date" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-6" required="" data-date-format="mm/dd/yyyy">
-                        </div>
-                        <div class="u-form-group u-form-partition-factor-2 u-form-group-7">
-                          <label for="text-24d4" class="u-label">Quantidade:</label>
-                          <input id="iQtde" type="text" placeholder="" id="text-24d4" name="text-4" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-7">
-                        </div>
-                        <div class="u-form-group u-form-partition-factor-2 u-form-group-8">
-                          <label for="text-4ed6" class="u-label">Medida</label>
-                          <input id="iMedida" type="text" placeholder="" id="text-4ed6" name="text-5" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-8">
-                        </div>
-                      </form>
-                    </div>
-                    <div class="u-border-1 u-border-black u-border-no-top u-container-align-center u-container-style u-expanded-width u-group u-palette-1-light-3 u-group-3">
-                      <div class="u-container-layout u-container-layout-4">
-                        <div class="u-container-align-center u-container-style u-expanded-width u-group u-palette-1-dark-1 u-shape-rectangle u-group-4">
-                          <div class="u-container-layout u-valign-top u-container-layout-5">
-                            <p class="u-align-center u-text u-text-default u-text-2">LISTA DE ITENS</p>
-                          </div>
-                        </div>
-                        <div class="u-container-style u-expanded-width u-group u-shape-rectangle u-group-5">
-                          <div class="u-container-layout u-container-layout-6"></div>
+                        <div class="u-form-group u-form-group-3" style="padding-top: 70px; margin-bottom: 0px;">
+                          <button type="button" style="margin-left: 10px;" onclick="adicionarItemTransf()" class="u-btn u-button-style u-btn-2">Adicionar </button>
+                          <button type="button" style="margin-left: 175px;" onclick="limparFormItemTransf()" class="u-border-none u-btn u-button-style u-white u-btn-3">Limpar</button>
                         </div>
                       </div>
-                    </div>
+                      
+                      <div class="u-border-1 u-border-black u-border-no-top u-container-align-center u-container-style u-expanded-width u-group u-palette-1-light-3 u-group-3">
+                        <div class="u-container-layout u-container-layout-4">
+                          <div class="u-container-align-center u-container-style u-expanded-width u-group u-palette-1-dark-1 u-shape-rectangle u-group-4">
+                            <div class="u-container-layout u-valign-top u-container-layout-5">
+                              <p class="u-align-center u-text u-text-default u-text-2">LISTA DE ITENS</p>
+                            </div>
+                          </div>
+                          <div class="u-container-style u-expanded-width u-group u-shape-rectangle u-group-5">
+                            <div id="tabelaItensTransf" class="u-container-layout u-container-layout-6"></div>
+                          </div>
+                        </div>
+                      </div>
+                      
                     <button id="btnCancelar" type="submit" class="u-align-right u-border-none u-btn u-btn-round u-button-style u-palette-2-base u-radius u-btn-2">CANCELAR</button>
-                    <button id="btnConfirmar" class="u-align-center u-border-none u-btn u-btn-round u-button-style u-palette-1-light-1 u-radius u-btn-3">TRANSFERIR</button>
-                    <button id="btnAdicionar" class="u-align-left u-border-none u-btn u-btn-round u-button-style u-custom-color-3 u-radius u-btn-4">ADICIONAR</button>
+                    <button id="btnTransferir" class="u-align-left u-border-none u-btn u-btn-round u-button-style u-custom-color-3 u-radius u-btn-4">TRANSFERIR</button>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -106,10 +114,10 @@
                           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-2030" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content"><path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"></path></svg>
                         </span>
                       </button>
-                      <input oninput="validarFormulario()" id="pesquisa_produto" class="u-search-input" type="text" name="search" value="" placeholder="pesquisar produto">
+                      <input oninput="PesquisaProd()" id="pesquisa_produto" class="u-search-input" type="text" name="search" value="" placeholder="pesquisar produto">
                     </form>
                     <div class="u-container-style u-expanded-width u-group u-shape-rectangle u-group-6">
-                      <div id="tabela">
+                      <div id="tabela" class="tabelaItens">
                       </div>
                       <div id="mensagem">
                       </div>
