@@ -9,7 +9,8 @@ import Loc from "../modelo/local.js";
 
 export default class ConsumoCtrl {
     //variável statica dela mesma
-    //get instance
+    s = Singleton.getInstance();
+    s2= Singleton.getInstance();
     async gravar(requisicao, resposta) {
         resposta.type('application/json');
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
