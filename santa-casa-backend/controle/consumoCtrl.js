@@ -17,10 +17,11 @@ export default class ConsumoCtrl {
             const dados = requisicao.body;
             const paciente = new Paciente(dados.paciente.idPaciente);
             const funcionario = new Funcionario(dados.funcionario.idFuncionario);//já recebo um objeto? ou devo instanciá-lo aqui?
+            const local = new Loc(dados.local.loc_id);
             const dataConsumo = dados.dataConsumo;
             const itensConsumo = dados.itensConsumo;
-            if (paciente instanceof Paciente && funcionario instanceof Funcionario && itensConsumo.length > 0) {//&& itensConsumo.length > 0
-                const cons = new Consumo(0, paciente, funcionario, itensConsumo, dataConsumo);
+            if (paciente instanceof Paciente && funcionario instanceof Funcionario && local instanceof Loc && itensConsumo.length > 0) {//&& itensConsumo.length > 0
+                const cons = new Consumo(0, paciente, funcionario, local, itensConsumo, dataConsumo);
                 const conexao = await conectar();
                 //conexao.beginTransaction()
                 cons.gravar(conexao).then(() => {

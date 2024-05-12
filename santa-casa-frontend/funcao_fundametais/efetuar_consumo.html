@@ -52,8 +52,8 @@
 
 
 
-                          <form method="post" id="formConsumo" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form"
-                            style="padding: 10px;">
+                          <form method="post" id="formConsumo"
+                            class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" style="padding: 10px;">
 
                             <div class="u-form-group u-form-name u-form-partition-factor-2">
                               <label for="paciente" class="u-label">Paciente</label>
@@ -65,12 +65,13 @@
                             <div class="u-form-group u-form-partition-factor-2 u-form-group-2">
                               <label for="funcionario" class="u-label">Funcionario</label>
                               <input type="text" placeholder="Fulano" id="funcionario" name="funcionario"
-                                class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" readonly required>
+                                class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" readonly
+                                required>
                             </div>
 
 
                             <div class="u-form-group u-form-group-3 u-form-partition-factor-2"
-                              style="padding-top: 50px;">
+                              style="padding-top: 10px;">
                               <label for="produto" class="u-label">Produto</label>
                               <input type="text" placeholder="Selecione um produto na tabela ao lado" id="produto"
                                 name="text-1"
@@ -106,22 +107,31 @@
 
 
                             <div class="u-form-group u-form-group-3" style="padding-top: 70px; margin-bottom: 0px;">
-                                <button type="button" style="margin-left: 10px;" onclick="adicionarItemConsumo()" class="u-btn u-button-style u-btn-2">Adicionar </button>
-                                <button type="button" style="margin-left: 175px;" onclick="limparFormItemConsumo()" class="u-border-none u-btn u-button-style u-white u-btn-3">Limpar</button>
+                              <button type="button" style="margin-left: 10px;" onclick="adicionarItemConsumo()"
+                                class="u-btn u-button-style u-btn-2">Adicionar </button>
+                              <button type="button" style="margin-left: 175px;" onclick="limparFormItemConsumo()"
+                                class="u-border-none u-btn u-button-style u-white u-btn-3">Limpar</button>
                             </div>
 
 
-                            <div class="u-container-style u-layout-cell u-size-30" style="height: 150px; max-height: 200px;">
-                              <div class="u-container-layout u-container-layout-8" style="height: 200px; max-height: 150px;">
-                                <div class=" u-container-style u-group u-group-7" style="height: 200px; max-height: 150px;">
-                                  <div class="u-container-layout u-container-layout-9" style="height: 200px; max-height: 115px; background-color: whitesmoke;">
-                                    <div class="u-container-align-center u-container-style u-expanded-width u-group u-palette-1-dark-1 u-group-8">
+                            <div class="u-container-style u-layout-cell u-size-30"
+                              style="height: 200px; max-height: 200px;">
+                              <div class="u-container-layout u-container-layout-8"
+                                style="height: 200px; max-height: 200px;">
+                                <div class=" u-container-style u-group u-group-7"
+                                  style="height: 200px; max-height: 200px;">
+                                  <div class="u-container-layout u-container-layout-9"
+                                    style="height: 200px; max-height: 180px; background-color: whitesmoke;">
+                                    <div
+                                      class="u-container-align-center u-container-style u-expanded-width u-group u-palette-1-dark-1 u-group-8">
                                       <div class="u-container-layout u-valign-top u-container-layout-10">
-                                        <p class="u-align-center u-text u-text-default u-text-3">LISTA PRODUTOS UTILIZADOS</p>
+                                        <p class="u-align-center u-text u-text-default u-text-3">LISTA PRODUTOS
+                                          UTILIZADOS</p>
                                       </div>
                                     </div>
-                                    <div id="tabelaItensConsumo" class="tabelaItens" style="max-height: 80px; padding-top: 20px;">
-                                          
+                                    <div id="tabelaItensConsumo" class="tabelaItens"
+                                      style="max-height: 170px; padding-top: 20px;">
+
                                     </div>
                                   </div>
                                 </div>
@@ -133,16 +143,9 @@
 
 
                             <div class="u-align-left u-form-group u-form-submit">
-                              <button type="submit" class="u-btn u-btn-submit u-button-style">Confirmar</button>
+                              <button type="submit" class="u-btn u-btn-submit u-button-style"
+                                style="margin-top: 12px; margin-bottom: 0px;">Confirmar</button>
                             </div>
-                            <div class="u-form-send-message u-form-send-success"> Obrigado! A sua mensagem foi
-                              enviada.
-                            </div>
-                            <div class="u-form-send-error u-form-send-message"> Não foi possível enviar a sua
-                              mensagem.
-                              Por favor, corrija os erros e tente novamente. </div>
-                            <input type="hidden" value="" name="recaptchaResponse">
-                            <input type="hidden" name="formServices" value="29268018-6cf4-4283-2dd9-bb3d09c15a38">
                           </form>
                         </div>
                       </div>
@@ -227,14 +230,14 @@
                     </div>
                   </div>
                 </div>
-
-
-
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div id="mensagem"></div>
+
     </div>
   </section>
 

@@ -390,10 +390,41 @@
 }
 
 
-.tabelaItens{
+.tabelaItens {
   max-height: 220px;
   overflow: auto;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+
+.divMsg {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#mensagem {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  z-index: 9999; /* Garante que a div de mensagem esteja acima de outros elementos */
+}
+
+.msgAviso {
+  background-color: #ffffcc;
+  border: 3px solid #fcfc28;
+  border-radius: 10px;
+  color: #333;
+}
+
+.msgErro {
+  background-color: #ff9999;
+  border: 3px solid #ff3838;
+  border-radius: 10px;
+  color: #333;
 }
