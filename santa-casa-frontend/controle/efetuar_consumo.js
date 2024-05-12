@@ -1,15 +1,44 @@
+var jsonConsumo = {
+    idConsumo: 0,
+    paciente: {},
+    funcionario: {},
+    itensConsumo: [],
+    dataConsumo: 0
+};
+
+var jsonItCons = {
+    consumo: {},
+    lote: {},
+    produto: {},
+    qtdeConteudoUtilizado: 0
+};
+
 const urlBase = 'http://localhost:4040';
 var formConsumo = document.getElementById('formConsumo');
 formConsumo.reset();
 formConsumo.onsubmit = validarFormulario;
 document.getElementById("funcionario").value = 1;//a partir do login, identificar funcionario
 var listaItensConsumo = [];
-var qtdeTotalLoteSelecionado= 0;
+var qtdeTotalLoteSelecionado = 0;
 var listaLotes = [];
 var pacConsumo;
-var funcConsumo = new Funcionario(document.getElementById('funcionario').value);
-exibirListaItensConsumo();
+var funcConsumo;
+procuraFuncionario();
 
+function procuraFuncionario() {
+    let idFunc = document.getElementById('funcionario').value;
+    fetch(urlBase + '/funcionario/' + idFunc, {
+        method: "GET"
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            funcConsumo = json.listaFuncionarios[0];
+            document.getElementById("funcionario").value = funcConsumo.nome_funcionario;
+        });
+}
+exibirListaItensConsumo();
 carregaPacientes();
 carregaProdutos();
 
@@ -19,8 +48,8 @@ function limpaPaciente() {
 }
 
 function validarFormulario(evento) {
-    let pac= document.getElementById("paciente").value;
-    if (formConsumo.checkValidity() && listaItensConsumo.length && pac) {
+    let pac = document.getElementById("paciente").value;
+    if (listaItensConsumo.length && pac) {
         let dataAtual = new Date();
         dataAtual.setHours(dataAtual.getHours() - 3);
         // Formata a data para o formato compatível com o MySQL
@@ -42,18 +71,29 @@ function validarFormulario(evento) {
                     limparFormItemConsumo();
                     listaItensConsumo = [];
                     exibirListaItensConsumo();
-                    alert(dados.mensagem);
+                    exibirMensagem(dados.mensagem);
                 }
                 else {
-                    alert(dados.mensagem);
+                    exibirMensagem(dados.mensagem);
                 }
             })
             .catch((erro) => {
-                alert("Não foi posssivel completar a operação: " + erro.message);
+                exibirMensagem("Não foi posssivel completar a operação: " + erro.message);
             })
     }
     else {
-        alert('É necessário informar o paciente e registrar os itens que foram consumidos para realizar a confirmação!');
+        if (!listaItensConsumo.length && !pac) {
+            exibirMensagem('Informe os itens consumidos e o paciente!');
+        }
+        else {
+            if (!listaItensConsumo.length) {
+                //Se zero, entra
+                exibirMensagem('Informe os itens consumidos!')
+            }
+            if (!pac) {
+                exibirMensagem('Informe o paciente!');
+            }
+        }
     }
     evento.preventDefault();
     evento.stopPropagation();
@@ -80,12 +120,23 @@ function adicionarItemConsumo() {
             let itCons = new ItensConsumo(null, objLote, objProd, qtde);
             listaItensConsumo.push(itCons);
         }
+        limparFormItemConsumo();
+        exibirListaItensConsumo();
     }
     else {
-        alert('Informe todos os dados para consumir um item. Selecione um produto, lote e informe a quantidade utilizada. A lista de itens consumidos não pode estar vazia e o consumo a ser feito não pode ser maior que o disponível!')
+        if (!objProd) {
+            exibirMensagem("Para consumir um produto voce deve selecionar um produto!");
+        }
+        else if (!objLote) {
+            exibirMensagem("Para consumir um produto voce deve selecionar um lote");
+        }
+        else if (!qtde) {
+            exibirMensagem("Para consumir um produto voce deve informar a quantidade utilizada!")
+        }
+        else if (qtde > qtdeTotalLoteSelecionado) {
+            exibirMensagem("Não é possível consumir mais do que há disponível no lote!");
+        }
     }
-    limparFormItemConsumo();
-    exibirListaItensConsumo();
 }
 
 function removerItemConsumo(codLote, codProd, qtdeConteudoUtilizado) {
@@ -112,7 +163,6 @@ function exibirListaItensConsumo() {
         tabela.style.borderCollapse = 'collapse';
         tabela.style.width = '95%';
         tabela.style.borderBottom = '1px solid';
-        //tabela.style.maxHeight= '100px';
         //tabela.className = 'table table-striped table-hover';
         let cabecalho = document.createElement('thead');
         cabecalho.style.borderBottom = '1px solid';
@@ -301,9 +351,9 @@ function adicionarLote(produto) {
         .then((json) => {
             listaLotes = [];
             let selectLote = document.getElementById("lote");
-            selectLote.innerHTML= "";
-            selectLote.value= "";
-            selectLote.text= "";
+            selectLote.innerHTML = "";
+            selectLote.value = "";
+            selectLote.text = "";
             let listaLot = json.listaLotes;
             if (Array.isArray(listaLot)) {
                 for (let i = 0; i < listaLot.length; i++) {
@@ -315,7 +365,7 @@ function adicionarLote(produto) {
                     listaLotes.push(objLote);
                     selectLote.appendChild(optionLote);
                     if (!i) {
-                        qtdeTotalLoteSelecionado= objLote.total_conteudo;
+                        qtdeTotalLoteSelecionado = objLote.total_conteudo;
                         document.getElementById("dataVencimento").value = formataData(objLote.data_validade);
                     }
                 };
@@ -328,7 +378,7 @@ document.getElementById("lote").addEventListener("change", function () {
     let codProd = document.getElementById('produto').value;
     let objLote = listaLotes.find(item => item.codigo === codLote && item.produto.prod_ID == codProd);
     document.getElementById('dataVencimento').value = formataData(objLote.data_validade);
-    qtdeTotalLoteSelecionado= objLote.total_conteudo;
+    qtdeTotalLoteSelecionado = objLote.total_conteudo;
 });
 
 
@@ -368,4 +418,28 @@ function gerarParametrosProduto(produto) {
     return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
     '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}',
     '${produto.observacao}','${produto.tipo}'`;
+}
+
+
+function exibirMensagem(mensagem, estilo) {
+    let elemMensagem = document.getElementById('mensagem');
+    if (!estilo) {
+        estilo = 'aviso';
+    }
+    if (estilo == 'aviso') {
+        //Mensagem alerta
+        elemMensagem.innerHTML = `<div class='divMsg msgAviso'>
+                        <p>${mensagem}</p>
+                    </div>`;
+    }
+    else {
+        //quando estilo= 'erro';
+        elemMensagem.innerHTML = `<div class='divMsg msgErro'>
+                        <p>${mensagem}</p>
+                    </div>`;
+    }
+
+    setTimeout(() => {
+        elemMensagem.innerHTML = '';
+    }, 7000);//7 Segundos
 }
