@@ -3,6 +3,7 @@ var jsonConsumo = {
     paciente: {},
     funcionario: {},
     itensConsumo: [],
+    local: {},
     dataConsumo: 0
 };
 
@@ -49,18 +50,23 @@ function limpaPaciente() {
 
 function validarFormulario(evento) {
     let pac = document.getElementById("paciente").value;
-    if (listaItensConsumo.length && pac) {
+    if ( listaItensConsumo.length && pac) {
         let dataAtual = new Date();
         dataAtual.setHours(dataAtual.getHours() - 3);
         // Formata a data para o formato compatível com o MySQL
         let dataFormatada = dataAtual.toISOString().slice(0, 19).replace('T', ' ');
-        const cons = new Consumo(0, pacConsumo, funcConsumo, listaItensConsumo, dataFormatada);
+        //const cons = new Consumo(0, pacConsumo, funcConsumo, listaItensConsumo, dataFormatada);
+        jsonConsumo.paciente= pacConsumo;
+        jsonConsumo.funcionario= funcConsumo;
+        jsonConsumo.itensConsumo= listaItensConsumo;
+        jsonConsumo.dataConsumo= dataFormatada;
+        jsonConsumo.local= {loc_id: 1};
         fetch(urlBase + '/consumo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(cons)
+            body: JSON.stringify(jsonConsumo)
         })
             .then((resposta) => {
                 return resposta.json();
@@ -71,7 +77,7 @@ function validarFormulario(evento) {
                     limparFormItemConsumo();
                     listaItensConsumo = [];
                     exibirListaItensConsumo();
-                    exibirMensagem(dados.mensagem);
+                    exibirMensagem(dados.mensagem, "ok");
                 }
                 else {
                     exibirMensagem(dados.mensagem);
@@ -106,20 +112,27 @@ function adicionarItemConsumo() {
     let objProd;
     objLote ? objProd = objLote.produto : objProd = null;
     let qtde = document.getElementById('qtde').value;
-    if (objLote && objProd && qtde > 0 && qtde < qtdeTotalLoteSelecionado) {
+    if (objLote && objProd && qtde > 0 && qtde <= qtdeTotalLoteSelecionado) {
         let itemExistente = listaItensConsumo.find(item => item.lote.codigo === objLote.codigo && item.produto.prod_ID === objProd.prod_ID);
         // Verifica se já existe um item com o mesmo produto e lote
         if (itemExistente) {
             // Se existir, apenas aumenta a quantidade
             let num = parseInt(itemExistente.qtdeConteudoUtilizado);
             num += parseInt(qtde);
-            itemExistente.qtdeConteudoUtilizado = parseInt(num);
+            if(num <= itemExistente.qtdeConteudoUtilizado){
+                itemExistente.qtdeConteudoUtilizado = parseInt(num);
+            }
+            else{
+                exibirMensagem("Quantidade máxima de consumo desse lote alcançada!");
+            }
         }
         else {
             // Se não existir, cria um novo item
             let itCons = new ItensConsumo(null, objLote, objProd, qtde);
             listaItensConsumo.push(itCons);
         }
+        /*let index = listaLotes.findIndex(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd);
+        listaLotes[index].total_conteudo-= parseInt(qtde);*/
         limparFormItemConsumo();
         exibirListaItensConsumo();
     }
@@ -131,7 +144,7 @@ function adicionarItemConsumo() {
             exibirMensagem("Para consumir um produto voce deve selecionar um lote");
         }
         else if (!qtde) {
-            exibirMensagem("Para consumir um produto voce deve informar a quantidade utilizada!")
+            exibirMensagem("Para consumir um produto voce deve informar a quantidade utilizada!");
         }
         else if (qtde > qtdeTotalLoteSelecionado) {
             exibirMensagem("Não é possível consumir mais do que há disponível no lote!");
@@ -180,7 +193,7 @@ function exibirListaItensConsumo() {
             let itCons = listaItensConsumo[i];
             linha.innerHTML = `
                         <td>${itCons.lote.codigo}</td>
-                        <td>${itCons.produto.prod_ID}</td>
+                        <td>${itCons.produto.nome}</td>
                         <td>${itCons.qtdeConteudoUtilizado}</td>
                         <td>
                             <button class="" onclick="removerItemConsumo(${gerarParametrosItemConsumo(itCons)})">
@@ -428,15 +441,20 @@ function exibirMensagem(mensagem, estilo) {
     }
     if (estilo == 'aviso') {
         //Mensagem alerta
-        elemMensagem.innerHTML = `<div class='divMsg msgAviso'>
-                        <p>${mensagem}</p>
-                    </div>`;
+        elemMensagem.innerHTML = `  <div class='divMsg msgAviso'>
+                                        <p>${mensagem}</p>
+                                    </div>`;
+    }
+    else if(estilo == 'ok'){
+        elemMensagem.innerHTML= `   <div class='divMsg msgOk'>
+                                        <p>${mensagem}</p>
+                                    </div>`;
     }
     else {
         //quando estilo= 'erro';
-        elemMensagem.innerHTML = `<div class='divMsg msgErro'>
-                        <p>${mensagem}</p>
-                    </div>`;
+        elemMensagem.innerHTML = `  <div class='divMsg msgErro'>
+                                        <p>${mensagem}</p>
+                                    </div>`;
     }
 
     setTimeout(() => {
