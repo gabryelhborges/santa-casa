@@ -443,3 +443,12 @@ function exibirMensagem(mensagem, estilo) {
         elemMensagem.innerHTML = '';
     }, 7000);//7 Segundos
 }
+
+
+function controlaQtde(){
+    let qtdeInformada = document.getElementById("qtde").value;
+    if(qtdeInformada > qtdeTotalLoteSelecionado){
+        document.getElementById("qtde").value= qtdeTotalLoteSelecionado;
+        exibirMensagem("Capacidade total do lote alcançada!");
+    }
+}

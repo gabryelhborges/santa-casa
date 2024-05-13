@@ -101,7 +101,7 @@
                             </div>
                             <div class="u-form-group u-form-partition-factor-3 u-form-group-6">
                               <label for="qtde" class="u-label">Quantidade</label>
-                              <input type="text" id="qtde" name="qtde"
+                              <input oninput="controlaQtde()" type="number" id="qtde" name="qtde" min="1" pattern="[0,9]*"
                                 class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
                             </div>
 

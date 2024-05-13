@@ -5,12 +5,14 @@ import Funcionario from "../modelo/funcionario.js";
 import ItensConsumo from "../modelo/itensConsumo.js";
 import Lote from "../modelo/lote.js";
 import Loc from "../modelo/local.js";
+import Singleton from "../implementacoesEngSoftware/singleton.js";
 
 
 export default class ConsumoCtrl {
     //variável statica dela mesma
     s = Singleton.getInstance();
     s2= Singleton.getInstance();
+
     async gravar(requisicao, resposta) {
         resposta.type('application/json');
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
@@ -24,13 +26,16 @@ export default class ConsumoCtrl {
                 const cons = new Consumo(0, paciente, funcionario, local, itensConsumo, dataConsumo);
                 const conexao = await conectar();
                 //conexao.beginTransaction()
-                cons.gravar(conexao).then(() => {
+                cons.gravar(conexao).then(async () => {
                     //Gravou consumo,e entao gravar os itens
                     for(const item of itensConsumo){
                         let itemConsumo = new ItensConsumo(cons, item.lote, item.produto, item.qtdeConteudoUtilizado);
                         itemConsumo.gravar(conexao);
                         //decrementar o lote
-                        let lote = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto,item.lote.formaFarmaceutica,item.lote.conteudo_frasco,item.lote.unidade,item.lote.total_conteudo, new Loc(1));
+                        let lote = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto,item.lote.formaFarmaceutica,item.lote.conteudo_frasco,item.lote.unidade,item.lote.total_conteudo, local);
+                        await lote.consultar().then((listaLote) =>{
+                            lote = listaLote.pop();
+                        });
                         lote.total_conteudo= lote.total_conteudo - item.qtdeConteudoUtilizado;
                         lote.atualizar().then(()=>{});
                     }
@@ -69,7 +74,7 @@ export default class ConsumoCtrl {
         if ((requisicao.method === "PUT" || requisicao.method === "PATCH") && requisicao.is("application/json")) {
             const dados = requisicao.body;
             const paciente = dados.paciente;
-            const funcionario = dados.funcionario;//já recebo um objeto? ou devo instanciá-lo aqui?
+            const funcionario = dados.funcionario;
             const dataConsumo = dados.dataConsumo;
             const itensConsumo = dados.itensConsumo;
             if (paciente instanceof Paciente && funcionario instanceof Funcionario && itensConsumo.length > 0 && dataConsumo) {
@@ -107,6 +112,7 @@ export default class ConsumoCtrl {
     }
 
     async excluir(requisicao, resposta) {
+        //Regra de negocio, consumo só pode ser excluído no mesmo dia em que foi realizado
         resposta.type('application/json');
         if (requisicao.method === "DELETE" && requisicao.is("application/json")) {
             const idConsumo = requisicao.body.idConsumo;
