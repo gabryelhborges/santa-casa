@@ -113,10 +113,12 @@ create table consumo(
 	cons_id integer not null auto_increment,
     cons_pac_id integer not null,
     cons_func_id integer not null,
+    cons_loc_id integer not null,
     cons_dataConsumo datetime DEFAULT CURRENT_TIMESTAMP,
     constraint pk_cons_id primary key (cons_id),
     constraint fk_cons_pac_id foreign key (cons_pac_id) references Pacientes(id_paciente),
-    constraint fk_cons_func_id foreign key (cons_func_id) references Funcionarios(idFuncionario)
+    constraint fk_cons_func_id foreign key (cons_func_id) references Funcionarios(idFuncionario),
+    constraint fk_cons_loc_id foreign key (cons_loc_id) references Loc(loc_id)
 );
 
 create table itensConsumo(
@@ -125,7 +127,7 @@ create table itensConsumo(
     ic_prod_id integer not null,
     ic_qtdeConteudoUtilizado integer not null,
     constraint pk_ic primary key (ic_cons_id, ic_lote_codigo, ic_prod_id),
-    constraint fk_ic_cons_id foreign key (ic_cons_id) references Consumo(cons_id),
+    constraint fk_ic_cons_id foreign key (ic_cons_id) references Consumo(cons_id) ON DELETE CASCADE,
     constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
 );
 
@@ -197,8 +199,8 @@ insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmac
 -- select * from lote;
 
 -- insert consumo
-insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(1,1,'2024-04-26');
-insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(2,2,'2026-07-30');
+insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) values(1, 1, '2024-04-26', 1);
+insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) values(2, 2, '2026-07-30', 1);
 
 -- insert itens consumo
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 54321, 2, 11);
