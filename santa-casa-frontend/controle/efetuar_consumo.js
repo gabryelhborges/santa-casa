@@ -119,7 +119,7 @@ function adicionarItemConsumo() {
             // Se existir, apenas aumenta a quantidade
             let num = parseInt(itemExistente.qtdeConteudoUtilizado);
             num += parseInt(qtde);
-            if(num <= itemExistente.qtdeConteudoUtilizado){
+            if(num <= qtdeTotalLoteSelecionado){
                 itemExistente.qtdeConteudoUtilizado = parseInt(num);
             }
             else{
@@ -230,7 +230,7 @@ function carregaPacientes() {
             let divTabPaciente = document.getElementById("tabelaPaciente");
             if (json.status) {
                 divTabPaciente.innerHTML = "";
-                listaPacientes = json.listaPacientes;
+                let listaPacientes = json.listaPacientes;
                 if (Array.isArray(listaPacientes)) {
                     if (listaPacientes.length > 0) {
                         let tabela = document.createElement('table');
