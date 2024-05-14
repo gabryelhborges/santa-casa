@@ -18,7 +18,8 @@ export default class ConsumoCtrl {
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
             const dados = requisicao.body;
             const paciente = new Paciente(dados.paciente.idPaciente);
-            const funcionario = new Funcionario(dados.funcionario.idFuncionario);//já recebo um objeto? ou devo instanciá-lo aqui?
+            const funcionario = new Funcionario(dados.funcionario.idFuncionario);
+
             const local = new Loc(dados.local.loc_id);
             const dataConsumo = dados.dataConsumo;
             const itensConsumo = dados.itensConsumo;
@@ -37,7 +38,7 @@ export default class ConsumoCtrl {
                             lote = listaLote.pop();
                         });
                         lote.total_conteudo= lote.total_conteudo - item.qtdeConteudoUtilizado;
-                        lote.atualizar().then(()=>{});
+                        lote.atualizar().then(()=>{}); 
                     }
                     resposta.status(200).json({
                         "status": true,
