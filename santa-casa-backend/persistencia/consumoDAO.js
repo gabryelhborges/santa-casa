@@ -6,8 +6,8 @@ import Paciente from "../modelo/paciente.js";
 export default class ConsumoDAO{
     async gravar(consumo, conexao){
         if(consumo instanceof Consumo){
-            const sql= "INSERT INTO Consumo(cons_pac_id, cons_func_id, cons_dataConsumo) VALUES(?,?,?)";
-            const parametros= [consumo.paciente.idPaciente, consumo.funcionario.idFuncionario, consumo.dataConsumo];
+            const sql= "INSERT INTO Consumo(cons_pac_id, cons_func_id, cons_loc_id) VALUES(?,?,?)";
+            const parametros= [consumo.paciente.idPaciente, consumo.funcionario.idFuncionario, consumo.local.loc_id];
             //conexao deve ser criada no control
             const retorno = await conexao.execute(sql, parametros);
             consumo.idConsumo = retorno[0].insertId;

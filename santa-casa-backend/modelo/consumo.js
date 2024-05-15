@@ -4,13 +4,15 @@ export default class Consumo{
     #idConsumo;
     #paciente;//objeto paciente
     #funcionario;//objeto funcionario
+    #local;
     #itensConsumo;//lista de produtos utilizados
     #dataConsumo;
     
-    constructor(idConsumo= 0, paciente= null, funcionario= null, itensConsumo= [], dataConsumo= ""){
+    constructor(idConsumo= 0, paciente= null, funcionario= null, local= null, itensConsumo= [], dataConsumo= ""){
         this.#idConsumo = idConsumo;
         this.#paciente = paciente;
         this.#funcionario = funcionario;
+        this.#local= local;
         this.#itensConsumo = itensConsumo;
         this.#dataConsumo = dataConsumo;
     }
@@ -36,6 +38,13 @@ export default class Consumo{
         this.#funcionario = novofuncionario;
     }
 
+    get local(){
+        return this.#local;
+    }
+    set local(novolocal){
+        this.#local= novolocal;
+    }
+
     get itensConsumo(){
         return this.#itensConsumo;
     }
@@ -58,6 +67,7 @@ export default class Consumo{
             idConsumo: this.#idConsumo,
             paciente: this.#paciente,
             funcionario: this.#funcionario,
+            local: this.#local,
             itensConsumo: this.#itensConsumo,
             dataConsumo: this.#dataConsumo
         };

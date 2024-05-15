@@ -1,14 +1,45 @@
+var jsonConsumo = {
+    idConsumo: 0,
+    paciente: {},
+    funcionario: {},
+    itensConsumo: [],
+    local: {},
+    dataConsumo: 0
+};
+
+var jsonItCons = {
+    consumo: {},
+    lote: {},
+    produto: {},
+    qtdeConteudoUtilizado: 0
+};
+
 const urlBase = 'http://localhost:4040';
 var formConsumo = document.getElementById('formConsumo');
 formConsumo.reset();
 formConsumo.onsubmit = validarFormulario;
 document.getElementById("funcionario").value = 1;//a partir do login, identificar funcionario
 var listaItensConsumo = [];
+var qtdeTotalLoteSelecionado = 0;
 var listaLotes = [];
 var pacConsumo;
-var funcConsumo = new Funcionario(document.getElementById('funcionario').value);
-exibirListaItensConsumo();
+var funcConsumo;
+procuraFuncionario();
 
+function procuraFuncionario() {
+    let idFunc = document.getElementById('funcionario').value;
+    fetch(urlBase + '/funcionario/' + idFunc, {
+        method: "GET"
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            funcConsumo = json.listaFuncionarios[0];
+            document.getElementById("funcionario").value = funcConsumo.nome_funcionario;
+        });
+}
+exibirListaItensConsumo();
 carregaPacientes();
 carregaProdutos();
 
@@ -18,18 +49,24 @@ function limpaPaciente() {
 }
 
 function validarFormulario(evento) {
-    if (formConsumo.checkValidity() && listaItensConsumo.length) {
+    let pac = document.getElementById("paciente").value;
+    if ( listaItensConsumo.length && pac) {
         let dataAtual = new Date();
         dataAtual.setHours(dataAtual.getHours() - 3);
         // Formata a data para o formato compatível com o MySQL
         let dataFormatada = dataAtual.toISOString().slice(0, 19).replace('T', ' ');
-        const cons = new Consumo(0, pacConsumo, funcConsumo, listaItensConsumo, dataFormatada);
+        //const cons = new Consumo(0, pacConsumo, funcConsumo, listaItensConsumo, dataFormatada);
+        jsonConsumo.paciente= pacConsumo;
+        jsonConsumo.funcionario= funcConsumo;
+        jsonConsumo.itensConsumo= listaItensConsumo;
+        jsonConsumo.dataConsumo= dataFormatada;
+        jsonConsumo.local= {loc_id: 1};
         fetch(urlBase + '/consumo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(cons)
+            body: JSON.stringify(jsonConsumo)
         })
             .then((resposta) => {
                 return resposta.json();
@@ -40,18 +77,29 @@ function validarFormulario(evento) {
                     limparFormItemConsumo();
                     listaItensConsumo = [];
                     exibirListaItensConsumo();
-                    alert(dados.mensagem);
+                    exibirMensagem(dados.mensagem, "ok");
                 }
                 else {
-                    alert(dados.mensagem);
+                    exibirMensagem(dados.mensagem);
                 }
             })
             .catch((erro) => {
-                alert("Não foi posssivel completar a operação: " + erro.message);
+                exibirMensagem("Não foi posssivel completar a operação: " + erro.message);
             })
     }
     else {
-        alert('É necessário informar o paciente e registrar os itens que foram consumidos para realizar a confirmação!');
+        if (!listaItensConsumo.length && !pac) {
+            exibirMensagem('Informe os itens consumidos e o paciente!');
+        }
+        else {
+            if (!listaItensConsumo.length) {
+                //Se zero, entra
+                exibirMensagem('Informe os itens consumidos!')
+            }
+            if (!pac) {
+                exibirMensagem('Informe o paciente!');
+            }
+        }
     }
     evento.preventDefault();
     evento.stopPropagation();
@@ -64,26 +112,44 @@ function adicionarItemConsumo() {
     let objProd;
     objLote ? objProd = objLote.produto : objProd = null;
     let qtde = document.getElementById('qtde').value;
-    if (objLote && objProd && qtde > 0) {
+    if (objLote && objProd && qtde > 0 && qtde <= qtdeTotalLoteSelecionado) {
         let itemExistente = listaItensConsumo.find(item => item.lote.codigo === objLote.codigo && item.produto.prod_ID === objProd.prod_ID);
         // Verifica se já existe um item com o mesmo produto e lote
         if (itemExistente) {
             // Se existir, apenas aumenta a quantidade
             let num = parseInt(itemExistente.qtdeConteudoUtilizado);
             num += parseInt(qtde);
-            itemExistente.qtdeConteudoUtilizado = parseInt(num);
+            if(num <= qtdeTotalLoteSelecionado){
+                itemExistente.qtdeConteudoUtilizado = parseInt(num);
+            }
+            else{
+                exibirMensagem("Quantidade máxima de consumo desse lote alcançada!");
+            }
         }
         else {
             // Se não existir, cria um novo item
             let itCons = new ItensConsumo(null, objLote, objProd, qtde);
             listaItensConsumo.push(itCons);
         }
+        /*let index = listaLotes.findIndex(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd);
+        listaLotes[index].total_conteudo-= parseInt(qtde);*/
+        limparFormItemConsumo();
+        exibirListaItensConsumo();
     }
     else {
-        alert('Informe todos os dados para consumir um item. Selecione um produto, lote e informe a quantidade utilizada. A lista de itens consumidos não poed estar vazia!')
+        if (!objProd) {
+            exibirMensagem("Para consumir um produto voce deve selecionar um produto!");
+        }
+        else if (!objLote) {
+            exibirMensagem("Para consumir um produto voce deve selecionar um lote");
+        }
+        else if (!qtde) {
+            exibirMensagem("Para consumir um produto voce deve informar a quantidade utilizada!");
+        }
+        else if (qtde > qtdeTotalLoteSelecionado) {
+            exibirMensagem("Não é possível consumir mais do que há disponível no lote!");
+        }
     }
-    limparFormItemConsumo();
-    exibirListaItensConsumo();
 }
 
 function removerItemConsumo(codLote, codProd, qtdeConteudoUtilizado) {
@@ -110,7 +176,6 @@ function exibirListaItensConsumo() {
         tabela.style.borderCollapse = 'collapse';
         tabela.style.width = '95%';
         tabela.style.borderBottom = '1px solid';
-        //tabela.style.maxHeight= '100px';
         //tabela.className = 'table table-striped table-hover';
         let cabecalho = document.createElement('thead');
         cabecalho.style.borderBottom = '1px solid';
@@ -128,7 +193,7 @@ function exibirListaItensConsumo() {
             let itCons = listaItensConsumo[i];
             linha.innerHTML = `
                         <td>${itCons.lote.codigo}</td>
-                        <td>${itCons.produto.prod_ID}</td>
+                        <td>${itCons.produto.nome}</td>
                         <td>${itCons.qtdeConteudoUtilizado}</td>
                         <td>
                             <button class="" onclick="removerItemConsumo(${gerarParametrosItemConsumo(itCons)})">
@@ -165,7 +230,7 @@ function carregaPacientes() {
             let divTabPaciente = document.getElementById("tabelaPaciente");
             if (json.status) {
                 divTabPaciente.innerHTML = "";
-                listaPacientes = json.listaPacientes;
+                let listaPacientes = json.listaPacientes;
                 if (Array.isArray(listaPacientes)) {
                     if (listaPacientes.length > 0) {
                         let tabela = document.createElement('table');
@@ -299,6 +364,9 @@ function adicionarLote(produto) {
         .then((json) => {
             listaLotes = [];
             let selectLote = document.getElementById("lote");
+            selectLote.innerHTML = "";
+            selectLote.value = "";
+            selectLote.text = "";
             let listaLot = json.listaLotes;
             if (Array.isArray(listaLot)) {
                 for (let i = 0; i < listaLot.length; i++) {
@@ -310,6 +378,7 @@ function adicionarLote(produto) {
                     listaLotes.push(objLote);
                     selectLote.appendChild(optionLote);
                     if (!i) {
+                        qtdeTotalLoteSelecionado = objLote.total_conteudo;
                         document.getElementById("dataVencimento").value = formataData(objLote.data_validade);
                     }
                 };
@@ -322,6 +391,7 @@ document.getElementById("lote").addEventListener("change", function () {
     let codProd = document.getElementById('produto').value;
     let objLote = listaLotes.find(item => item.codigo === codLote && item.produto.prod_ID == codProd);
     document.getElementById('dataVencimento').value = formataData(objLote.data_validade);
+    qtdeTotalLoteSelecionado = objLote.total_conteudo;
 });
 
 
@@ -361,4 +431,42 @@ function gerarParametrosProduto(produto) {
     return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
     '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}',
     '${produto.observacao}','${produto.tipo}'`;
+}
+
+
+function exibirMensagem(mensagem, estilo) {
+    let elemMensagem = document.getElementById('mensagem');
+    if (!estilo) {
+        estilo = 'aviso';
+    }
+    if (estilo == 'aviso') {
+        //Mensagem alerta
+        elemMensagem.innerHTML = `  <div class='divMsg msgAviso'>
+                                        <p>${mensagem}</p>
+                                    </div>`;
+    }
+    else if(estilo == 'ok'){
+        elemMensagem.innerHTML= `   <div class='divMsg msgOk'>
+                                        <p>${mensagem}</p>
+                                    </div>`;
+    }
+    else {
+        //quando estilo= 'erro';
+        elemMensagem.innerHTML = `  <div class='divMsg msgErro'>
+                                        <p>${mensagem}</p>
+                                    </div>`;
+    }
+
+    setTimeout(() => {
+        elemMensagem.innerHTML = '';
+    }, 7000);//7 Segundos
+}
+
+
+function controlaQtde(){
+    let qtdeInformada = document.getElementById("qtde").value;
+    if(qtdeInformada > qtdeTotalLoteSelecionado){
+        document.getElementById("qtde").value= qtdeTotalLoteSelecionado;
+        exibirMensagem("Capacidade total do lote alcançada!");
+    }
 }
