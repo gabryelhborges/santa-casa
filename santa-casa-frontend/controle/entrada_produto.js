@@ -308,10 +308,14 @@ document.getElementById("codigo_lote").addEventListener("change", function() {
     if(document.getElementById('validade').value)
         disabled_able();
     criarLimpar();
-    if (this.value === "criarNovo") { // Se a opção "Criar Novo Lote" for selecionada
+    if (this.value === "criarNovo") {
+        if(document.getElementById('validade').disabled == true)
+            disabled_able();
+         // Se a opção "Criar Novo Lote" for selecionada
         criarLote();
         document.getElementById("criar_codigo_lote").focus();
     }else if(!this.value){
+        
         criarLimpar();
     }else{
         let valor = separarPorHifen(this.value);

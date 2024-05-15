@@ -91,6 +91,14 @@ create table loc(
     constraint pk_loc primary key (loc_id)
 );
 
+CREATE TABLE entrada(
+    entrada_id INTEGER not NULL AUTO_INCREMENT,
+    entrada_funcionario_id INTEGER not NULL,
+    data_entrada DATE NOT NULL,
+    constraint pk_id PRIMARY key (entrada_id),
+    constraint fk_fun FOREIGN KEY (entrada_funcionario_id) REFERENCES funcionarios(idFuncionario)
+)
+
 -- drop table lote;
 create table lote(
     codigo varchar(15) not null,
@@ -108,6 +116,16 @@ create table lote(
     constraint fk_un_cod foreign key (unidade_un_cod) references unidade(un_cod),
     constraint fk_loc foreign key (loc) references loc(loc_id)
 );
+
+CREATE TABLE itensEntrada(
+    ent_id INTEGER NOT NULL,
+    lote_cod VARCHAR(15) NOT NULL,
+    prod_id INTEGER NOT null,
+    qtde INTEGER NOT NULL,
+    constraint pk_ent_id PRIMARY KEY (ent_id,lote_cod,prod_id),
+    constraint fk_entrada foreign key (ent_id) REFERENCES entrada(entrada_id),
+    constraint fk_lote Foreign Key (lote_cod,prod_id) REFERENCES lote(codigo,produto_prod_ID)
+)
 
 create table consumo(
 	cons_id integer not null auto_increment,
