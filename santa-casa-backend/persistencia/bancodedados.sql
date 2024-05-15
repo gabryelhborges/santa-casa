@@ -139,26 +139,45 @@ create table Motivo(
 
 create table baixa(
     idBaixa integer not null auto_increment,
+    b_idFuncionario integer not null,
     dataBaixa datetime DEFAULT CURRENT_TIMESTAMP,
-    constraint pk_baixa primary key(idBaixa);
+    constraint pk_baixa primary key(idBaixa),
+    constraint fk_baixa_func foreign key(b_idFuncionario) references Funcionarios(idFuncionario);
 
 );
 
 create table itensBaixa(
-    ibBaixa integer not null,
-    ibProduto integer not null,
-    ibMotivo integer not null,
-    ibQtde integer not null,
-    ibLote integer not null,
-    ibUnidade integer no null,
-    ibObservacao varchar(200),
-    constraint pk_ib primary key(ibBaixa, ibLote, ibProduto),
-    constraint fk_ibBaixa foreign key(ibBaixa) references Baixa(idBaixa) ON DELETE CASCADE,
-    constraint fk_iblote_ibprod_ibunidade foreign key (ibLote, ibProduto, ibUnidade) references Lote(codigo, produto_prod_ID, unidade_un_cod),
-    constraint fk_ibMotivo foreign key(ibMotivo) references Motivo(motivo_id);
+    ib_idBaixa integer not null,
+    ib_idProduto integer not null,
+    ib_idMotivo integer not null,
+    ib_idQtde integer not null,
+    ib_idLote integer not null,
+    ib_idUnidade integer no null,
+    ib_idObservacao varchar(200),
+    constraint pk_ib primary key(ib_idBaixa, ib_idLote, ib_idProduto),
+    constraint fk_ib_idBaixa foreign key(ib_idBaixa) references Baixa(idBaixa) ON DELETE CASCADE,
+    constraint fk_iblote_ibprod_ibunidade foreign key (ib_idLote, ib_idProduto, ib_idUnidade) references Lote(codigo, produto_prod_ID, unidade_un_cod),
+    constraint fk_ibMotivo foreign key(ib_idMotivo) references Motivo(motivo_id);
      
 );
 
+--insert baixa
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+
+--insert itensBaixa
+
+--insert dos motivos
+INSERT INTO Motivo (motivo) VALUES ('Vencido');
+INSERT INTO Motivo (motivo) VALUES ('Danificado');
+INSERT INTO Motivo (motivo) VALUES ('Roubado');
+INSERT INTO Motivo (motivo) VALUES ('Extraviado');
+INSERT INTO Motivo (motivo) VALUES ('Recolhido pelo fornecedor');
+INSERT INTO Motivo (motivo) VALUES ('Uso em treinamento');
 
 
 -- insert nos pacientes
@@ -193,7 +212,6 @@ insert into fabricante values(default, '15.670.288/0002-60','Gilead Sciences','A
 -- insert nas unidades
 insert into unidade values(default,'Grama(g)');
 insert into unidade values(default,'mililitro(ml)');
-insert into unidade values(default,'gotas(gt)');
 insert into unidade values(default,'Unidade Internacional(UI)');
 -- select * from unidade;
 
