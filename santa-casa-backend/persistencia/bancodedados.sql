@@ -131,6 +131,35 @@ create table itensConsumo(
     constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
 );
 
+create table Motivo(
+    motivo_id integer not null auto_increment,
+    motivo varchar(70) not null,
+    constraint pk_motivo primary key(motivo_id);
+);
+
+create table baixa(
+    idBaixa integer not null auto_increment,
+    dataBaixa datetime DEFAULT CURRENT_TIMESTAMP,
+    constraint pk_baixa primary key(idBaixa);
+
+);
+
+create table itensBaixa(
+    ibBaixa integer not null,
+    ibProduto integer not null,
+    ibMotivo integer not null,
+    ibQtde integer not null,
+    ibLote integer not null,
+    ibUnidade integer no null,
+    ibObservacao varchar(200),
+    constraint pk_ib primary key(ibBaixa, ibLote, ibProduto),
+    constraint fk_ibBaixa foreign key(ibBaixa) references Baixa(idBaixa) ON DELETE CASCADE,
+    constraint fk_iblote_ibprod_ibunidade foreign key (ibLote, ibProduto, ibUnidade) references Lote(codigo, produto_prod_ID, unidade_un_cod),
+    constraint fk_ibMotivo foreign key(ibMotivo) references Motivo(motivo_id);
+     
+);
+
+
 
 -- insert nos pacientes
 insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('526.217.888-07','Leon B Ronchi', 'branco','S','M','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
