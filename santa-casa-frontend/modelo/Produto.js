@@ -10,7 +10,7 @@ class Produto{
     #tipo
     
 
-    constructor(prod_ID=0,Fabricante_idFabricante=0,nome="",psicotropico="",valor_custo=0,far_cod=0,ffa_cod=0,uni_cod=0,observacao="", descricao_uso="", tipo="") {
+    constructor(prod_ID=0,Fabricante_idFabricante=0,nome="",psicotropico="",valor_custo=0,far_cod=0,observacao="", descricao_uso="", tipo="") {
         this.#prod_ID = prod_ID;
         this.#Fabricante_idFabricante = Fabricante_idFabricante;
         this.#nome = nome;

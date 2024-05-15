@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="pt">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <title>Baixa de Produtos</title>
+  <link rel="stylesheet" href="../estilização/nicepage.css" media="screen">
+  <link rel="stylesheet" href="../estilização/efetuar_consumo.css" media="screen">
+  <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
+  <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+  <meta name="generator" content="Nicepage 6.9.2, nicepage.com">
+  <meta name="referrer" content="origin">
+  <link id="u-theme-google-font" rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+
+
+
+  <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": ""
+}</script>
+  <meta name="theme-color" content="#478ac9">
+  <meta property="og:title" content="Página 3">
+  <meta property="og:type" content="website">
+  <meta data-intl-tel-input-cdn-path="intlTelInput/">
+</head>
+
+<body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="pt">
+  <section class="u-clearfix u-section-1" id="sec-6d3a">
+    <div class="u-clearfix u-sheet u-sheet-1">
+      <div class="custom-expanded data-layout-selected u-clearfix u-layout-wrap u-layout-wrap-1">
+        <div class="u-layout">
+          <div class="u-layout-row">
+            <div class="u-container-style u-layout-cell u-size-30 u-layout-cell-1">
+              <div class="u-container-layout u-container-layout-1">
+                <div class="u-container-style u-expanded-width u-group u-palette-1-light-2 u-group-1">
+                  <div class="u-container-layout u-container-layout-2">
+                    <div
+                      class="u-container-align-center u-container-style u-expanded-width u-group u-palette-1-dark-1 u-group-2">
+                      <div class="u-container-layout u-valign-middle u-container-layout-3">
+                        <h4 class="u-align-center u-text u-text-default u-text-1">Baixa de Produtos<br>
+                        </h4>
+                      </div>
+                    </div>
+                    <div class="u-container-style u-expanded-width u-group u-palette-1-light-2 u-group-3">
+                      <div class="u-container-layout u-container-layout-4">
+                        <div class="custom-expanded u-form u-form-1">
+
+
+
+                          <form method="post" id="formConsumo"
+                            class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" style="padding: 10px;">
+
+                            <div class="u-form-group u-form-group-3 u-form-partition-factor-2"
+                            style="padding-top: 10px;">
+                            <label for="produto" class="u-label">Produto</label>
+                            <input type="text" placeholder="Selecione um produto na tabela ao lado." id="produto"
+                              name="text-1"
+                              class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" readonly>
+                          </div>
+                          <div class="u-form-group u-form-name u-form-partition-factor-2">
+                            <label for="unidade" class="u-label">Unidade de Medida</label>
+                            <select type="text" placeholder="Selecione um unidade." id="unidade"
+                              name="unidade"
+                              class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" required
+                              readonly>
+                            </select>
+                          </div>
+                         
+
+                          <div class="u-form-group u-form-partition-factor-3 u-form-group-6">
+                            <label for="qtde" class="u-label">Quantidade</label>
+                            <input oninput="controlaQtde()" type="number" id="qtde" name="qtde" min="1" pattern="[0,9]*"
+                              class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
+                          </div>
+
+                          <div class="u-form-group u-form-partition-factor-3 u-form-group-4">
+                            <label for="lote" class="u-label">Lote</label>
+                            <select type="text" placeholder="Selecione um produto primeiro" id="lote" name="lote"
+                              class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
+
+                            </select>
+                          </div>
+
+                           
+                            <div class="u-form-group u-form-partition-factor-2 u-form-group-2">
+                              <label for="motivo" class="u-label">Motivo</label>
+                              <select type="text"  id="motivo" name="motivo"
+                                class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" readonly
+                                required>
+                                </select>
+                            </div>
+
+
+                            <div class="u-form-date u-form-group u-form-partition-factor-3 u-form-group-5">
+                              <label for="observacao" class="u-label">Observação</label>
+                              <input ype="text" id="observacao" name="observacao"
+                                class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
+                            </div>
+                           
+
+
+                            <div class="u-form-group u-form-group-3" style="padding-top: 70px; margin-bottom: 0px;">
+                              <button type="button" style="margin-left: 10px;" onclick="adicionarItemConsumo()"
+                                class="u-btn u-button-style u-btn-2">Adicionar </button>
+                              <button type="button" style="margin-left: 175px;" onclick="limparFormItemConsumo()"
+                                class="u-border-none u-btn u-button-style u-white u-btn-3">Limpar</button>
+                            </div>
+
+
+                            <div class="u-container-style u-layout-cell u-size-30"
+                              style="height: 200px; max-height: 200px;">
+                              <div class="u-container-layout u-container-layout-8"
+                                style="height: 200px; max-height: 200px;">
+                                <div class=" u-container-style u-group u-group-7"
+                                  style="height: 200px; max-height: 200px;">
+                                  <div class="u-container-layout u-container-layout-9"
+                                    style="height: 200px; max-height: 180px; background-color: whitesmoke;">
+                                    <div
+                                      class="u-container-align-center u-container-style u-expanded-width u-group u-palette-1-dark-1 u-group-8">
+                                      <div class="u-container-layout u-valign-top u-container-layout-10">
+                                        <p class="u-align-center u-text u-text-default u-text-3">LISTA PRODUTOS</p>
+                                      </div>
+                                    </div>
+                                    <div id="tabelaItensConsumo" class="tabelaItens"
+                                      style="max-height: 170px; padding-top: 20px;">
+
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="u-align-left u-form-group u-form-submit">
+                              <button type="submit" class="u-btn u-btn-submit u-button-style"
+                                style="margin-top: 12px; margin-bottom: 0px;">Confirmar</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="u-container-style u-layout-cell u-size-30 u-layout-cell-2">
+              <div class="u-container-layout u-container-layout-8">
+                <div class="custom-expanded u-container-style u-group u-palette-1-light-2 u-group-9">
+                  <div class="u-container-layout u-container-layout-11">
+                    <div class="u-container-style u-expanded-width u-group u-palette-1-dark-1 u-group-10">
+                      <div class="u-container-layout u-container-layout-12">
+                        <p class="u-align-center u-text u-text-default u-text-4">PESQUISA PRODUTO </p>
+                      </div>
+                    </div>
+                    <div
+                      class="custom-expanded u-align-center u-border-2 u-border-black u-radius u-search u-search-left u-white u-search-2">
+                      <button class="u-search-button" type="button" onclick="carregaProdutos()">
+                        <span class="u-search-icon u-spacing-10">
+                          <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 56.966 56.966">
+                            <use xlink:href="#svg-dac5"></use>
+                          </svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            version="1.1" id="svg-dac5" x="0px" y="0px" viewBox="0 0 56.966 56.966"
+                            style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" class="u-svg-content">
+                            <path
+                              d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z">
+                            </path>
+                          </svg>
+                        </span>
+                      </button>
+                      <input id="pesquisaProduto" oninput="carregaProdutos()" class="u-search-input" type="search"
+                        name="search" value="" placeholder="Busca">
+                    </div>
+
+                    <div id="tabelaProduto" class="tabelaItens">
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="mensagem"></div>
+
+    </div>
+  </section>
+
+</body>
+<script src="../modelo/funcionario.js"></script>
+<script src="../modelo/unidade.js"></script>
+<script src="../modelo/Produto.js"></script>
+<script src="../modelo/lote.js"></script>
+<script src="../modelo/consumo.js"></script>
+<script src="../modelo/itensConsumo.js"></script>
+<script src="../controle/efetuar_consumo.js"></script>
+
+</html>
