@@ -1,7 +1,5 @@
 const urlBase = 'http://localhost:4040/produto';
 const urlFab = 'http://localhost:4040/fabricante';
-const urlForma = 'http://localhost:4040/forma';
-const urlUnidade = 'http://localhost:4040/unidade';
 const urlNomeFarmaco = 'http://localhost:4040/nomeFarmaco';
 var formProd = document.getElementById('formProduto');
 
@@ -11,8 +9,6 @@ formProd.reset();
 formProd.onsubmit = validarFormulario;
 
 inpuNomeFarmaco();
-inpuUnidade();
-inpuForma();
 inputFabricantesNome();
 exibirProdutos();
 PreencheFabricantes();
@@ -26,12 +22,10 @@ function validarFormulario(evento) {
         let psicotropico = document.getElementById('psicotropico').value;
         let valor_custo = stringParaDecimal(document.getElementById('valor_custo').value);
         let far_cod = document.getElementById('far_cod').value;
-        let ffa_cod = document.getElementById('ffa_cod').value;
-        let uni_cod = document.getElementById("uni_cod").value;
         let observacao = document.getElementById('observacao').value;
         let descricao_uso = document.getElementById('descricao_uso').value;
         let tipo = document.getElementById('tipo').value;
-        let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo);
+        let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod,  observacao, descricao_uso, tipo);
 
         if (acao === 'cadastrar') {
             fetch(urlBase, {
@@ -66,12 +60,10 @@ function validarFormulario(evento) {
                 let psicotropico = document.getElementById('psicotropico').value;
                 let valor_custo = stringParaDecimal(document.getElementById('valor_custo').value);
                 let far_cod = document.getElementById('far_cod').value;
-                let ffa_cod = document.getElementById('ffa_cod').value;
-                let uni_cod = document.getElementById("uni_cod").value;
                 let observacao = document.getElementById('observacao').value;
                 let descricao_uso = document.getElementById('descricao_uso').value;
                 let tipo = document.getElementById('tipo').value;
-                let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo);
+                let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod,  observacao, descricao_uso, tipo);
                 fetch(urlBase, {
                     method: 'PATCH',
                     headers: {
@@ -161,69 +153,9 @@ function inputFabricantesNome() {
         });
 }
 
-function inpuForma() {
-    fetch(urlForma, {
-        method: 'GET',
-        redirect: 'follow'
-    })
-        .then((resposta) => {
-            return resposta.json();
-        })
-        .then((json) => {
-            let select = document.getElementById('ffa_cod');
 
-            listaForma = json.listaFormaFaramaceuticas;
-            if (Array.isArray(listaForma)) {
-                if (listaForma.length > 0) {
-                    for (let i = 0; i < listaForma.length; i++) {
-                        let forma = listaForma[i];
-                        let option = document.createElement('option');
-                        option.text = forma.forma;
-                        option.value = forma.ffa_cod;
-                        select.appendChild(option);
-                    }
-                }
-                else {
-                    select.innerHTML = `<option>Erro Formas Farmaceuticas</option>`;
-                }
-            }
-        })
-        .catch((erro) => {
-            exibirMensagem('Não foi possível recuperar as formas farmacêuticas do backend: ' + erro.message);
-        });
-}
 
-function inpuUnidade() {
-    fetch(urlUnidade, {
-        method: 'GET',
-        redirect: 'follow'
-    })
-        .then((resposta) => {
-            return resposta.json();
-        })
-        .then((json) => {
-            let select = document.getElementById('uni_cod');
 
-            listaUni = json.listaUnidades;
-            if (Array.isArray(listaUni)) {
-                if (listaUni.length > 0) {
-                    for (let i = 0; i < listaUni.length; i++) {
-                        let unidade = listaUni[i];
-                        let option = document.createElement('option');
-                        option.text = unidade.unidade;
-                        option.value = unidade.un_cod;
-                        select.appendChild(option);
-                    }
-                }
-                else {
-                    select.innerHTML = `<option>Erro Formas Farmaceuticas</option>`;
-                }
-            }
-        })
-        .catch((erro) => {
-            exibirMensagem('Não foi possível recuperar as formas farmacêuticas do backend: ' + erro.message);
-        });
-}
 
 function inpuNomeFarmaco() {
     fetch(urlNomeFarmaco, {
@@ -366,13 +298,12 @@ async function PreencheFabricantes() {
 
 function gerarParametrosProduto(produto) {
     return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
-    '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}',
-    '${produto.ffa_cod}','${produto.uni_cod}','${produto.observacao}','${produto.descricao_uso}',
+    '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}', '${produto.observacao}','${produto.descricao_uso}',
     '${produto.tipo}'`;
 }
 
 
-function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo, modo) {
+function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, modo) {
 
     document.getElementById('prod_ID').value = prod_ID;
     document.getElementById('Fabricante_idFabricante').value = Fabricante_idFabricante;
@@ -380,8 +311,6 @@ function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico,
     document.getElementById('psicotropico').value = psicotropico;
     document.getElementById('valor_custo').value = valor_custo;
     document.getElementById('far_cod').value = far_cod;
-    document.getElementById('ffa_cod').value = ffa_cod;
-    document.getElementById('uni_cod').value = uni_cod;
     document.getElementById('observacao').value = observacao;
     document.getElementById('descricao_uso').value = descricao_uso;
     document.getElementById('tipo').value = tipo;
@@ -404,8 +333,6 @@ function limparFormulario() {
     document.getElementById('psicotropico').value = '';
     document.getElementById('valor_custo').value = '';
     document.getElementById('far_cod').value = '';
-    document.getElementById('ffa_cod').value = '';
-    document.getElementById('uni_cod').value = '';
     document.getElementById('observacao').value = '';
     document.getElementById('descricao_uso').value = '';
     document.getElementById('tipo').value = '';
