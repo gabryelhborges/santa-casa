@@ -149,6 +149,54 @@ create table itensConsumo(
     constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
 );
 
+create table Motivo(
+    motivo_id integer not null auto_increment,
+    motivo varchar(70) not null,
+    constraint pk_motivo primary key(motivo_id);
+);
+
+create table baixa(
+    idBaixa integer not null auto_increment,
+    b_idFuncionario integer not null,
+    dataBaixa datetime DEFAULT CURRENT_TIMESTAMP,
+    constraint pk_baixa primary key(idBaixa),
+    constraint fk_baixa_func foreign key(b_idFuncionario) references Funcionarios(idFuncionario);
+
+);
+
+create table itensBaixa(
+    ib_idBaixa integer not null,
+    ib_idProduto integer not null,
+    ib_idMotivo integer not null,
+    ib_idQtde integer not null,
+    ib_idLote integer not null,
+    ib_idUnidade integer no null,
+    ib_idObservacao varchar(200),
+    constraint pk_ib primary key(ib_idBaixa, ib_idLote, ib_idProduto),
+    constraint fk_ib_idBaixa foreign key(ib_idBaixa) references Baixa(idBaixa) ON DELETE CASCADE,
+    constraint fk_iblote_ibprod_ibunidade foreign key (ib_idLote, ib_idProduto, ib_idUnidade) references Lote(codigo, produto_prod_ID, unidade_un_cod),
+    constraint fk_ibMotivo foreign key(ib_idMotivo) references Motivo(motivo_id);
+     
+);
+
+--insert baixa
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+
+--insert itensBaixa
+
+--insert dos motivos
+INSERT INTO Motivo (motivo) VALUES ('Vencido');
+INSERT INTO Motivo (motivo) VALUES ('Danificado');
+INSERT INTO Motivo (motivo) VALUES ('Roubado');
+INSERT INTO Motivo (motivo) VALUES ('Extraviado');
+INSERT INTO Motivo (motivo) VALUES ('Recolhido pelo fornecedor');
+INSERT INTO Motivo (motivo) VALUES ('Uso em treinamento');
+
 
 -- insert nos pacientes
 insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('526.217.888-07','Leon B Ronchi', 'branco','S','M','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
@@ -182,7 +230,6 @@ insert into fabricante values(default, '15.670.288/0002-60','Gilead Sciences','A
 -- insert nas unidades
 insert into unidade values(default,'Grama(g)');
 insert into unidade values(default,'mililitro(ml)');
-insert into unidade values(default,'gotas(gt)');
 insert into unidade values(default,'Unidade Internacional(UI)');
 -- select * from unidade;
 
