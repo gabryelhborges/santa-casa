@@ -46,6 +46,7 @@ export default class ConsumoCtrl {
                                 lote.total_conteudo = lote.total_conteudo - item.qtdeConteudoUtilizado;
                                 lote.atualizar().catch((erro) => {
                                     atualizou = 0;
+                                    //console.log(erro);
                                 });
                             }
                             i++;
@@ -81,7 +82,7 @@ export default class ConsumoCtrl {
                     });
                 }
                 finally {
-                    //conexao.release();
+                    conexao.release();
                 }
             }
             else {
