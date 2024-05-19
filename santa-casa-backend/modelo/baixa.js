@@ -5,12 +5,14 @@ export default class Baixa{
     #itensBaixa; //lista produtos
     #funcionario; //objeto funcionario
     #dataBaixa;
+    #local; //ob local
     
-    constructor(idBaixa= 0, itensBaixa= null, funcionario=null, dataBaixa= ""){
+    constructor(idBaixa= 0, itensBaixa= null, funcionario=null, dataBaixa= "", local = null){
         this.#idBaixa = idBaixa;
         this.#itensBaixa = itensBaixa;
         this.#funcionario = funcionario;
         this.#dataBaixa = dataBaixa;
+        this.#local = local;
     }
 
     get idBaixa(){
@@ -41,13 +43,21 @@ export default class Baixa{
         this.#dataBaixa = novadataBaixa;
     }
 
+    get local(){
+        return this.#local;
+    }
+    set local(novoLocal){
+        this.#local = novoLocal;
+    }
+
 
     toJSON(){
         return {
             idBaixa: this.#idBaixa,
             itensBaixa: this.#itensBaixa,
             funcionario: this.#funcionario,
-            dataBaixa: this.#dataBaixa
+            dataBaixa: this.#dataBaixa,
+            local: this.#local
         };
     }
 

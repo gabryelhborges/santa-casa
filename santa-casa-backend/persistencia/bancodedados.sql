@@ -58,6 +58,12 @@ create table nomefarmacologico(
     constraint pk_far primary key (far_cod)
 );
 
+create table unidade(
+    un_cod integer not null auto_increment,
+    unidade varchar(30) not null, -- ml, comprimido, 
+    constraint pk_un primary key (un_cod)
+);
+
 create table produtos(
     prod_ID integer not null,
     Fabricante_idFabricante integer not null,
@@ -68,16 +74,14 @@ create table produtos(
     observacao varchar(300),
     descricao_uso varchar(300) not null,
     tipo varchar(50) not null,
+    un_min integer not null,
     constraint pk_prod primary key (prod_ID),
     constraint fk_pf foreign key (Fabricante_idFabricante) references fabricante(idFabricante),
-    constraint fk_far foreign key (far_cod) references nomefarmacologico(far_cod)
+    constraint fk_far foreign key (far_cod) references nomefarmacologico(far_cod),
+    constraint fk_unProd foreign key(un_min) references Unidade(un_cod)
 );
 
-create table unidade(
-    un_cod integer not null auto_increment,
-    unidade varchar(30) not null, -- ml, comprimido, 
-    constraint pk_un primary key (un_cod)
-);
+
 
 create table formafarmaceutica(
     ffa_cod integer not null auto_increment,
@@ -91,6 +95,17 @@ create table loc(
     constraint pk_loc primary key (loc_id)
 );
 
+<<<<<<< Updated upstream
+=======
+CREATE TABLE entrada(
+    entrada_id INTEGER not NULL AUTO_INCREMENT,
+    entrada_funcionario_id INTEGER not NULL,
+    data_entrada DATE NOT NULL,
+    constraint pk_id PRIMARY key (entrada_id),
+    constraint fk_fun FOREIGN KEY (entrada_funcionario_id) REFERENCES funcionarios(idFuncionario)
+);
+
+>>>>>>> Stashed changes
 -- drop table lote;
 create table lote(
     codigo varchar(15) not null,
@@ -109,6 +124,19 @@ create table lote(
     constraint fk_loc foreign key (loc) references loc(loc_id)
 );
 
+<<<<<<< Updated upstream
+=======
+CREATE TABLE itensEntrada(
+    ent_id INTEGER NOT NULL,
+    lote_cod VARCHAR(15) NOT NULL,
+    prod_id INTEGER NOT null,
+    qtde INTEGER NOT NULL,
+    constraint pk_ent_id PRIMARY KEY (ent_id,lote_cod,prod_id),
+    constraint fk_entrada foreign key (ent_id) REFERENCES entrada(entrada_id),
+    constraint fk_lote Foreign Key (lote_cod,prod_id) REFERENCES lote(codigo,produto_prod_ID)
+);
+
+>>>>>>> Stashed changes
 create table consumo(
 	cons_id integer not null auto_increment,
     cons_pac_id integer not null,
@@ -134,15 +162,17 @@ create table itensConsumo(
 create table Motivo(
     motivo_id integer not null auto_increment,
     motivo varchar(70) not null,
-    constraint pk_motivo primary key(motivo_id);
+    constraint pk_motivo primary key(motivo_id)
 );
 
 create table baixa(
     idBaixa integer not null auto_increment,
     b_idFuncionario integer not null,
+    b_locId integer not null,
     dataBaixa datetime DEFAULT CURRENT_TIMESTAMP,
     constraint pk_baixa primary key(idBaixa),
-    constraint fk_baixa_func foreign key(b_idFuncionario) references Funcionarios(idFuncionario);
+    constraint fk_baixa_func foreign key(b_idFuncionario) references Funcionarios(idFuncionario),
+    constraint fk_baixa_loc foreign key(b_locId) references Loc(loc_id)
 
 );
 
@@ -151,13 +181,14 @@ create table itensBaixa(
     ib_idProduto integer not null,
     ib_idMotivo integer not null,
     ib_idQtde integer not null,
-    ib_idLote integer not null,
-    ib_idUnidade integer no null,
+    ib_idLote varchar(15) not null,
+    ib_idUnidade integer not null,
     ib_idObservacao varchar(200),
     constraint pk_ib primary key(ib_idBaixa, ib_idLote, ib_idProduto),
     constraint fk_ib_idBaixa foreign key(ib_idBaixa) references Baixa(idBaixa) ON DELETE CASCADE,
-    constraint fk_iblote_ibprod_ibunidade foreign key (ib_idLote, ib_idProduto, ib_idUnidade) references Lote(codigo, produto_prod_ID, unidade_un_cod),
-    constraint fk_ibMotivo foreign key(ib_idMotivo) references Motivo(motivo_id);
+    constraint fk_iblote_ibprod foreign key (ib_idLote, ib_idProduto) references Lote(codigo, produto_prod_ID),
+    constraint fk_un_baixa foreign key(ib_idUnidade) references Unidade(un_cod),
+    constraint fk_ibMotivo foreign key(ib_idMotivo) references Motivo(motivo_id)
      
 );
 

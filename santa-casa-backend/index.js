@@ -11,6 +11,9 @@ import rotaConsumo from "./rotas/rotaConsumo.js";
 import rotaItensConsumo from "./rotas/rotaItensConsumo.js";
 import rotaNomeFarmaco from "./rotas/rotaNomeFarmacologico.js";
 import rotaLocal from "./rotas/rotaLocal.js"
+import rotaEntrada from "./rotas/rotaEntrada.js";
+import rotaMotivo from "./rotas/rotaMotivo.js";
+
 
 //Aplicação HTTP pronta, bastando parametrizá-la
 const host = "0.0.0.0";
@@ -32,6 +35,9 @@ app.use('/nomeFarmaco', rotaNomeFarmaco);
 app.use('/lote', rotaLote);
 app.use('/itensconsumo', rotaItensConsumo);
 app.use('/local', rotaLocal);
+app.use('/entrada', rotaEntrada);
+app.use('/motivo',rotaMotivo);
+
 
 app.listen(porta, host, ()=>{
     console.log(`API do sistema em execução: ${host}:${porta}`);
