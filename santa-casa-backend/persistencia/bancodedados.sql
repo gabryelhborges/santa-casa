@@ -129,6 +129,27 @@ create table itensConsumo(
     constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
 );
 
+create table transferencia(
+    tf_id integer not null auto_increment,
+    tf_data date DEFAULT CURRENT_TIMESTAMP,
+    tf_func_id integer not null,
+    tf_origem integer not null,
+    tf_destino integer not null,
+    constraint fk_origem foreign key (tf_origem) references loc(loc_id,),
+    constraint fk_destino foreign key (tf_destino) references loc(loc_id),
+    constraint fk_func foreign key (tf_func_id) references Funcionarios(idFuncionario),
+    constraint pk_tf primary key(if_id)
+);
+
+create table itensTransferidos(
+    itf_transf_id int not null auto_increment,
+    itf_tf_id int not null,
+    itf_lote_cod integer not null,
+    itf_qtdetransferida decimal(5,2) not null,
+    itf_unidade varchar(30),
+    constraint fk_itf_lote foreign key (itf_lote_cod) references lote(codigo),
+    constraint pk_itf primary key (itf_transf_id)
+);
     
 -- insert nos pacientes
 insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('526.217.888-07','Leon B Ronchi', 'branco','S','M','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
