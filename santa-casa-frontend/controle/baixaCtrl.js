@@ -1,5 +1,3 @@
-import ItensBaixa from "../../santa-casa-backend/modelo/itensBaixa";
-
 var jsonBaixa = {
     idBaixa: 0,
     ItensBaixa: [],
@@ -11,22 +9,28 @@ var jsonBaixa = {
 var jsonItBaixa = {
     baixa: {},
     produto: {},
-    ib_idMotivo: {},
-    ib_idQtde: {},
-    ib_idLote: {}
+    motivo: {},
+    quantidade: 0,
+    lote: {},
+    unidade: {},
+    ib_idObservacao: 0
 };
 
 const urlBase = 'http://localhost:4040';
-var formConsumo = document.getElementById('formConsumo');
-formConsumo.reset();
-formConsumo.onsubmit = validarFormulario;
+var formBaixa = document.getElementById('formBaixa');
+formBaixa.reset();
+formBaixa.onsubmit = validarFormulario;
 document.getElementById("funcionario").value = 1;//a partir do login, identificar funcionario
-var listaItensConsumo = [];
+var listaItensBaixa = [];
 var qtdeTotalLoteSelecionado = 0;
 var listaLotes = [];
-var pacConsumo;
-var funcConsumo;
+var funcBaixa;
+var listaUni = [];
+var listaMt = [];
+
 procuraFuncionario();
+adicionarUnidade();
+adicionarMotivos();
 
 function procuraFuncionario() {
     let idFunc = document.getElementById('funcionario').value;
@@ -37,48 +41,41 @@ function procuraFuncionario() {
             return resposta.json();
         })
         .then((json) => {
-            funcConsumo = json.listaFuncionarios[0];
-            document.getElementById("funcionario").value = funcConsumo.nome_funcionario;
+            funcBaixa = json.listaFuncionarios[0];
+            document.getElementById("funcionario").value = funcBaixa.nome_funcionario;
         });
 }
-exibirListaItensConsumo();
-carregaPacientes();
+
+exibirListaItensBaixa();
 carregaProdutos();
 
-function limpaPaciente() {
-    pacConsumo = null;
-    document.getElementById('paciente').value = '';
-}
 
 function validarFormulario(evento) {
-    let pac = document.getElementById("paciente").value;
-    if ( listaItensConsumo.length && pac) {
+    if ( listaItensBaixa.length && pac) {
         let dataAtual = new Date();
         dataAtual.setHours(dataAtual.getHours() - 3);
         // Formata a data para o formato compatível com o MySQL
         let dataFormatada = dataAtual.toISOString().slice(0, 19).replace('T', ' ');
-        //const cons = new Consumo(0, pacConsumo, funcConsumo, listaItensConsumo, dataFormatada);
-        jsonConsumo.paciente= pacConsumo;
-        jsonConsumo.funcionario= funcConsumo;
-        jsonConsumo.itensConsumo= listaItensConsumo;
-        jsonConsumo.dataConsumo= dataFormatada;
-        jsonConsumo.local= {loc_id: 1};
-        fetch(urlBase + '/consumo', {
+        
+        jsonBaixa.itensBaixa= listaItensBaixa;
+        jsonBaixa.funcionario= funcBaixa;
+        jsonBaixa.dataBaixa= dataFormatada;
+        jsonBaixa.local= {loc_id: 1};
+        fetch(urlBase + '/baixa', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(jsonConsumo)
+            body: JSON.stringify(jsonBaixa)
         })
             .then((resposta) => {
                 return resposta.json();
             })
             .then((dados) => {
                 if (dados.status) {
-                    limpaPaciente();
-                    limparFormItemConsumo();
-                    listaItensConsumo = [];
-                    exibirListaItensConsumo();
+                    limparFormItemBaixa();
+                    listaItensBaixa = [];
+                    exibirListaItensBaixa();
                     exibirMensagem(dados.mensagem, "ok");
                 }
                 else {
@@ -90,53 +87,50 @@ function validarFormulario(evento) {
             })
     }
     else {
-        if (!listaItensConsumo.length && !pac) {
-            exibirMensagem('Informe os itens consumidos e o paciente!');
-        }
-        else {
-            if (!listaItensConsumo.length) {
+            if (!listaItensBaixa.length) {
                 //Se zero, entra
                 exibirMensagem('Informe os itens consumidos!')
             }
-            if (!pac) {
-                exibirMensagem('Informe o paciente!');
-            }
-        }
+        
     }
     evento.preventDefault();
     evento.stopPropagation();
 }
-
-function adicionarItemConsumo() {
-    let codLote = document.getElementById('lote').value;
+//  cria listas (fetch) de todos, depois da um find  
+function adicionarItemBaixa() {
     let codProd = document.getElementById('produto').value;
+    let codMotivo = document.getElementById("motivo").value;
+    let qtde = document.getElementById('qtde').value;
+    let codLote = document.getElementById('lote').value;
+    let codUnidade = document.getElementById("unidade").value;
+    let obs = document.getElementById("observacao").value;
     let objLote = listaLotes.find(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd);
     let objProd;
+    let objMotivo = listaMotivos.find(itemMotivo => itemMotivo.motivo_id == codMotivo);
+    let objUnidade = listaUni.find(itemUnidade => itemUnidade.un_cod == codUnidade);
+
     objLote ? objProd = objLote.produto : objProd = null;
-    let qtde = document.getElementById('qtde').value;
-    if (objLote && objProd && qtde > 0 && qtde <= qtdeTotalLoteSelecionado) {
-        let itemExistente = listaItensConsumo.find(item => item.lote.codigo === objLote.codigo && item.produto.prod_ID === objProd.prod_ID);
+    if (objProd && objMotivo && qtde <= qtdeTotalLoteSelecionado && objLote && objUnidade && obs) {
+        let itemExistente = listaItensBaixa.find(item => item.lote.codigo === objLote.codigo && item.produto.prod_ID === objProd.prod_ID);
         // Verifica se já existe um item com o mesmo produto e lote
         if (itemExistente) {
             // Se existir, apenas aumenta a quantidade
-            let num = parseInt(itemExistente.qtdeConteudoUtilizado);
+            let num = parseInt(itemExistente.quantidade);
             num += parseInt(qtde);
             if(num <= qtdeTotalLoteSelecionado){
-                itemExistente.qtdeConteudoUtilizado = parseInt(num);
+                itemExistente.quantidade = parseInt(num);
             }
             else{
-                exibirMensagem("Quantidade máxima de consumo desse lote alcançada!");
+                exibirMensagem("Quantidade máxima de baixa desse lote alcançada!");
             }
         }
         else {
             // Se não existir, cria um novo item
-            let itCons = new ItensConsumo(null, objLote, objProd, qtde);
-            listaItensConsumo.push(itCons);
+            let itBaixa = new ItensBaixa(null, objProd, objMotivo, qtde, objLote, objUnidade, obs);
+            listaItensBaixa.push(itBaixa);
         }
-        /*let index = listaLotes.findIndex(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd);
-        listaLotes[index].total_conteudo-= parseInt(qtde);*/
-        limparFormItemConsumo();
-        exibirListaItensConsumo();
+        limparFormItemBaixa();
+        exibirListaItensBaixa();
     }
     else {
         if (!objProd) {
@@ -154,14 +148,20 @@ function adicionarItemConsumo() {
     }
 }
 
-function removerItemConsumo(codLote, codProd, qtdeConteudoUtilizado) {
-    listaItensConsumo = listaItensConsumo.filter(item => {
-        return item.lote.codigo != codLote || item.produto.prod_ID != codProd || item.qtdeConteudoUtilizado != qtdeConteudoUtilizado;
+function removerItemBaixa(codProd, codMotivo, qtde, codLote, codUnidade, obs) {
+    listaItensBaixa = listaItensBaixa.filter(item => {
+        return  
+                item.produto.prod_ID != codProd || 
+                item.motivo.motivo_id != codMotivo || 
+                item.quantidade != qtde || 
+                item.lote.codigo != codLote || 
+                item.unidade.un_cod != codUnidade ||
+                item.ib_idObservacao != obs;
     });
-    exibirListaItensConsumo();
+    exibirListaItensBaixa();
 }
 
-function limparFormItemConsumo() {
+function limparFormItemBaixa() {
     document.getElementById('produto').value = '';
     document.getElementById('nomeProduto').value = '';
     document.getElementById('lote').value = '';
@@ -170,10 +170,10 @@ function limparFormItemConsumo() {
     document.getElementById('qtde').value = '';
 }
 
-function exibirListaItensConsumo() {
-    let divItensCons = document.getElementById("tabelaItensConsumo");
-    divItensCons.innerHTML = '';
-    if (listaItensConsumo.length) {
+function exibirListaItensBaixa() {
+    let divItensBaixa = document.getElementById("tabelaItensBaixa");
+    divItensBaixa.innerHTML = '';
+    if (listaItensBaixa.length) {
         let tabela = document.createElement('table');
         tabela.style.borderCollapse = 'collapse';
         tabela.style.width = '95%';
@@ -186,19 +186,25 @@ function exibirListaItensConsumo() {
                         <th>Lote</th>
                         <th>Produto</th>
                         <th>Qtde</th>
+                        <th>Unidade</th>
+                        <th>Motivo</th>
+                        <th>Observacao</th>
                     </tr>
                     `;
         tabela.appendChild(cabecalho);
         let corpo = document.createElement('tbody');
-        for (let i = 0; i < listaItensConsumo.length; i++) {
+        for (let i = 0; i < listaItensBaixa.length; i++) {
             let linha = document.createElement('tr');
-            let itCons = listaItensConsumo[i];
+            let itBaixa = listaItensBaixa[i];
             linha.innerHTML = `
-                        <td>${itCons.lote.codigo}</td>
-                        <td>${itCons.produto.nome}</td>
-                        <td>${itCons.qtdeConteudoUtilizado}</td>
+                        <td>${itBaixa.lote.codigo}</td>
+                        <td>${itBaixa.produto.nome}</td>
+                        <td>${itBaixa.quantidade}</td>
+                        <td>${itBaixa.unidade.unidade}</td>
+                        <td>${itBaixa.motivo.motivo}</td>
+                        <td>${itBaixa.ib_idObservacao}</td>
                         <td>
-                            <button class="" onclick="removerItemConsumo(${gerarParametrosItemConsumo(itCons)})">
+                            <button class="" onclick="removerItemBaixa(${gerarParametrosItemBaixa(itBaixa)})">
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 64 64">
                                     <path d="M 28 11 C 26.895 11 26 11.895 26 13 L 26 14 L 13 14 C 11.896 14 11 14.896 11 16 C 11 17.104 11.896 18 13 18 L 14.160156 18 L 16.701172 48.498047 C 16.957172 51.583047 19.585641 54 22.681641 54 L 41.318359 54 C 44.414359 54 47.041828 51.583047 47.298828 48.498047 L 49.839844 18 L 51 18 C 52.104 18 53 17.104 53 16 C 53 14.896 52.104 14 51 14 L 38 14 L 38 13 C 38 11.895 37.105 11 36 11 L 28 11 z M 18.173828 18 L 45.828125 18 L 43.3125 48.166016 C 43.2265 49.194016 42.352313 50 41.320312 50 L 22.681641 50 C 21.648641 50 20.7725 49.194016 20.6875 48.166016 L 18.173828 18 z"></path>
                                 </svg>
@@ -209,81 +215,18 @@ function exibirListaItensConsumo() {
             corpo.appendChild(linha);
         }
         tabela.appendChild(corpo);
-        divItensCons.appendChild(tabela);
+        divItensBaixa.appendChild(tabela);
     }
     else {
-        divItensCons.innerHTML = 'Nenhum produto foi utilizado';
+        divItensBaixa.innerHTML = 'Nenhum produto foi utilizado';
     }
 }
 
-function gerarParametrosItemConsumo(itCons) {
-    return `'${itCons.lote.codigo}','${itCons.produto.prod_ID}','${itCons.qtdeConteudoUtilizado}'`;
+function gerarParametrosItemBaixa(itBaixa) {
+    return `'${itBaixa.produto.prod_ID}','${itBaixa.motivo.motivo_id}','${itBaixa.quantidade}',
+    '${itBaixa.lote.codigo}','${itBaixa.unidade.un_cod}','${itBaixa.ib_idObservacao}'`;
 }
 
-function carregaPacientes() {
-    let pesquisa = document.getElementById("pesquisaPaciente").value;
-    fetch(urlBase + '/paciente' + '/' + pesquisa, {
-        method: "GET"
-    })
-        .then((resposta) => {
-            return resposta.json();
-        })
-        .then((json) => {
-            let divTabPaciente = document.getElementById("tabelaPaciente");
-            if (json.status) {
-                divTabPaciente.innerHTML = "";
-                let listaPacientes = json.listaPacientes;
-                if (Array.isArray(listaPacientes)) {
-                    if (listaPacientes.length > 0) {
-                        let tabela = document.createElement('table');
-                        tabela.style.borderCollapse = 'collapse';
-                        tabela.style.width = '95%';
-                        tabela.style.borderBottom = '1px solid';
-                        //tabela.className = 'table table-striped table-hover';
-                        let cabecalho = document.createElement('thead');
-                        cabecalho.style.borderBottom = '1px solid';
-                        cabecalho.innerHTML = `
-                    <tr>
-                        <th>Nome</th>
-                        <th>CPF</th>
-                        <th>Sexo</th>
-                    </tr>
-                    `;
-                        tabela.appendChild(cabecalho);
-                        let corpo = document.createElement('tbody');
-                        for (let i = 0; i < listaPacientes.length; i++) {
-                            let linha = document.createElement('tr');
-                            let paciente = listaPacientes[i];
-                            linha.innerHTML = `
-                        <td>${paciente.nome}</td>
-                        <td>${paciente.cpf}</td>
-                        <td>${paciente.sexo}</td>
-                        <td>
-                            <button class="" onclick="selecionarPaciente(${gerarParametrosPaciente(paciente)})">
-                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="10px" viewBox="0 0 24 24">
-                                    <path d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"></path>
-                                </svg>
-                            </button>
-                        </td>
-                        `;
-                            linha.style.borderBottom = '1px solid';
-                            corpo.appendChild(linha);
-                        }
-                        tabela.appendChild(corpo);
-                        divTabPaciente.appendChild(tabela);
-                    }
-                    else {
-                        divTabPaciente.innerHTML = `<div> 
-                                    Não existem pacientes com essa descrição
-                                </div>`;
-                    }
-                }
-            }
-            else {
-                divTabPaciente.innerHTML = "Não foi possível consultar os produtos";
-            }
-        })
-}
 
 function carregaProdutos() {
     let pesquisa = document.getElementById("pesquisaProduto").value;
@@ -388,6 +331,60 @@ function adicionarLote(produto) {
         });
 }
 
+function adicionarUnidade() {
+    fetch(urlBase + "/unidade", {
+        method: "GET"
+    }).then((resposta) => {
+        return resposta.json();
+    })
+        .then((json) => {
+            listaUni = [];
+            let selectUnidade = document.getElementById("unidade");
+            selectUnidade.innerHTML = "";
+            selectUnidade.value = "";
+            selectUnidade.text = "";
+            let listaUn = json.listaUnidades;
+            if (Array.isArray(listaUn)) {
+                for (let i = 0; i < listaUn.length; i++) {
+                    let un = listaUn[i];
+                    let objUn = new Unidade(un.un_cod, un.unidade);
+                    let optionUnidade = document.createElement("option");
+                    optionUnidade.value = objUn.un_cod;
+                    optionUnidade.text = objUn.unidade;
+                    listaUni.push(objUn);
+                    selectUnidade.appendChild(optionUnidade);
+                };
+            }
+        });
+}
+
+function adicionarMotivos() {
+    fetch(urlBase + "/motivo", {
+        method: "GET"
+    }).then((resposta) => {
+        return resposta.json();
+    })
+        .then((json) => {
+            listaMt = [];
+            let selectMotivo = document.getElementById("motivo");
+            selectMotivo.innerHTML = "";
+            selectMotivo.value = "";
+            selectMotivo.text = "";
+            let listaMt = json.listaMotivos;
+            if (Array.isArray(listaMt)) {
+                for (let i = 0; i < listaMt.length; i++) {
+                    let mt = listaMt[i];
+                    let ObjMt = new Motivo(mt.motivo_id, mt.motivo);
+                    let optionMotivo = document.createElement("option");
+                    optionMotivo.value = ObjMt.motivo_id;
+                    optionMotivo.text = ObjMt.motivo;
+                    listaMt.push(ObjMt);
+                    selectMotivo.appendChild(optionMotivo);
+                };
+            }
+        });
+}
+
 document.getElementById("lote").addEventListener("change", function () {
     let codLote = document.getElementById('lote').value;
     let codProd = document.getElementById('produto').value;
@@ -397,10 +394,6 @@ document.getElementById("lote").addEventListener("change", function () {
 });
 
 
-function selecionarPaciente(idPaciente, cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, cadastro, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) {
-    document.getElementById('paciente').value = nome;
-    pacConsumo = new Paciente(idPaciente, cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, cadastro, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual);
-}
 
 function formataData(dataParametro) {
     // Convertendo a string em um objeto Date
@@ -418,16 +411,7 @@ function formataData(dataParametro) {
     return dataFormatada;
 }
 
-function gerarParametrosPaciente(paciente) {
-    return `'${paciente.idPaciente}','${paciente.cpf}','${paciente.nome}',
-    '${paciente.raca}','${paciente.estado_civil}','${paciente.sexo}',
-    '${formataData(paciente.data_nascimento)}','${paciente.endereco}','${paciente.bairro}',
-    '${paciente.telefone}','${paciente.profissao}','${paciente.cadastro}',
-    '${paciente.numero}','${paciente.complemento}','${paciente.cep}',
-    '${paciente.naturalidade}','${paciente.nome_pai}','${paciente.nome_responsavel}',
-    '${paciente.nome_mae}','${paciente.nome_social}','${paciente.utilizar_nome_social}',
-    '${paciente.religiao}','${paciente.orientacao_sexual}'`;
-}
+
 
 function gerarParametrosProduto(produto) {
     return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
