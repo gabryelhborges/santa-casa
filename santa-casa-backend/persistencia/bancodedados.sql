@@ -58,6 +58,12 @@ create table nomefarmacologico(
     constraint pk_far primary key (far_cod)
 );
 
+create table unidade(
+    un_cod integer not null auto_increment,
+    unidade varchar(30) not null, -- ml, comprimido, 
+    constraint pk_un primary key (un_cod)
+);
+
 create table produtos(
     prod_ID integer not null,
     Fabricante_idFabricante integer not null,
@@ -68,16 +74,14 @@ create table produtos(
     observacao varchar(300),
     descricao_uso varchar(300) not null,
     tipo varchar(50) not null,
+    un_min integer not null,
     constraint pk_prod primary key (prod_ID),
     constraint fk_pf foreign key (Fabricante_idFabricante) references fabricante(idFabricante),
-    constraint fk_far foreign key (far_cod) references nomefarmacologico(far_cod)
+    constraint fk_far foreign key (far_cod) references nomefarmacologico(far_cod),
+    constraint fk_unProd foreign key(un_min) references Unidade(un_cod)
 );
 
-create table unidade(
-    un_cod integer not null auto_increment,
-    unidade varchar(30) not null, -- ml, comprimido, 
-    constraint pk_un primary key (un_cod)
-);
+
 
 create table formafarmaceutica(
     ffa_cod integer not null auto_increment,
@@ -90,6 +94,16 @@ create table loc(
     loc_nome varchar(30) not null,
     constraint pk_loc primary key (loc_id)
 );
+
+
+CREATE TABLE entrada(
+    entrada_id INTEGER not NULL AUTO_INCREMENT,
+    entrada_funcionario_id INTEGER not NULL,
+    data_entrada DATE NOT NULL,
+    constraint pk_id PRIMARY key (entrada_id),
+    constraint fk_fun FOREIGN KEY (entrada_funcionario_id) REFERENCES funcionarios(idFuncionario)
+
+)
 
 -- drop table lote;
 create table lote(
@@ -109,14 +123,28 @@ create table lote(
     constraint fk_loc foreign key (loc) references loc(loc_id)
 );
 
+CREATE TABLE itensEntrada(
+    ent_id INTEGER NOT NULL,
+    lote_cod VARCHAR(15) NOT NULL,
+    prod_id INTEGER NOT null,
+    qtde INTEGER NOT NULL,
+    constraint pk_ent_id PRIMARY KEY (ent_id,lote_cod,prod_id),
+    constraint fk_entrada foreign key (ent_id) REFERENCES entrada(entrada_id),
+    constraint fk_lote Foreign Key (lote_cod,prod_id) REFERENCES lote(codigo,produto_prod_ID)
+
+);
+
+
 create table consumo(
 	cons_id integer not null auto_increment,
     cons_pac_id integer not null,
     cons_func_id integer not null,
+    cons_loc_id integer not null,
     cons_dataConsumo datetime DEFAULT CURRENT_TIMESTAMP,
     constraint pk_cons_id primary key (cons_id),
     constraint fk_cons_pac_id foreign key (cons_pac_id) references Pacientes(id_paciente),
-    constraint fk_cons_func_id foreign key (cons_func_id) references Funcionarios(idFuncionario)
+    constraint fk_cons_func_id foreign key (cons_func_id) references Funcionarios(idFuncionario),
+    constraint fk_cons_loc_id foreign key (cons_loc_id) references Loc(loc_id)
 );
 
 create table itensConsumo(
@@ -125,9 +153,10 @@ create table itensConsumo(
     ic_prod_id integer not null,
     ic_qtdeConteudoUtilizado integer not null,
     constraint pk_ic primary key (ic_cons_id, ic_lote_codigo, ic_prod_id),
-    constraint fk_ic_cons_id foreign key (ic_cons_id) references Consumo(cons_id),
+    constraint fk_ic_cons_id foreign key (ic_cons_id) references Consumo(cons_id) ON DELETE CASCADE,
     constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
 );
+
 
 create table transferencia(
     tf_id integer not null auto_increment,
@@ -151,6 +180,58 @@ create table itensTransferidos(
     constraint pk_itf primary key (itf_transf_id)
 );
     
+=======
+create table Motivo(
+    motivo_id integer not null auto_increment,
+    motivo varchar(70) not null,
+    constraint pk_motivo primary key(motivo_id)
+);
+
+create table baixa(
+    idBaixa integer not null auto_increment,
+    b_idFuncionario integer not null,
+    b_locId integer not null,
+    dataBaixa datetime DEFAULT CURRENT_TIMESTAMP,
+    constraint pk_baixa primary key(idBaixa),
+    constraint fk_baixa_func foreign key(b_idFuncionario) references Funcionarios(idFuncionario),
+    constraint fk_baixa_loc foreign key(b_locId) references Loc(loc_id)
+
+);
+
+create table itensBaixa(
+    ib_idBaixa integer not null,
+    ib_idProduto integer not null,
+    ib_idMotivo integer not null,
+    ib_idQtde integer not null,
+    ib_idLote varchar(15) not null,
+    ib_idUnidade integer not null,
+    ib_idObservacao varchar(200),
+    constraint pk_ib primary key(ib_idBaixa, ib_idLote, ib_idProduto),
+    constraint fk_ib_idBaixa foreign key(ib_idBaixa) references Baixa(idBaixa) ON DELETE CASCADE,
+    constraint fk_iblote_ibprod foreign key (ib_idLote, ib_idProduto) references Lote(codigo, produto_prod_ID),
+    constraint fk_un_baixa foreign key(ib_idUnidade) references Unidade(un_cod),
+    constraint fk_ibMotivo foreign key(ib_idMotivo) references Motivo(motivo_id)
+     
+);
+
+--insert baixa
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+INSERT INTO baixa () VALUES ();
+
+--insert itensBaixa
+
+--insert dos motivos
+INSERT INTO Motivo (motivo) VALUES ('Vencido');
+INSERT INTO Motivo (motivo) VALUES ('Danificado');
+INSERT INTO Motivo (motivo) VALUES ('Roubado');
+INSERT INTO Motivo (motivo) VALUES ('Extraviado');
+INSERT INTO Motivo (motivo) VALUES ('Recolhido pelo fornecedor');
+INSERT INTO Motivo (motivo) VALUES ('Uso em treinamento');
+
 -- insert nos pacientes
 insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('526.217.888-07','Leon B Ronchi', 'branco','S','M','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
 insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('999.999.999-99','Fulano da Silva Sauro','pardo','C','M','1997-10-13','Rua tal','Bairro X','(99) 99998-9999','marceneiro','9999','complemento X','00000-000','Testeiro','Fulanão','Fulaninho','Fulanona','Robson','N','Catolico',3);
@@ -183,7 +264,6 @@ insert into fabricante values(default, '15.670.288/0002-60','Gilead Sciences','A
 -- insert nas unidades
 insert into unidade values(default,'Grama(g)');
 insert into unidade values(default,'mililitro(ml)');
-insert into unidade values(default,'gotas(gt)');
 insert into unidade values(default,'Unidade Internacional(UI)');
 -- select * from unidade;
 
@@ -218,8 +298,8 @@ insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmac
 -- select * from lote;
 
 -- insert consumo
-insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(1,1,'2024-04-26');
-insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo) values(2,2,'2026-07-30');
+insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) values(1, 1, '2024-04-26', 1);
+insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) values(2, 2, '2026-07-30', 1);
 
 -- insert itens consumo
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 54321, 2, 11);
