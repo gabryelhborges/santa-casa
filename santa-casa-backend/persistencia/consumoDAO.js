@@ -1,6 +1,7 @@
 import Consumo from "../modelo/consumo.js";
 import Funcionario from "../modelo/funcionario.js";
 import ItensConsumo from "../modelo/itensConsumo.js";
+import Loc from "../modelo/local.js";
 import Paciente from "../modelo/paciente.js";
 
 export default class ConsumoDAO{
@@ -59,7 +60,12 @@ export default class ConsumoDAO{
                 funcionario = listaFunc.pop();
             });
 
-            let consumo = new Consumo(registro.cons_id, paciente, funcionario, [], registro.cons_dataConsumo);
+            let local = new Loc();
+            await local.consultar(registro.cons_loc_id).then((listaLocais)=>{
+                local= listaLocais.pop();
+            })
+
+            let consumo = new Consumo(registro.cons_id, paciente, funcionario, local, [], registro.cons_dataConsumo);
             let listaItensConsumo = [];
             let ic = new ItensConsumo(consumo);
             await ic.consultar(conexao).then((listaIC)=>{
