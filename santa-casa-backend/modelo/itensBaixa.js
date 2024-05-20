@@ -1,29 +1,29 @@
 import ItensBaixaDAO from "../persistencia/itensBaixaDAO.js"
 
 export default class ItensBaixa{
-    #ib_idBaixa;
-    #produto; //objeto produto
-    #ib_idMotivo;
-    #ib_idQtde;
-    #ib_idLote;
-    #ib_idUnidade;
+    #baixa;
+    #produto; //obj produto
+    #motivo; //obj motivo
+    #quantidade;
+    #lote; //obj lote
+    #unidade; //obj unidade
     #ib_idObservacao;
     
-    constructor(ib_idBaixa= 0, produto= null, ib_idMotivo= "", ib_idQtde= "", ib_idLote= "", ib_idUnidade= "", ib_idObservacao=""){
-        this.#ib_idBaixa = ib_idBaixa;
+    constructor(baixa= null, produto= null, motivo= "", quantidade= "", lote= "", unidade= "", ib_idObservacao=""){
+        this.#baixa = baixa;
         this.#produto = produto;
-        this.#ib_idMotivo = ib_idMotivo;
-        this.#ib_idQtde= ib_idQtde;
-        this.#ib_idLote = ib_idLote;
-        this.#ib_idUnidade = ib_idUnidade;
+        this.#motivo = motivo;
+        this.#quantidade= quantidade;
+        this.#lote = lote;
+        this.#unidade = unidade;
         this.#ib_idObservacao = ib_idObservacao;
     }
 
-    get ib_idBaixa(){
-        return this.#ib_idBaixa;
+    get baixa(){
+        return this.#baixa;
     }
-    set ib_idBaixa(novoib_idBaixa){
-        this.#ib_idBaixa= novoib_idBaixa;
+    set baixa(novoib_idBaixa){
+        this.#baixa= novoib_idBaixa;
     }
 
     get produto(){
@@ -33,32 +33,32 @@ export default class ItensBaixa{
         this.#produto = novoproduto
     }
 
-    get ib_idMotivo(){
-        return this.#ib_idMotivo;
+    get motivo(){
+        return this.#motivo;
     }
-    set ib_idMotivo(novoib_idMotivo){
-        this.#ib_idMotivo = novoib_idMotivo;
-    }
-
-    get ib_idQtde(){
-        return this.#ib_idQtde;
-    }
-    set ib_idQtde(novoib_idQtde){
-        this.#ib_idQtde= novoib_idQtde;
+    set motivo(novomotivo){
+        this.#motivo = novomotivo;
     }
 
-    get ib_idLote(){
-        return this.#ib_idLote;
+    get quantidade(){
+        return this.#quantidade;
     }
-    set ib_idLote(novoib_idLote){
-        this.#ib_idLote = novoib_idLote;
+    set quantidade(novoquantidade){
+        this.#quantidade= novoquantidade;
     }
 
-    get ib_idUnidade(){
-        return this.#ib_idUnidade;
+    get lote(){
+        return this.#lote;
     }
-    set ib_idUnidade(novoib_idUnidade){
-        this.#ib_idUnidade = novoib_idUnidade;
+    set lote(novolote){
+        this.#lote = novolote;
+    }
+
+    get unidade(){
+        return this.#unidade;
+    }
+    set unidade(novounidade){
+        this.#unidade = novounidade;
     }
 
     get ib_idObservacao(){
@@ -73,12 +73,12 @@ export default class ItensBaixa{
     }
     toJSON(){
         return {
-            ib_idBaixa: this.#ib_idBaixa,
+            baixa: this.#baixa,
             produto: this.#produto,
-            ib_idMotivo: this.#ib_idMotivo,
-            ib_idQtde: this.#ib_idQtde,
-            ib_idLote: this.#ib_idLote,
-            ib_idUnidade: this.#ib_idUnidade,
+            motivo: this.#motivo,
+            quantidade: this.#quantidade,
+            lote: this.#lote,
+            unidade: this.#unidade,
             ib_idObservacao: this.#ib_idObservacao
         };
     }

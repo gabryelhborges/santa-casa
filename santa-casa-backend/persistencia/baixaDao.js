@@ -5,7 +5,7 @@ import Funcionario from "../modelo/funcionario.js";
 export default class BaixaDAO{
     async gravar(baixa, conexao){
         if(baixa instanceof Baixa){
-            const sql= "INSERT INTO Baixa(b_idFuncionario) VALUES(?)";
+            const sql= "INSERT INTO Baixa(b_idFuncionario, local) VALUES(?)";
             const parametros= [baixa.funcionario.idFuncionario];
             //conexao deve ser criada no control
             const retorno = await conexao.execute(sql, parametros);
@@ -16,8 +16,8 @@ export default class BaixaDAO{
 
     async atualizar(baixa, conexao){
         if(baixa instanceof Baixa){
-            const sql = "UPDATE Baixa SET b_idFuncionario = ?, cons_dataBaixa = ? WHERE idBaixa = ?";
-            const parametros = [baixa.funcionario.idFuncionario, baixa.dataBaixa, baixa.idBaixa];
+            const sql = "UPDATE Baixa SET b_idFuncionario = ?, cons_dataBaixa = ? local = ? WHERE idBaixa = ?";
+            const parametros = [baixa.funcionario.idFuncionario, baixa.dataBaixa, baixa.idBaixa, baixa.local];
             await conexao.execute(sql, parametros);
         }
     }
