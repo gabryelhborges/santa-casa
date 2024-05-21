@@ -5,14 +5,14 @@ export default async function conectar(){
     }
     else {
         const pool = mysql.createPool({
-            host: 'localhost',//localhost
+            host: 'localhost',
             port: '3306',
             user: 'root',
-            password: '',
+            password: '1234',
             database: 'santa_casa',
             waitForConnections: true,
             connectionLimit: 10,
-            maxIdle: 2, // Máximo de conexões inativas; o valor padrão é o mesmo que "connectionLimit"
+            maxIdle: 10, // Máximo de conexões inativas; o valor padrão é o mesmo que "connectionLimit"
             idleTimeout: 60000, // Tempo limite das conexões inativas em milissegundos; o valor padrão é "60000"
             queueLimit: 0,
             enableKeepAlive: true,

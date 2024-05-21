@@ -144,7 +144,7 @@ function inputFabricantesNome() {
                     }
                 }
                 else {
-                    select.innerHTML = `<option>Erro Fabricantees</option>`;
+                    select.innerHTML = `<option>Erro Fabricantes</option>`;
                 }
             }
         })
