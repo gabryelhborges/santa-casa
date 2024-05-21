@@ -1,3 +1,4 @@
+import ItensEntrada from "../modelo/itensEntrada";
 
 
 export  default class EntradaDAO {
@@ -36,6 +37,24 @@ export  default class EntradaDAO {
             sql = `SELECT * FROM entrada WHERE data_entrada like ? ORDER BY  data_entrada ASC`;
             parametros = ['%'+termo+'%'];
         }
-        
+        const [registros, campos]= await conexao.execute(sql, parametros);
+        let listaEntrada = [];
+        for(const registro of registros){
+            let funcionario = new Funcionario();
+            await funcionario.consultar(registro.cons_func_id).then((listaFunc)=>{
+                funcionario = listaFunc.pop();
+            });
+
+            let entrada = new Entrada(registro.entrada_id, funcionario,registro.data_entrada);
+            let listaItensConsumo = [];
+            let ic = new ItensConsumo(consumo);
+            await ic.consultar(conexao).then((listaIC)=>{
+                listaItensConsumo = listaIC;
+            })
+            consumo.itensConsumo= listaItensConsumo;
+
+            listaConsumos.push(consumo);
+        }
+        return listaConsumos;
     }
 }
