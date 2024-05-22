@@ -102,8 +102,7 @@ CREATE TABLE entrada(
     data_entrada DATE NOT NULL,
     constraint pk_id PRIMARY key (entrada_id),
     constraint fk_fun FOREIGN KEY (entrada_funcionario_id) REFERENCES funcionarios(idFuncionario)
-
-)
+);
 
 -- drop table lote;
 create table lote(
@@ -179,8 +178,7 @@ create table itensTransferidos(
     constraint fk_itf_lote foreign key (itf_lote_cod) references lote(codigo),
     constraint pk_itf primary key (itf_transf_id)
 );
-    
-=======
+
 create table Motivo(
     motivo_id integer not null auto_increment,
     motivo varchar(70) not null,
@@ -288,9 +286,9 @@ insert into formafarmaceutica values(default,'aerossol');
 insert into nomefarmacologico values(null, 'teste');
 
 -- insert produtos
-insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo) values (1, 1, 'Produto A', 'N', 10.50, 1, 'Observação sobre o Produto A', 'Descrição de uso do Produto A','Tipo A');
-insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo) values(2, 2, 'Produto B', 'S', 15.75, 1, 'Observação sobre o Produto B', 'Descrição de uso do Produto B', 'Tipo B');
-insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo) values(3, 3, 'Produto C', 'N', 20.00, 1, 'Observação sobre o Produto C', 'Descrição de uso do Produto C', 'Tipo C');
+insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min) values (1, 1, 'Produto A', 'N', 10.50, 1, 'Observação sobre o Produto A', 'Descrição de uso do Produto A','Tipo A', 2);
+insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min) values(2, 2, 'Produto B', 'S', 15.75, 1, 'Observação sobre o Produto B', 'Descrição de uso do Produto B', 'Tipo B', 2);
+insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min) values(3, 3, 'Produto C', 'N', 20.00, 1, 'Observação sobre o Produto C', 'Descrição de uso do Produto C', 'Tipo C', 2);
 
 -- insert lote
 insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc) VALUES('12345', '2024-07-13', 100, 1, 2, 125, 2, 12500, 1);
