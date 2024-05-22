@@ -29,7 +29,7 @@ export default class BaixaCtrl {
                 baixa.gravar(conexao).then(async () => {
                     //Gravou baixa,e entao gravar os itens
                     for(const item of itensBaixa){
-                        let itemBaixa = new ItensBaixa(baixa, item.produto, item.ib_idMotivo, item.ib_idQtde, item.ib_idLote, item.ib_idUnidade, item.ib_idObservacao);
+                        let itemBaixa = new ItensBaixa(baixa, item.produto, item.motivo, item.quantidade, item.lote, item.unidade, item.ib_idObservacao);
                         itemBaixa.gravar(conexao);
                         //decrementar o lote
                         let lote = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto,item.lote.formaFarmaceutica,item.lote.conteudo_frasco,item.lote.unidade,item.lote.total_conteudo, local);

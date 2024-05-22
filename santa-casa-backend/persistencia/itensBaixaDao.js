@@ -8,9 +8,9 @@ import Produto from "../modelo/produto.js";
 export default class ItensBaixaDAO{
     async gravar(itemBaixa, conexao){
         if(itemBaixa instanceof ItensBaixa){
-            const sql = `INSERT INTO ItensBaixa(ib_idBaixa, ib_idProduto, ib_idMotivo, quantidade, ib_idLote, ib_idUnidade, ib_idObservacao) 
-            VALUES(?,?,?,?)`;
-            const parametros = [itemBaixa.baixa.idBaixa,itemBaixa.produto.prod_ID,itemBaixa.motivo.motivo_id, itemBaixa.quantidade, itemBaixa.lote.codigo, itemBaixa.unidade.un_cod, itemBaixa.ib_idObservacao];
+            const sql = `INSERT INTO ItensBaixa(ib_idBaixa, ib_idProduto, ib_idMotivo, ib_idQtde, ib_idLote, ib_idUnidade, ib_idObservacao) 
+            VALUES(?,?,?,?,?,?,?)`;
+            const parametros = [itemBaixa.baixa.idBaixa, itemBaixa.produto.prod_ID,itemBaixa.motivo.motivo_id, itemBaixa.quantidade, itemBaixa.lote.codigo, itemBaixa.unidade.un_cod, itemBaixa.ib_idObservacao];
             await conexao.execute(sql, parametros);
         }
     }
