@@ -102,8 +102,7 @@ CREATE TABLE entrada(
     data_entrada DATE NOT NULL,
     constraint pk_id PRIMARY key (entrada_id),
     constraint fk_fun FOREIGN KEY (entrada_funcionario_id) REFERENCES funcionarios(idFuncionario)
-
-)
+);
 
 -- drop table lote;
 create table lote(
@@ -157,6 +156,29 @@ create table itensConsumo(
     constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
 );
 
+
+create table transferencia(
+    tf_id integer not null auto_increment,
+    tf_data date DEFAULT CURRENT_TIMESTAMP,
+    tf_func_id integer not null,
+    tf_origem integer not null,
+    tf_destino integer not null,
+    constraint fk_origem foreign key (tf_origem) references loc(loc_id,),
+    constraint fk_destino foreign key (tf_destino) references loc(loc_id),
+    constraint fk_func foreign key (tf_func_id) references Funcionarios(idFuncionario),
+    constraint pk_tf primary key(if_id)
+);
+
+create table itensTransferidos(
+    itf_transf_id int not null auto_increment,
+    itf_tf_id int not null,
+    itf_lote_cod integer not null,
+    itf_qtdetransferida decimal(5,2) not null,
+    itf_unidade varchar(30),
+    constraint fk_itf_lote foreign key (itf_lote_cod) references lote(codigo),
+    constraint pk_itf primary key (itf_transf_id)
+);
+
 create table Motivo(
     motivo_id integer not null auto_increment,
     motivo varchar(70) not null,
@@ -207,7 +229,6 @@ INSERT INTO Motivo (motivo) VALUES ('Roubado');
 INSERT INTO Motivo (motivo) VALUES ('Extraviado');
 INSERT INTO Motivo (motivo) VALUES ('Recolhido pelo fornecedor');
 INSERT INTO Motivo (motivo) VALUES ('Uso em treinamento');
-
 
 -- insert nos pacientes
 insert into pacientes(cpf, nome, raca, estado_civil, sexo, data_nascimento, endereco, bairro, telefone, profissao, numero, complemento, cep, naturalidade, nome_pai, nome_responsavel, nome_mae, nome_social, utilizar_nome_social, religiao, orientacao_sexual) values('526.217.888-07','Leon B Ronchi', 'branco','S','M','2004-02-07','Rua Monsenhor Nakamura','Parque dos Orixás','(18) 98106-9187','estudante','1146','Não há complemento','19160-000','Brasileiro','Sergio','Geovanna','Marcia','Solange','S','Ateu',3);
@@ -265,9 +286,9 @@ insert into formafarmaceutica values(default,'aerossol');
 insert into nomefarmacologico values(null, 'teste');
 
 -- insert produtos
-insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo) values (1, 1, 'Produto A', 'N', 10.50, 1, 'Observação sobre o Produto A', 'Descrição de uso do Produto A','Tipo A');
-insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo) values(2, 2, 'Produto B', 'S', 15.75, 1, 'Observação sobre o Produto B', 'Descrição de uso do Produto B', 'Tipo B');
-insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo) values(3, 3, 'Produto C', 'N', 20.00, 1, 'Observação sobre o Produto C', 'Descrição de uso do Produto C', 'Tipo C');
+insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min) values (1, 1, 'Produto A', 'N', 10.50, 1, 'Observação sobre o Produto A', 'Descrição de uso do Produto A','Tipo A', 2);
+insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min) values(2, 2, 'Produto B', 'S', 15.75, 1, 'Observação sobre o Produto B', 'Descrição de uso do Produto B', 'Tipo B', 2);
+insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min) values(3, 3, 'Produto C', 'N', 20.00, 1, 'Observação sobre o Produto C', 'Descrição de uso do Produto C', 'Tipo C', 2);
 
 -- insert lote
 insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc) VALUES('12345', '2024-07-13', 100, 1, 2, 125, 2, 12500, 1);
