@@ -27,13 +27,14 @@ var openModalBtn = document.getElementById('openModalBtn');
 var closeModalBtn = document.getElementsByClassName('close')[0];
 
 // Quando o usuário clicar no botão, exiba o modal
+/*
 openModalBtn.onclick = function () {
     modal.style.display = 'block';
 }
-
+*/
 // Quando o usuário clicar no botão de fechar, oculte o modal
 closeModalBtn.onclick = function () {
-    modal.style.display = 'none';
+    
 }
 
 // Quando o usuário clicar fora do modal, oculte-o
@@ -104,14 +105,14 @@ function exibirConsumos() {
                                 <td>${consumo.local.loc_nome}</td>
                                 <td>${formataDataHora(consumo.dataConsumo)}</td>
                                 <td>
-                                    <button onclick="exibirItensConsumidos(${consumo.idConsumo})">
+                                    <button class-"" onclick="exibirItensConsumidos(${consumo.idConsumo})">
                                         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 50 50">
                                             <path d="M 3 9 A 1.0001 1.0001 0 1 0 3 11 L 47 11 A 1.0001 1.0001 0 1 0 47 9 L 3 9 z M 3 24 A 1.0001 1.0001 0 1 0 3 26 L 47 26 A 1.0001 1.0001 0 1 0 47 24 L 3 24 z M 3 39 A 1.0001 1.0001 0 1 0 3 41 L 47 41 A 1.0001 1.0001 0 1 0 47 39 L 3 39 z"></path>
                                         </svg>
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="" onclick="excluirConsumo(${gerarParametrosConsumo(consumo)})">
+                                    <button class="" onclick="excluirConsumo(${consumo.idConsumo})">
                                         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 64 64">
                                             <path d="M 28 11 C 26.895 11 26 11.895 26 13 L 26 14 L 13 14 C 11.896 14 11 14.896 11 16 C 11 17.104 11.896 18 13 18 L 14.160156 18 L 16.701172 48.498047 C 16.957172 51.583047 19.585641 54 22.681641 54 L 41.318359 54 C 44.414359 54 47.041828 51.583047 47.298828 48.498047 L 49.839844 18 L 51 18 C 52.104 18 53 17.104 53 16 C 53 14.896 52.104 14 51 14 L 38 14 L 38 13 C 38 11.895 37.105 11 36 11 L 28 11 z M 18.173828 18 L 45.828125 18 L 43.3125 48.166016 C 43.2265 49.194016 42.352313 50 41.320312 50 L 22.681641 50 C 21.648641 50 20.7725 49.194016 20.6875 48.166016 L 18.173828 18 z"></path>
                                         </svg>
@@ -126,35 +127,43 @@ function exibirConsumos() {
                         divTabConsumo.appendChild(container);
                     } else {
                         divTabConsumo.innerHTML = `<div> 
-                                    Não existem pacientes com essa descrição
+                                    Não existem consumos com essa descrição
                                 </div>`;
                     }
                 }
             } else {
-                divTabConsumo.innerHTML = "Não foi possível consultar os produtos";
+                divTabConsumo.innerHTML = "Não foi possível consultar os consumos";
             }
         })
+}
+
+function fecharModal(){
+    modal.style.display = 'none';
+}
+
+function resetaConteudoModal(){
+    conteudoModal.innerHTML= `
+        <span onclick="fecharModal()" class="close">&times;</span>
+    `;
+    
 }
 
 function exibirItensConsumidos(consumoId) {
     let cons = varListaCons.find(item => item.idConsumo == consumoId);
     let listaItensConsumidos = cons.itensConsumo;
-    let divTabItCons = document.getElementById("myModal");
+
+    conteudoModal = document.getElementById("modalContent");
+    resetaConteudoModal();
+    modal.style.display = 'block';//exibe modal
+    modal.innerHTML= "";
+
     let container = document.createElement('div');
-    container.style.overflowY = 'auto';
-    container.style.height = '600px';
-    container.style.border = '1px solid #ddd';
+    container.className= 'divTabela';
 
     let tabela = document.createElement('table');
-    tabela.style.borderCollapse = 'collapse';
-    tabela.style.width = '1500px';
-    tabela.style.borderBottom = '1px solid';
+    tabela.className= 'tabItCons';
 
     let cabecalho = document.createElement('thead');
-    cabecalho.style.borderBottom = '1px solid';
-    cabecalho.style.position = 'sticky';
-    cabecalho.style.top = '0';
-    cabecalho.style.backgroundColor = '#fff';
     cabecalho.innerHTML = `
         <tr>
             <th>Produto</th>
@@ -162,6 +171,7 @@ function exibirItensConsumidos(consumoId) {
             <th>Quantidade utilizada</th>
         </tr>
     `;
+    cabecalho.className= 'cabecalhoItCons';
     tabela.appendChild(cabecalho);
 
     let corpo = document.createElement('tbody');
@@ -174,11 +184,13 @@ function exibirItensConsumidos(consumoId) {
             <td>${itCons.qtdeConteudoUtilizado}</td>
         `;
         linha.style.borderBottom = '1px solid';
+        linha.className= 'linhaItCons';
         corpo.appendChild(linha);
     }
     tabela.appendChild(corpo);
     container.appendChild(tabela);
-    divTabItCons.appendChild(container);
+    conteudoModal.appendChild(container);
+    modal.appendChild(conteudoModal);
 }
 
 function excluirConsumo() {
