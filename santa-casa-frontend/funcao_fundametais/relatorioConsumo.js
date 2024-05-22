@@ -183,7 +183,7 @@ function exibirItensConsumidos(consumoId) {
             <td>${itCons.lote.codigo}</td>
             <td>${itCons.qtdeConteudoUtilizado}</td>
         `;
-        linha.style.borderBottom = '1px solid';
+        linha.style.border = '1px solid';
         linha.className= 'linhaItCons';
         corpo.appendChild(linha);
     }
