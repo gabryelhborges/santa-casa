@@ -8,9 +8,10 @@ class Produto{
     #observacao
     #descricao_uso
     #tipo
+    #un_min
     
 
-    constructor(prod_ID=0,Fabricante_idFabricante=0,nome="",psicotropico="",valor_custo=0,far_cod=0,observacao="", descricao_uso="", tipo="") {
+    constructor(prod_ID=0,Fabricante_idFabricante=0,nome="",psicotropico="",valor_custo=0,far_cod=0,observacao="", descricao_uso="", tipo="", un_min=0) {
         this.#prod_ID = prod_ID;
         this.#Fabricante_idFabricante = Fabricante_idFabricante;
         this.#nome = nome;
@@ -20,6 +21,7 @@ class Produto{
         this.#observacao = observacao;
         this.#descricao_uso= descricao_uso; 
         this.#tipo = tipo;
+        this.#un_min = un_min;
     }
 
      // getter for prod_ID
@@ -109,6 +111,14 @@ class Produto{
         this.#tipo = value;
     }
 
+    get un_min(){
+        return this.#un_min
+    }
+
+    set un_min(value){
+        this.#un_min = value;
+    }
+
     toString(){}
 
     toJSON(){
@@ -121,7 +131,8 @@ class Produto{
             far_cod: this.#far_cod,
             observacao: this.#observacao,
             descricao_uso: this.#descricao_uso,
-            tipo: this.#tipo
+            tipo: this.#tipo,
+            un_min: this.#un_min
         };
     }
 

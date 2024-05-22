@@ -20,7 +20,7 @@ const urlBase = 'http://localhost:4040';
 var formBaixa = document.getElementById('formBaixa');
 formBaixa.reset();
 formBaixa.onsubmit = validarFormulario;
-document.getElementById("funcionario").value = 1;//a partir do login, identificar funcionario
+document.getElementById("funcionario").value = 3;//a partir do login, identificar funcionario
 var listaItensBaixa = [];
 var qtdeTotalLoteSelecionado = 0;
 var listaLotes = [];
@@ -106,7 +106,7 @@ function adicionarItemBaixa() {
     let obs = document.getElementById("observacao").value;
     let objLote = listaLotes.find(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd);
     let objProd;
-    let objMotivo = listaMotivos.find(itemMotivo => itemMotivo.motivo_id == codMotivo);
+    let objMotivo = listaMt.find(itemMotivo => itemMotivo.motivo_id == codMotivo);
     let objUnidade = listaUni.find(itemUnidade => itemUnidade.un_cod == codUnidade);
 
     objLote ? objProd = objLote.produto : objProd = null;
@@ -134,13 +134,19 @@ function adicionarItemBaixa() {
     }
     else {
         if (!objProd) {
-            exibirMensagem("Para consumir um produto voce deve selecionar um produto!");
+            exibirMensagem("Para dar baixa voce deve selecionar um produto!");
         }
         else if (!objLote) {
-            exibirMensagem("Para consumir um produto voce deve selecionar um lote");
+            exibirMensagem("Para dar baixa voce deve selecionar um lote");
+        }
+        else if (!objMotivo) {
+            exibirMensagem("Para dar baixa voce deve selecionar um motivo");
         }
         else if (!qtde) {
-            exibirMensagem("Para consumir um produto voce deve informar a quantidade utilizada!");
+            exibirMensagem("Para dar baixa voce deve informar a quantidade utilizada!");
+        }
+        else if (!obs) {
+            exibirMensagem("Para dar baixa voce deve deixar uma observação!");
         }
         else if (qtde > qtdeTotalLoteSelecionado) {
             exibirMensagem("Não é possível consumir mais do que há disponível no lote!");
@@ -168,6 +174,11 @@ function limparFormItemBaixa() {
     document.getElementById('lote').innerHTML = '';
     document.getElementById('dataVencimento').value = '';
     document.getElementById('qtde').value = '';
+    document.getElementById('unidade').value = '';
+    document.getElementById('unidade').innerHTML = '';
+    document.getElementById('motivo').value = '';
+    document.getElementById('motivo').innerHTML = '';
+    document.getElementById('observacao').value = '';
 }
 
 function exibirListaItensBaixa() {
@@ -293,11 +304,13 @@ function carregaProdutos() {
         })
 }
 
-function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo) {
+function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo, un_min) {
     document.getElementById('produto').value = prod_ID;
     document.getElementById('nomeProduto').value = nome;
     document.getElementById('qtde').focus();
     adicionarLote(prod_ID);
+    adicionarUnidade();
+    adicionarMotivos();
 }
 
 function adicionarLote(produto) {
@@ -370,10 +383,10 @@ function adicionarMotivos() {
             selectMotivo.innerHTML = "";
             selectMotivo.value = "";
             selectMotivo.text = "";
-            let listaMt = json.listaMotivos;
-            if (Array.isArray(listaMt)) {
-                for (let i = 0; i < listaMt.length; i++) {
-                    let mt = listaMt[i];
+            let mtLista = json.listaMotivos;
+            if (Array.isArray(mtLista)) {
+                for (let i = 0; i < mtLista.length; i++) {
+                    let mt = mtLista[i];
                     let ObjMt = new Motivo(mt.motivo_id, mt.motivo);
                     let optionMotivo = document.createElement("option");
                     optionMotivo.value = ObjMt.motivo_id;
@@ -416,7 +429,7 @@ function formataData(dataParametro) {
 function gerarParametrosProduto(produto) {
     return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
     '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}',
-    '${produto.observacao}','${produto.tipo}'`;
+    '${produto.observacao}','${produto.tipo}','${produto.un_min}'`;
 }
 
 

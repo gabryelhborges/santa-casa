@@ -9,8 +9,7 @@
   <title>Baixa de Produtos</title>
   <link rel="stylesheet" href="../estilização/nicepage.css" media="screen">
   <link rel="stylesheet" href="../estilização/efetuar_consumo.css" media="screen">
-  <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
-  <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+  <link rel="stylesheet" type="text/css" href="../estilização/formulario.css" media="screen" />
   <meta name="generator" content="Nicepage 6.9.2, nicepage.com">
   <meta name="referrer" content="origin">
   <link id="u-theme-google-font" rel="stylesheet"
@@ -55,59 +54,88 @@
                           <form method="post" id="formBaixa"
                             class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" style="padding: 10px;">
 
+                            <div class="u-form-group u-form-partition-factor-2 u-form-group-2">
+                              <label for="funcionario" class="u-label">Funcionario</label>
+                              <input type="text" placeholder="Fulano" id="funcionario" name="funcionario"
+                                class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" readonly
+                                required>
+                            </div>
+
                             <div class="u-form-group u-form-group-3 u-form-partition-factor-2"
-                            style="padding-top: 10px;">
-                            <label for="produto" class="u-label">Produto</label>
-                            <input type="text" placeholder="Selecione um produto na tabela ao lado." id="produto"
-                              name="text-1"
-                              class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" readonly>
-                          </div>
+                              style="padding-top: 10px;">
+                              <label for="produto" class="u-label">Produto</label>
+                              <input type="text" placeholder="Selecione um produto na tabela ao lado." id="produto"
+                                name="text-1"
+                                class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" readonly>
+                            </div>
+                            
+                            <div class="dual-input-container">
+                                <div class="u-form-date u-form-group u-form-partition-factor-3 u-form-group-5">
+                                <label for="nomeProduto" class="u-label">Nome produto</label>
+                                <input type="text" placeholder="Ex: dipirona" id="nomeProduto" name="nomeProduto"
+                                  class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" readonly>
+                              </div>
+                              
+                              <div class="u-form-group u-form-partition-factor-3 u-form-group-6">
+                                <label for="qtde" class="u-label">Quantidade</label>
+                                <input oninput="controlaQtde()" type="number" id="qtde" name="qtde" min="1" pattern="[0,9]*"
+                                  class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
+                              </div>
+                            </div>
 
-                          <div class="u-form-group u-form-partition-factor-3 u-form-group-4">
-                            <label for="lote" class="u-label">Lote</label>
-                            <select type="text" placeholder="Selecione um produto primeiro" id="lote" name="lote"
-                              class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
+                           
 
-                            </select>
-                          </div>
+                            <div class="dual-input-container">
+                              <div class="u-form-group u-form-partition-factor-3 u-form-group-4">
+                                <label for="lote" class="u-label">Lote</label>
+                                <select type="text" placeholder="Selecione um produto primeiro" id="lote" name="lote"
+                                  class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
 
-                          <div class="u-form-group u-form-partition-factor-3 u-form-group-6">
-                            <label for="qtde" class="u-label">Quantidade</label>
-                            <input oninput="controlaQtde()" type="number" id="qtde" name="qtde" min="1" pattern="[0,9]*"
-                              class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
-                          </div>
+                                </select>
+                              </div>
+                              <div class="u-form-date u-form-group u-form-partition-factor-3 u-form-group-5">
+                                <label for="dataVencimento" class="u-label">Data vencimento</label>
+                                <input readonly type="text" id="dataVencimento" name="dataVencimento"
+                                  class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3"
+                                  data-date-format="mm/dd/yyyy">
+                              </div>
+                            </div>
 
-                          <div class="u-form-group u-form-name u-form-partition-factor-2">
-                            <label for="unidade" class="u-label">Unidade de Medida</label>
-                            <select type="text" placeholder="Selecione um unidade." id="unidade"
-                              name="unidade"
-                              class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" required
-                              readonly>
-                            </select>
-                          </div>
-                         
+                            
+                            <div class="dual-input-container">
+                              <div class="u-form-group u-form-name u-form-partition-factor-2">
+                                <label for="unidade" class="u-label">Unidade de Medida</label>
+                                <select type="text" placeholder="Selecione um unidade." id="unidade"
+                                  name="unidade"
+                                  class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" required
+                                  readonly>
+                                </select>
+                              </div>
+                            
+                                <div class="u-form-group u-form-partition-factor-2 u-form-group-2">
+                                  <label for="motivo" class="u-label">Motivo</label>
+                                  <select type="text"  id="motivo" name="motivo"
+                                    class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" readonly
+                                    required>
+                                    </select>
+                                </div>
+                            </div>
+                          
 
                           
 
-                         
 
-                           
-                            <div class="u-form-group u-form-partition-factor-2 u-form-group-2">
-                              <label for="motivo" class="u-label">Motivo</label>
-                              <select type="text"  id="motivo" name="motivo"
-                                class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" readonly
-                                required>
-                                </select>
-                            </div>
-
-
-                            <div class="u-form-date u-form-group u-form-partition-factor-3 u-form-group-5">
-                              <label for="observacao" class="u-label">Observação</label>
-                              <input ype="text" id="observacao" name="observacao"
-                                class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3">
-                            </div>
-                           
-
+                              <div class="dual-input-container" id="div1">
+                                <div class="dual-input-container">
+                                    <label>Observações</label>
+                                </div>
+                                <div class="dual-input-container">
+                                  <textarea id="observacao" class="input-style" rows="4" cols="50" name="observacao"
+                                    placeholder="Observações" maxlength="2000" required></textarea>
+                                </div>
+                              </div>
+                          
+                          
 
                             <div class="u-form-group u-form-group-3" style="padding-top: 70px; margin-bottom: 0px;">
                               <button type="button" style="margin-left: 10px;" onclick="adicionarItemBaixa()"

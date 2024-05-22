@@ -12,6 +12,7 @@ inpuNomeFarmaco();
 inputFabricantesNome();
 exibirProdutos();
 PreencheFabricantes();
+adicionarUnidade();
 var acao = 'cadastrar';
 
 function validarFormulario(evento) {
@@ -25,7 +26,8 @@ function validarFormulario(evento) {
         let observacao = document.getElementById('observacao').value;
         let descricao_uso = document.getElementById('descricao_uso').value;
         let tipo = document.getElementById('tipo').value;
-        let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod,  observacao, descricao_uso, tipo);
+        let un_min = document.getElementById('un_min').value;
+        let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod,  observacao, descricao_uso, tipo, un_min);
 
         if (acao === 'cadastrar') {
             fetch(urlBase, {
@@ -63,7 +65,8 @@ function validarFormulario(evento) {
                 let observacao = document.getElementById('observacao').value;
                 let descricao_uso = document.getElementById('descricao_uso').value;
                 let tipo = document.getElementById('tipo').value;
-                let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod,  observacao, descricao_uso, tipo);
+                let un_min = document.getElementById('un_min').value;
+                let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod,  observacao, descricao_uso, tipo, un_min);
                 fetch(urlBase, {
                     method: 'PATCH',
                     headers: {
@@ -205,7 +208,7 @@ async function listaNomeFab() {
             let listaNome = [];
             listaNome = json.listaFabricante;
             if (Array.isArray(listaNome)) {
-                console.log(listaNome);
+                console.table(listaNome);
                 return listaNome; // Retorna a lista de fabricantes
             } else {
                 throw new Error('Dados inválidos do backend: lista não é um array.');
@@ -217,6 +220,30 @@ async function listaNomeFab() {
         });
 }
 
+function adicionarUnidade() {
+    fetch(urlBase + "/unidade", {
+        method: "GET"
+    }).then((resposta) => {
+        return resposta.json();
+    })
+        .then((json) => {
+            let selectUnidade = document.getElementById("un_min");
+            selectUnidade.innerHTML = "";
+            selectUnidade.value = "";
+            selectUnidade.text = "";
+            let listaUn = json.listaUnidades;
+            if (Array.isArray(listaUn)) {
+                for (let i = 0; i < listaUn.length; i++) {
+                    console.table(listaUn);
+                    let un = listaUn[i];
+                    let optionUnidade = document.createElement("option");
+                    optionUnidade.value = un.un_cod;
+                    optionUnidade.text = un.unidade;
+                    selectUnidade.appendChild(optionUnidade);
+                };
+            }
+        });
+}
 
 function exibirProdutos() {
     //chamar func lista

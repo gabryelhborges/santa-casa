@@ -30,44 +30,69 @@
                         <label>Código do Produto <strong style="color: red;">*</strong></label>
                         <label>Fabricante<strong style="color: red;">*</strong></label>
                     </div>
-                    <input id="prod_ID" type="text" class="input-style" placeholder="Código identificador de produto"
+                    <div class="dual-input-container">
+                        <input id="prod_ID" type="text" class="input-style" placeholder="Código identificador de produto"
                         name="codigo_produto" required>
-                    <select id="Fabricante_idFabricante" name="selectFabricante" class="input-style" required> </select>
+                        <select id="Fabricante_idFabricante" name="selectFabricante" class="input-style" required> </select>
+                    </div>
                 </div>
-                <label>&nbsp;&nbsp;&nbsp;Nome do Produto <strong style="color: red;">*</strong></label>
-                <div>
-                    <input id="nome" type="text" class="input-style" placeholder="Nome do Produto" name="nome" required>
+
+                <div class="dual-input-container" id="div1">
+                    <div class="dual-input-container">
+                        <label>Nome do Produto <strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="dual-input-container">
+                        <input id="nome" type="text" class="input-style" placeholder="Nome do Produto" name="nome" required>
+                    </div>
                 </div>
+                
                 <div class="dual-input-container">
                     <div class="dual-input-container">
                         <label>Tipo do Produto<strong style="color: red;">*</strong></label>
                         <label>Valor de Custo <strong style="color: red;">*</strong></label>
                     </div>
-
-                    <select id="tipo" name="select" class="input-style" required>
-                        <option value="Remedio" selected> Remedio </option>
-                        <option value="Material"> Material </option>
-                    </select>
-
-                    <input oninput="mascaraValor(this)" id="valor_custo" type="text" class="input-style"
-                        placeholder="R$ 0,00" name="valor_custo" required>
+                    <div class="dual-input-container">
+                        <select id="tipo" name="select" class="input-style" required>
+                            <option value="Remedio" selected> Remedio </option>
+                            <option value="Material"> Material </option>
+                        </select>
+    
+                        <input oninput="mascaraValor(this)" id="valor_custo" type="text" class="input-style"
+                            placeholder="R$ 0,00" name="valor_custo" required>
+                    </div>
                 </div>
-                <label>&nbsp;&nbsp;&nbsp;Nome Farmacológico<strong style="color: red;">*</strong></label>
-                <div class="single-input-container">
-                    <select id="far_cod" name="selectNomeFar" class="input-style" required> </select>
-                <div>
-                    <label>&nbsp;&nbsp;&nbsp;Descrição de uso<strong style="color: red;">*</strong></label>
-                    <textarea id="descricao_uso" class="input-style" rows="4" cols="50" name="descricao_uso"
+                <div class="dual-input-container" id="div1">
+                    <div class="dual-input-container">
+                        <label>Nome Farmacológico<strong style="color: red;">*</strong></label>
+                        <label>Unidade Mínima<strong style="color: red;">*</strong></label>
+                    </div>
+                    <div class="dual-input-container">
+                        <select id="far_cod" name="selectNomeFar" class="input-style" required> </select>
+                        <select id="un_min" name="un_min" class="input-style" required> </select>
+                    </div>
+                </div>
+
+                
+                <div class="dual-input-container" id="div1">
+                    <div class="dual-input-container">
+                        <label>Descrição de uso<strong style="color: red;">*</strong></label>
+                        <label>Observações</label>
+                    </div>
+                    <div class="dual-input-container">
+                        <textarea id="descricao_uso" class="input-style" rows="4" cols="50" name="descricao_uso"
                         placeholder="Descrição de uso" maxlength="2000" required></textarea>
-                </div>
-                <div>
-                    <label>&nbsp;&nbsp;&nbsp;Observações</label>
-                    <textarea id="observacao" class="input-style" rows="4" cols="50" name="observacao"
+
+                        <textarea id="observacao" class="input-style" rows="4" cols="50" name="observacao"
                         placeholder="Observações" maxlength="2000" required></textarea>
+                     </div>
                 </div>
-                <div>
-                    <input id="psicotropico" type="checkbox" name="checkbox" value="S">
-                    <label>Psicotrópico</strong></label>
+                <div class="dual-input-container" id="div1">
+                    <div class="dual-input-container">
+                        <label>Psicotrópico</strong></label>
+                    </div>
+                    <div class="dual-input-container">
+                        <input id="psicotropico" type="checkbox" name="checkbox" value="S">
+                    </div>
                 </div>
                 <br>
                 <div>
