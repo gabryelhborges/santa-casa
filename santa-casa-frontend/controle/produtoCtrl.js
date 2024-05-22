@@ -1,6 +1,4 @@
-const urlBase = 'http://localhost:4040/produto';
-const urlFab = 'http://localhost:4040/fabricante';
-const urlNomeFarmaco = 'http://localhost:4040/nomeFarmaco';
+const urlBase = 'http://localhost:4040';
 var formProd = document.getElementById('formProduto');
 
 
@@ -125,7 +123,7 @@ function validarFormulario(evento) {
 }
 
 function inputFabricantesNome() {
-    fetch(urlFab, {
+    fetch(urlBase + "/fabricante", {
         method: 'GET',
         redirect: 'follow'
     })
@@ -161,7 +159,7 @@ function inputFabricantesNome() {
 
 
 function inpuNomeFarmaco() {
-    fetch(urlNomeFarmaco, {
+    fetch(urlBase + "/nomeFarmaco", {
         method: 'GET',
         redirect: 'follow'
     })
@@ -192,9 +190,42 @@ function inpuNomeFarmaco() {
         });
 }
 
+function adicionarUnidade() {
+    fetch(urlBase + "/unidade", {
+        method: 'GET',
+        redirect: 'follow'
+    })
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((json) => {
+            let selectUn = document.getElementById('un_min');
+
+            listaUn = json.listaUnidades;
+            if (Array.isArray(listaUn)) {
+                if (listaUn.length > 0) {
+                    for (let i = 0; i < listaUn.length; i++) {
+                        let un = listaUn[i];
+                        let option = document.createElement('option');
+                        option.text = un.unidade;
+                        option.value = un.un_cod;
+                        selectUn.appendChild(option);
+                    }
+                }
+                else {
+                    selectUn.innerHTML = `<option>Erro Unidades</option>`;
+                }
+            }
+        })
+        .catch((erro) => {
+            exibirMensagem('Não foi possível recuperar as unidades do backend: ' + erro.message);
+        });
+}
+
+
 //retornar lista geral
 async function listaNomeFab() {
-    return await fetch(urlFab, {
+    return await fetch(urlBase + "/fabricante", {
         method: 'GET',
         redirect: 'follow'
     })
@@ -220,34 +251,11 @@ async function listaNomeFab() {
         });
 }
 
-function adicionarUnidade() {
-    fetch(urlBase + "/unidade", {
-        method: "GET"
-    }).then((resposta) => {
-        return resposta.json();
-    })
-        .then((json) => {
-            let selectUnidade = document.getElementById("un_min");
-            selectUnidade.innerHTML = "";
-            selectUnidade.value = "";
-            selectUnidade.text = "";
-            let listaUn = json.listaUnidades;
-            if (Array.isArray(listaUn)) {
-                for (let i = 0; i < listaUn.length; i++) {
-                    console.table(listaUn);
-                    let un = listaUn[i];
-                    let optionUnidade = document.createElement("option");
-                    optionUnidade.value = un.un_cod;
-                    optionUnidade.text = un.unidade;
-                    selectUnidade.appendChild(optionUnidade);
-                };
-            }
-        });
-}
+
 
 function exibirProdutos() {
     //chamar func lista
-    fetch(urlBase, {
+    fetch(urlBase + "/produto", {
         method: 'GET',
         redirect: 'follow'
     })
@@ -281,7 +289,7 @@ function exibirProdutos() {
                         linha.innerHTML = `
                         <td>${produto.prod_ID}</td>
                         <td>${produto.nome}</td>
-                        <td id="${produto.Fabricante_idFabricante}" value="${produto.Fabricante_idFabricante}"></td>
+                        <td id="${"fabricante_" + produto.Fabricante_idFabricante}"></td>
                         <td>${produto.valor_custo}</td>
                         <td>
                             <button class="btn btn-danger☺" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'excluir')">
@@ -317,10 +325,11 @@ function exibirProdutos() {
 async function PreencheFabricantes() {
     let listaNomes = await listaNomeFab();
     for (const fabricante of listaNomes) {
-        idFabricanteProcurado = document.getElementById(fabricante.idFabricante);
+        idFabricanteProcurado = document.getElementById("fabricante_" + fabricante.idFabricante);
         if (idFabricanteProcurado) 
              idFabricanteProcurado.innerHTML = fabricante.f_nome;
     }
+    
 }
 
 function gerarParametrosProduto(produto) {
