@@ -23,7 +23,7 @@ export default class BaixaCtrl {
             const dataBaixa = dados.dataBaixa;
             const itensBaixa = dados.itensBaixa;
             if (funcionario instanceof Funcionario && local instanceof Loc && itensBaixa.length > 0) {//&& itensBaixa.length > 0
-                const baixa = new Baixa(0, itensBaixa, funcionario, dataBaixa, dataBaixa, local);
+                const baixa = new Baixa(0, itensBaixa, funcionario, dataBaixa, local);
                 const conexao = await conectar();
                 //conexao.beginTransaction()
                 baixa.gravar(conexao).then(async () => {

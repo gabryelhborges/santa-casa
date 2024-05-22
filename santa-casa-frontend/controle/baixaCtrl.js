@@ -13,7 +13,7 @@ var jsonItBaixa = {
     quantidade: 0,
     lote: {},
     unidade: {},
-    ib_idObservacao: 0
+    ib_idObservacao: ""
 };
 
 const urlBase = 'http://localhost:4040';
@@ -51,7 +51,7 @@ carregaProdutos();
 
 
 function validarFormulario(evento) {
-    if ( listaItensBaixa.length && pac) {
+    if (listaItensBaixa.length) {
         let dataAtual = new Date();
         dataAtual.setHours(dataAtual.getHours() - 3);
         // Formata a data para o formato compatível com o MySQL
@@ -131,6 +131,9 @@ function adicionarItemBaixa() {
         }
         limparFormItemBaixa();
         exibirListaItensBaixa();
+        adicionarUnidade();
+        adicionarMotivos();
+        
     }
     else {
         if (!objProd) {
