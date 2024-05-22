@@ -121,7 +121,7 @@
         .modal-content {
             position: relative;
             /* Adiciona posição relativa ao conteúdo */
-            background-color: #fefefe;
+            background-color: #ddd;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
@@ -133,6 +133,35 @@
             color: black;
             text-decoration: none;
             cursor: pointer;
+        }
+
+        .divTabela {
+            overflow-y: auto;
+            height: 100%;
+            width: 95%;
+            border: 1px solid #ddd;
+        }
+
+        .tabItCons {
+            border-collapse: collapse;
+            width: 70%;
+            border-bottom: 1px solid;
+        }
+
+        .tabItCons thead{
+            border: 1px solid black;
+        }
+
+        .cabecalhoItCons {
+            border: 1px solid black;
+            position: sticky;
+            top: 0;
+            background-color: rgb(155, 155, 155);
+        }
+        
+        .linhaItCons, .linhaItCons td{
+            background-color: #fff;
+            border: 1px solid black;
         }
     </style>
 </head>
@@ -149,9 +178,9 @@
     <!-- Modal -->
     <div id="myModal" class="modal">
         <!-- Conteúdo do modal -->
-        <div class="modal-content">
+        <div id="modalContent" class="modal-content">
             <span class="close">&times;</span>
-            <p>Dados itens consumidos</p>
+            
         </div>
     </div>
 
