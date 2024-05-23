@@ -21,6 +21,12 @@ create table itensConsumo(
     constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
 );
 */
+
+/*
+    - Relatorio 1: filtrar por paciente mostrar cada consumo com seus itensConsumidos
+    - Relatorio 2: Filtrar por produto mostrando a quantidade total consumida (sql sum)
+*/
+
 var varListaCons = [];
 var modal = document.getElementById('myModal');
 var openModalBtn = document.getElementById('openModalBtn');
@@ -194,12 +200,9 @@ function exibirItensConsumidos(consumoId) {
 }
 
 function excluirConsumo() {
-    return "";
+    fetch(urlBase + "/")
 }
 
-function gerarParametrosConsumo() {
-    return "";
-}
 
 function formataDataHora(dataParametro) {
     // Convertendo a string em um objeto Date
