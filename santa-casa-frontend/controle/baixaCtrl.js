@@ -16,6 +16,54 @@ var jsonItBaixa = {
     ib_idObservacao: ""
 };
 
+/* requisição JSON para testar backend
+{
+    "itensBaixa": [
+        {
+            "produto": {
+                "prod_ID": 1
+            },
+            "motivo": {
+                "motivo_id": 1
+            },
+            "quantidade": 17,
+            "lote": {
+                "codigo": "L001"
+            },
+            "unidade": {
+                "un_cod": 1
+            },
+            "ib_idObservacao": "Teste"
+        },
+
+        {
+            "produto": {
+                "prod_ID": 2
+            },
+            "motivo": {
+                "motivo_id": 2
+            },
+            "quantidade": 17,
+            "lote": {
+                "codigo": "L002"
+            },
+            "unidade": {
+                "un_cod": 2
+            },
+            "ib_idObservacao": "Teste DOIS"
+        }
+    ],
+    "funcionario": {
+        "idFuncionario": 3
+    },
+    "dataBaixa": "2024-06-29",
+    "local": {
+        "loc_id": 1
+    }
+}
+
+*/
+
 const urlBase = 'http://localhost:4040';
 var formBaixa = document.getElementById('formBaixa');
 formBaixa.reset();

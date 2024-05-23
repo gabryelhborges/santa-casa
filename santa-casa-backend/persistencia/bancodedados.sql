@@ -286,13 +286,28 @@ insert into formafarmaceutica values(default,'aerossol');
 insert into nomefarmacologico values(null, 'teste');
 
 -- insert produtos
-insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min) values (1, 1, 'Produto A', 'N', 10.50, 1, 'Observação sobre o Produto A', 'Descrição de uso do Produto A','Tipo A', 2);
-insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min) values(2, 2, 'Produto B', 'S', 15.75, 1, 'Observação sobre o Produto B', 'Descrição de uso do Produto B', 'Tipo B', 2);
-insert into produtos(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min) values(3, 3, 'Produto C', 'N', 20.00, 1, 'Observação sobre o Produto C', 'Descrição de uso do Produto C', 'Tipo C', 2);
+INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min)
+VALUES (1, 1, 'Novalgina 500mg', 'N', 5.50, 1, 'Analgésico e antitérmico', 'Uso oral, dose única diária', 'Remédio', 1);
+INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min)
+VALUES (2, 2, 'Dipirona Sódica 1g', 'N', 7.80, 2, 'Usado para dor e febre', 'Uso oral ou intravenoso, conforme orientação médica', 'Remédio', 2);
+INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min)
+VALUES (3, 1, 'Paracetamol 750mg', 'N', 3.20, 3, 'Analgésico e antipirético', 'Uso oral, até 4 vezes ao dia', 'Remédio', 1);
+INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min)
+VALUES (4, 3, 'Ibuprofeno 600mg', 'N', 4.50, 4, 'Anti-inflamatório e analgésico', 'Uso oral, 3 vezes ao dia', 'Remédio', 3);
+INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min)
+VALUES (5, 2, 'Aspirina 100mg', 'N', 2.00, 5, 'Analgésico e anti-inflamatório', 'Uso oral, uma vez ao dia', 'Remédio', 2);
 
 -- insert lote
-insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc) VALUES('12345', '2024-07-13', 100, 1, 2, 125, 2, 12500, 1);
-insert into lote(codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc) VALUES('54321', '2024-08-20', 200, 2, 2, 150, 2, 30000, 1);
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
+VALUES ('L001', '2024-12-31', 100, 1, 1, 500, 1, 50000, 1);
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
+VALUES ('L002', '2025-06-30', 200, 2, 2, 1000, 2, 200000, 1);
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
+VALUES ('L003', '2024-08-15', 150, 3, 3, 750, 3, 112500, 1);
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
+VALUES ('L004', '2025-02-28', 250, 4, 4, 600, 1, 150000, 1);
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
+VALUES ('L005', '2024-11-30', 300, 5, 5, 100, 2, 30000, 1);
 -- select * from lote;
 
 -- insert consumo
@@ -303,3 +318,10 @@ insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) va
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 54321, 2, 11);
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 12345, 1, 6);
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 12345, 1, 2);
+
+
+INSERT INTO nomefarmacologico (nome_far) VALUES ('Novalgina');
+INSERT INTO nomefarmacologico (nome_far) VALUES ('Dipirona');
+INSERT INTO nomefarmacologico (nome_far) VALUES ('Paracetamol');
+INSERT INTO nomefarmacologico (nome_far) VALUES ('Ibuprofeno');
+INSERT INTO nomefarmacologico (nome_far) VALUES ('Aspirina');
