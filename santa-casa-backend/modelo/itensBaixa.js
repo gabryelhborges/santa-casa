@@ -19,6 +19,15 @@ export default class ItensBaixa{
         this.#ib_idObservacao = ib_idObservacao;
     }
 
+    
+    get baixa() {
+        return this.#baixa;
+    }
+
+    set baixa(value) {
+        this.#baixa = value;
+    }
+
     get produto() {
         return this.#produto;
     }
