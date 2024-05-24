@@ -69,7 +69,7 @@ create table produtos(
     Fabricante_idFabricante integer not null,
     nome varchar(45) not null,
     psicotropico varchar(1) not null,
-    valor_custo decimal(5,2) not null,
+    valor_custo decimal(10,2) not null,
     far_cod integer not null, -- nome farmacologico
     observacao varchar(300),
     descricao_uso varchar(300) not null,
@@ -324,9 +324,3 @@ insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudo
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 12345, 1, 6);
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 12345, 1, 2);
 
-
-INSERT INTO nomefarmacologico (nome_far) VALUES ('Novalgina');
-INSERT INTO nomefarmacologico (nome_far) VALUES ('Dipirona');
-INSERT INTO nomefarmacologico (nome_far) VALUES ('Paracetamol');
-INSERT INTO nomefarmacologico (nome_far) VALUES ('Ibuprofeno');
-INSERT INTO nomefarmacologico (nome_far) VALUES ('Aspirina');

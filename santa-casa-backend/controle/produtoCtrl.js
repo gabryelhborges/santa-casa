@@ -9,15 +9,15 @@ export default class ProdutoCtrl {
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
             const dados = requisicao.body;
             const prod_ID = dados.prod_ID;
-            const fabricante = new Fabricante(dados.fabricante);
+            const fabricante = new Fabricante(dados.fabricante.idFabricante);
             const nome = dados.nome;
             const psicotropico = dados.psicotropico;
             const valor_custo = dados.valor_custo;
-            const nomeFar = new NomeFarmacologico(dados.nomeFar);
+            const nomeFar = new NomeFarmacologico(dados.nomeFar.far_cod);
             const observacao = dados.observacao || null;
             const descricao_uso = dados.descricao_uso || null;
             const tipo = dados.tipo ;
-            const unidade =  new Unidade(dados.unidade);
+            const unidade =  new Unidade(dados.unidade.un_cod);
             
             //Validar apenas os atributos que são NOT NULL?
             if (prod_ID && fabricante instanceof Fabricante && nome && psicotropico && valor_custo && tipo && nomeFar instanceof NomeFarmacologico && unidade instanceof Unidade) {
@@ -56,15 +56,15 @@ export default class ProdutoCtrl {
         if ((requisicao.method === "PUT" || requisicao.method === "PATCH") && requisicao.is("application/json")){
             const dados = requisicao.body;
             const prod_ID = dados.prod_ID;
-            const fabricante = dados.fabricante;
+            const fabricante = new Fabricante(dados.fabricante.idFabricante);
             const nome = dados.nome;
             const psicotropico = dados.psicotropico;
             const valor_custo = dados.valor_custo;
-            const nomeFar = dados.nomeFar;
+            const nomeFar = new NomeFarmacologico(dados.nomeFar.far_cod);
             const observacao = dados.observacao || null;
             const descricao_uso = dados.descricao_uso || null;
             const tipo = dados.tipo;
-            const unidade = dados.unidade;
+            const unidade = new Unidade(dados.unidade.un_cod);
             if(fabricante instanceof Fabricante && nome && psicotropico && valor_custo && tipo && nomeFar instanceof NomeFarmacologico && unidade instanceof Unidade){
                 const produto = new Produto(prod_ID, fabricante, nome, psicotropico, valor_custo, nomeFar, observacao, descricao_uso, tipo, unidade);
                 produto.atualizar().then(()=>{
