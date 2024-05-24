@@ -2,15 +2,15 @@ import ProdutoDAO from "../persistencia/produtoDAO.js";
 
 export default class Produto {
     #prod_ID
-    #fabricante //obj fabricante
+    #fabricante //objeto fabricante
     #nome
     #psicotropico
     #valor_custo
-    #nomeFar //Obj Nome Farmacológico
+    #nomeFar //Objeto Nome Farmacológico
     #observacao
     #descricao_uso
     #tipo
-    #unidade //Obj Unidade
+    #unidade //Objeto Unidade
     
 
     constructor(prod_ID=0,fabricante=null,nome="",psicotropico="",valor_custo=0,nomeFar=null,observacao="", descricao_uso="", tipo="", unidade =null) {
