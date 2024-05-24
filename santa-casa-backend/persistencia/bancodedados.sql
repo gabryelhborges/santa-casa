@@ -283,7 +283,12 @@ insert into formafarmaceutica values(default,'spray');
 insert into formafarmaceutica values(default,'aerossol');
 -- select * from formafarmaceutica;
 
-insert into nomefarmacologico values(null, 'teste');
+INSERT INTO nomefarmacologico (nome_far) VALUES ('Novalgina');
+INSERT INTO nomefarmacologico (nome_far) VALUES ('Dipirona');
+INSERT INTO nomefarmacologico (nome_far) VALUES ('Paracetamol');
+INSERT INTO nomefarmacologico (nome_far) VALUES ('Ibuprofeno');
+INSERT INTO nomefarmacologico (nome_far) VALUES ('Aspirina');
+
 
 -- insert produtos
 INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min)
@@ -291,11 +296,11 @@ VALUES (1, 1, 'Novalgina 500mg', 'N', 5.50, 1, 'Analgésico e antitérmico', 'Us
 INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min)
 VALUES (2, 2, 'Dipirona Sódica 1g', 'N', 7.80, 2, 'Usado para dor e febre', 'Uso oral ou intravenoso, conforme orientação médica', 'Remédio', 2);
 INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min)
-VALUES (3, 1, 'Paracetamol 750mg', 'N', 3.20, 3, 'Analgésico e antipirético', 'Uso oral, até 4 vezes ao dia', 'Remédio', 1);
+VALUES (3, 3, 'Paracetamol 750mg', 'N', 3.20, 3, 'Analgésico e antipirético', 'Uso oral, até 4 vezes ao dia', 'Remédio', 1);
 INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min)
-VALUES (4, 3, 'Ibuprofeno 600mg', 'N', 4.50, 4, 'Anti-inflamatório e analgésico', 'Uso oral, 3 vezes ao dia', 'Remédio', 3);
+VALUES (4, 4, 'Ibuprofeno 600mg', 'N', 4.50, 4, 'Anti-inflamatório e analgésico', 'Uso oral, 3 vezes ao dia', 'Remédio', 3);
 INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min)
-VALUES (5, 2, 'Aspirina 100mg', 'N', 2.00, 5, 'Analgésico e anti-inflamatório', 'Uso oral, uma vez ao dia', 'Remédio', 2);
+VALUES (5, 5, 'Aspirina 100mg', 'N', 2.00, 5, 'Analgésico e anti-inflamatório', 'Uso oral, uma vez ao dia', 'Remédio', 2);
 
 -- insert lote
 INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)

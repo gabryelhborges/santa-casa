@@ -5,7 +5,7 @@ export default class Baixa{
     #itensBaixa; //lista produtos
     #funcionario; //objeto funcionario
     #dataBaixa;
-    #local; //ob local
+    #local; //obj local
     
     constructor(idBaixa= 0, itensBaixa= [], funcionario=null, dataBaixa= "", local = null){
         this.#idBaixa = idBaixa;

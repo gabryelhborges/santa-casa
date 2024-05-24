@@ -33,7 +33,7 @@
                     <div class="dual-input-container">
                         <input id="prod_ID" type="text" class="input-style" placeholder="Código identificador de produto"
                         name="codigo_produto" required>
-                        <select id="Fabricante_idFabricante" name="selectFabricante" class="input-style" required> </select>
+                        <select id="fabricante" name="selectFabricante" class="input-style" required> </select>
                     </div>
                 </div>
 
@@ -67,8 +67,8 @@
                         <label>Unidade Mínima<strong style="color: red;">*</strong></label>
                     </div>
                     <div class="dual-input-container">
-                        <select id="far_cod" name="selectNomeFar" class="input-style" required> </select>
-                        <select id="un_min" name="un_min" class="input-style" required> </select>
+                        <select id="nomeFar" name="selectNomeFar" class="input-style" required> </select>
+                        <select id="unidade" name="unidade" class="input-style" required> </select>
                     </div>
                 </div>
 
@@ -125,6 +125,9 @@
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
 <script src="../modelo/Produto.js"></script>
+<script src="../modelo/fabricante.js"></script>
+<script src="../modelo/nomeFarmacologico.js"></script>
+<script src="../modelo/unidade.js"></script>
 <script src="../controle/produtoCtrl.js"></script>
 <script src="../util/util.js"></script>
 

@@ -1,3 +1,6 @@
+import Fabricante from "../modelo/fabricante.js";
+import NomeFarmacologico from "../modelo/nomeFarmacologico.js";
+import Unidade from "../modelo/unidade.js";
 import Produto from "../modelo/produto.js";
 import conectar from "./conexao.js";
 
@@ -5,7 +8,7 @@ export default class ProdutoDAO{
     async gravar(produto){
         if(produto instanceof Produto){
             const sql = "INSERT INTO produtos(prod_ID, Fabricante_idFabricante ,nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min) VALUES (?,?,?,?,?,?,?,?,?,?);";
-            const parametros = [ produto.prod_ID, produto.Fabricante_idFabricante,produto.nome,produto.psicotropico,produto.valor_custo,produto.far_cod, produto.observacao,produto.descricao_uso, produto.tipo];
+            const parametros = [ produto.prod_ID, produto.fabricante.idFabricante,produto.nome,produto.psicotropico,produto.valor_custo,produto.nomeFar.far_cod, produto.observacao,produto.descricao_uso, produto.tipo, produto.unidade.un_cod];
             const conexao = await conectar();
             const retorno = await conexao.execute(sql, parametros);
            // produto.prod_ID = retorno[0].insertId;
@@ -16,7 +19,7 @@ export default class ProdutoDAO{
     async atualizar(produto){
         if(produto instanceof Produto){
             const sql = "UPDATE produtos SET  Fabricante_idFabricante  = ?,nome = ?,psicotropico = ?,valor_custo = ?,far_cod = ?, observacao = ?,descricao_uso = ?, tipo = ? , un_min = ? WHERE prod_ID = ?";
-            const parametros = [produto.Fabricante_idFabricante, produto.nome, produto.psicotropico, produto.valor_custo, produto.far_cod, produto.observacao, produto.descricao_uso, produto.tipo, produto.un_min, produto.prod_ID];
+            const parametros = [produto.fabricante.idFabricante, produto.nome, produto.psicotropico, produto.valor_custo, produto.nomeFar.far_cod, produto.observacao, produto.descricao_uso, produto.tipo, produto.unidade.un_cod, produto.prod_ID];
             const conexao = await conectar();
             await conexao.execute(sql, parametros);
             global.poolConexoes.releaseConnection(conexao);
@@ -55,7 +58,24 @@ export default class ProdutoDAO{
         let listaProdutos = [];
         //Preenchendo a lista com cada registro retornado
         for(const registro of registros){
-            const produto = new Produto(registro.prod_ID, registro.Fabricante_idFabricante, registro.nome, registro.psicotropico, registro.valor_custo, registro.far_cod, registro.observacao, registro.descricao_uso, registro.tipo, registro.un_min);
+
+            let fabricante = new Fabricante();
+            await fabricante.consultar(registro.Fabricante_idFabricante).then((listaFab)=>{
+                fabricante = listaFab.pop();
+            });
+
+            let unidade= new Unidade();
+            await unidade.consultar(registro.un_min).then((listaUn)=>{
+                unidade = listaUn.pop();
+            });
+
+            
+            let nomeFar= new NomeFarmacologico();
+            await nomeFar.consultar(registro.far_cod).then((listaFar)=>{
+                nomeFar = listaFar.pop();
+            });
+
+            const produto = new Produto(registro.prod_ID, fabricante, registro.nome, registro.psicotropico, registro.valor_custo, nomeFar, registro.observacao, registro.descricao_uso, registro.tipo, unidade);
             listaProdutos.push(produto);
         }
         global.poolConexoes.releaseConnection(conexao);
