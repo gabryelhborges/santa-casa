@@ -1,31 +1,31 @@
 class Produto{
     #prod_ID
-    #Fabricante_idFabricante 
+    #fabricante //obj fabricante
     #nome
     #psicotropico
     #valor_custo
-    #far_cod
+    #nomeFar //Obj Nome Farmacológico
     #observacao
     #descricao_uso
     #tipo
-    #un_min
+    #unidade //Obj Unidade
     
 
-    constructor(prod_ID=0,Fabricante_idFabricante=0,nome="",psicotropico="",valor_custo=0,far_cod=0,observacao="", descricao_uso="", tipo="", un_min=0) {
+    constructor(prod_ID=0,fabricante=null,nome="",psicotropico="",valor_custo=0,nomeFar=null,observacao="", descricao_uso="", tipo="", unidade =null) {
         this.#prod_ID = prod_ID;
-        this.#Fabricante_idFabricante = Fabricante_idFabricante;
+        this.#fabricante = fabricante;
         this.#nome = nome;
         this.#psicotropico = psicotropico;
         this.#valor_custo = valor_custo;
-        this.#far_cod = far_cod;
+        this.#nomeFar = nomeFar;
         this.#observacao = observacao;
         this.#descricao_uso= descricao_uso; 
         this.#tipo = tipo;
-        this.#un_min = un_min;
+        this.#unidade  = unidade;
     }
 
-     // getter for prod_ID
-     get prod_ID() {
+    // getter for prod_ID
+    get prod_ID() {
         return this.#prod_ID;
     }
 
@@ -34,14 +34,14 @@ class Produto{
     this.#prod_ID = value;
     }
 
-    // getter for Fabricante_idFabricante
-    get Fabricante_idFabricante() {
-    return this.#Fabricante_idFabricante;
+    // getter for fabricante
+    get fabricante() {
+    return this.#fabricante;
     }
 
-    // setter for Fabricante_idFabricante
-    set Fabricante_idFabricante(value) {
-    this.#Fabricante_idFabricante = value;
+    // setter for fabricante
+    set fabricante(value) {
+    this.#fabricante = value;
     }
 
     // getter for nome
@@ -74,14 +74,14 @@ class Produto{
         this.#valor_custo = value;
     }
 
-    // getter for far_cod
-    get far_cod() {
-        return this.#far_cod;
+    // getter for nomeFar
+    get nomeFar() {
+        return this.#nomeFar;
     }
 
-    // setter for far_cod
-    set far_cod(value) {
-        this.#far_cod = value;
+    // setter for nomeFar
+    set nomeFar(value) {
+        this.#nomeFar = value;
     }
     // getter for observacao
     get observacao() {
@@ -111,12 +111,12 @@ class Produto{
         this.#tipo = value;
     }
 
-    get un_min(){
-        return this.#un_min
+    get unidade(){
+        return this.#unidade
     }
 
-    set un_min(value){
-        this.#un_min = value;
+    set unidade(value){
+        this.#unidade = value;
     }
 
     toString(){}
@@ -124,20 +124,16 @@ class Produto{
     toJSON(){
         return{
             prod_ID: this.#prod_ID,
-            Fabricante_idFabricante: this.#Fabricante_idFabricante,
+            fabricante: this.#fabricante,
             nome: this.#nome,
             psicotropico: this.#psicotropico,
             valor_custo: this.#valor_custo,
-            far_cod: this.#far_cod,
+            nomeFar: this.#nomeFar,
             observacao: this.#observacao,
             descricao_uso: this.#descricao_uso,
             tipo: this.#tipo,
-            un_min: this.#un_min
+            unidade: this.#unidade
         };
-    }
-
-    toString(){
-        return "produto: " + this.#nome;
     }
 
 }
