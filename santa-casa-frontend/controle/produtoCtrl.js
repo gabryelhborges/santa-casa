@@ -28,7 +28,7 @@ function validarFormulario(evento) {
         let produto = new Produto(prod_ID, fabricante, nome, psicotropico, valor_custo, nomeFar,  observacao, descricao_uso, tipo, unidade);
 
         if (acao === 'cadastrar') {
-            fetch(urlBase, {
+            fetch(urlBase + "/produto", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ function validarFormulario(evento) {
                 let tipo = document.getElementById('tipo').value;
                 let unidade = new Unidade(document.getElementById('unidade').value);
                 let produto = new Produto(prod_ID, fabricante, nome, psicotropico, valor_custo, nomeFar,  observacao, descricao_uso, tipo, unidade);
-                fetch(urlBase, {
+                fetch(urlBase + "/produto", {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
@@ -94,7 +94,7 @@ function validarFormulario(evento) {
             if (confirm('Deseja realmente excluir esse produto?')) {
                 let prod_ID = document.getElementById('prod_ID').value;
                 let produto = new Produto(prod_ID);
-                fetch(urlBase, {
+                fetch(urlBase + "/produto", {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -176,7 +176,7 @@ function inpuNomeFarmaco() {
                         let nomeFarmaco = listaNomeFar[i];
                         let option = document.createElement('option');
                         option.text = nomeFarmaco.nome_far;
-                        option.value = nomeFarmaco.nomeFar;
+                        option.value = nomeFarmaco.far_cod;
                         select.appendChild(option);
                     }
                 }
@@ -223,33 +223,6 @@ function inputUnidade() {
 }
 
 
-//retornar lista geral
-// async function listaNomeFab() {
-//     return await fetch(urlBase + "/fabricante", {
-//         method: 'GET',
-//         redirect: 'follow'
-//     })
-//         .then((resposta) => {
-//             if (!resposta.ok) {
-//                 throw new Error('Erro na requisição: ' + resposta.status);
-//             }
-//             return resposta.json();
-//         })
-//         .then((json) => {
-//             let listaNome = [];
-//             listaNome = json.listaFabricante;
-//             if (Array.isArray(listaNome)) {
-//                 console.table(listaNome);
-//                 return listaNome; // Retorna a lista de fabricantes
-//             } else {
-//                 throw new Error('Dados inválidos do backend: lista não é um array.');
-//             }
-//         })
-//         .catch((erro) => {
-//             console.error('Erro ao recuperar os fabricantes do backend:', erro.message);
-//             throw erro; // Propaga o erro para quem chamou a função
-//         });
-// }
 
 
 
@@ -275,6 +248,7 @@ function exibirProdutos() {
                     <tr>
                         <th>Código Produto</th>
                         <th>Produto</th>
+                        <th>Tipo</th>
                         <th>Fabricante</th>
                         <th>Valor</th>
                     </tr>
@@ -289,6 +263,7 @@ function exibirProdutos() {
                         linha.innerHTML = `
                         <td>${produto.prod_ID}</td>
                         <td>${produto.nome}</td>
+                        <td>${produto.tipo}</td>
                         <td>${produto.fabricante.f_nome}</td>
                         <td>${produto.valor_custo}</td>
                         <td>
@@ -322,46 +297,38 @@ function exibirProdutos() {
         });
 }
 
-// async function PreencheFabricantes() {
-//     let listaNomes = await listaNomeFab();
-//     for (const fabricante of listaNomes) {
-//         idFabricanteProcurado = document.getElementById("fabricante_" + fabricante.idFabricante);
-//         if (idFabricanteProcurado) 
-//              idFabricanteProcurado.innerHTML = fabricante.f_nome;
-//     }
-    
-// }
+
 
 function gerarParametrosProduto(produto) {
     return `'${produto.prod_ID}','${produto.fabricante.idFabricante}','${produto.nome}',
     '${produto.psicotropico}','${produto.valor_custo}','${produto.nomeFar.far_cod}', '${produto.observacao}','${produto.descricao_uso}',
-    '${produto.tipo}', '${produto.unidade.un_id}'`;
+    '${produto.tipo}', '${produto.unidade.un_cod}'`;
 }
 
 
-function selecionarProduto(prod_ID, fabricante, nome, psicotropico, valor_custo, nomeFar, observacao, descricao_uso, tipo, unidade, modo) {
 
+function selecionarProduto(prod_ID, fabricanteId, nome, psicotropico, valor_custo, nomeFarId, observacao, descricao_uso, tipo, unidadeId, modo) {
     document.getElementById('prod_ID').value = prod_ID;
-    document.getElementById('fabricante').value = fabricante.idFabricante;
+    document.getElementById('fabricante').value = fabricanteId;
     document.getElementById('nome').value = nome;
     document.getElementById('psicotropico').value = psicotropico;
     document.getElementById('valor_custo').value = valor_custo;
-    document.getElementById('nomeFar').value = nomeFar.far_cod;
+    document.getElementById('nomeFar').value = nomeFarId;
     document.getElementById('observacao').value = observacao;
     document.getElementById('descricao_uso').value = descricao_uso;
     document.getElementById('tipo').value = tipo;
-    document.getElementById('unidade').value = unidade.un_cod;
+    document.getElementById('unidade').value = unidadeId;
 
     let bttForm = document.getElementById('bttForm');
     if (modo == 'alterar') {
         acao = 'alterar';
         bttForm.innerHTML = 'Alterar';
-    }
-    else if (modo == 'excluir') {
+    } else if (modo == 'excluir') {
         acao = 'excluir';
         bttForm.innerHTML = 'Excluir';
     }
 }
+
 
 function limparFormulario() {
     document.getElementById('prod_ID').value = '';
