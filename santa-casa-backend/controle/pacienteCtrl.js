@@ -1,6 +1,9 @@
 import Paciente from "../modelo/paciente.js";
+import Singleton from "../implementacoesEngSoftware/singleton.js"
 
 export default class PacienteCtrl {
+    instCtrl = Singleton.getInstance();
+    
     gravar(requisicao, resposta) {
         resposta.type('application/json');
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
