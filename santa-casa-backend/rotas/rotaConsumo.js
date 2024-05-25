@@ -7,8 +7,8 @@ const rotaConsumo = new Router();
 rotaConsumo.get('/', consCtrl.consultar)
 .get('/:termo', consCtrl.consultar)
 .post('/', consCtrl.gravar)
-.patch('/', consCtrl.atualizar)
-.put('/', consCtrl.atualizar)
+//.patch('/', consCtrl.atualizar)
+//.put('/', consCtrl.atualizar)
 .delete('/', consCtrl.excluir)
 
 export default rotaConsumo;

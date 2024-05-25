@@ -40,7 +40,7 @@ openModalBtn.onclick = function () {
 */
 // Quando o usuário clicar no botão de fechar, oculte o modal
 closeModalBtn.onclick = function () {
-    
+
 }
 
 // Quando o usuário clicar fora do modal, oculte-o
@@ -143,15 +143,15 @@ function exibirConsumos() {
         })
 }
 
-function fecharModal(){
+function fecharModal() {
     modal.style.display = 'none';
 }
 
-function resetaConteudoModal(){
-    conteudoModal.innerHTML= `
+function resetaConteudoModal() {
+    conteudoModal.innerHTML = `
         <span onclick="fecharModal()" class="close">&times;</span>
     `;
-    
+
 }
 
 function exibirItensConsumidos(consumoId) {
@@ -161,13 +161,13 @@ function exibirItensConsumidos(consumoId) {
     conteudoModal = document.getElementById("modalContent");
     resetaConteudoModal();
     modal.style.display = 'block';//exibe modal
-    modal.innerHTML= "";
+    modal.innerHTML = "";
 
     let container = document.createElement('div');
-    container.className= 'divTabela';
+    container.className = 'divTabela';
 
     let tabela = document.createElement('table');
-    tabela.className= 'tabItCons';
+    tabela.className = 'tabItCons';
 
     let cabecalho = document.createElement('thead');
     cabecalho.innerHTML = `
@@ -177,7 +177,7 @@ function exibirItensConsumidos(consumoId) {
             <th>Quantidade utilizada</th>
         </tr>
     `;
-    cabecalho.className= 'cabecalhoItCons';
+    cabecalho.className = 'cabecalhoItCons';
     tabela.appendChild(cabecalho);
 
     let corpo = document.createElement('tbody');
@@ -190,7 +190,7 @@ function exibirItensConsumidos(consumoId) {
             <td>${itCons.qtdeConteudoUtilizado}</td>
         `;
         linha.style.border = '1px solid';
-        linha.className= 'linhaItCons';
+        linha.className = 'linhaItCons';
         corpo.appendChild(linha);
     }
     tabela.appendChild(corpo);
@@ -199,8 +199,24 @@ function exibirItensConsumidos(consumoId) {
     modal.appendChild(conteudoModal);
 }
 
-function excluirConsumo() {
-    fetch(urlBase + "/")
+function excluirConsumo(idConsumo) {
+    fetch(urlBase + "/consumo", {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({idConsumo})
+    })
+    .then((resposta)=>{
+        return resposta.json();
+    })
+    .then((dados)=>{
+        exibirMensagem(dados.mensagem, 'ok');
+        exibirConsumos();
+    })
+    .catch((erro)=>{
+        exibirMensagem(erro);
+    });
 }
 
 
