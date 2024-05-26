@@ -1,0 +1,47 @@
+.baixa-container {
+    text-align: center;
+    margin: 20px auto;
+    width: 80%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Centralizar o cabeçalho da baixa */
+.baixa-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Centralizar a tabela dentro do container */
+.baixa-items {
+    display: none;
+    justify-content: center;
+}
+
+/* Centralizar o texto dentro da tabela */
+.baixa-items table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+/* Estilo para as células da tabela */
+.baixa-items th, .baixa-items td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Cabeçalho da tabela */
+.baixa-items th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.title {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
