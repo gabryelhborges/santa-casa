@@ -75,6 +75,7 @@ var listaLotes = [];
 var funcBaixa;
 var listaUni = [];
 var listaMt = [];
+var listaPd = [];
 
 procuraFuncionario();
 adicionarUnidade();
@@ -179,7 +180,7 @@ function adicionarItemBaixa() {
         }
         limparFormItemBaixa();
         exibirListaItensBaixa();
-        adicionarUnidade();
+        //adicionarUnidade();
         adicionarMotivos();
         
     }
@@ -303,6 +304,7 @@ function carregaProdutos() {
             if (json.status) {
                 divTabProduto.innerHTML = "";
                 listaProdutos = json.listaProdutos;
+                listaPd = [];
                 if (Array.isArray(listaProdutos)) {
                     if (listaProdutos.length > 0) {
                         let tabela = document.createElement('table');
@@ -324,6 +326,8 @@ function carregaProdutos() {
                         for (let i = 0; i < listaProdutos.length; i++) {
                             let linha = document.createElement('tr');
                             let produto = listaProdutos[i];
+                            let ObjPd = new Produto(produto.prod_ID, produto.fabricante, produto.nome, produto.psicotropico, produto.valor_custo, produto.nomeFar, produto.observacao, produto.descricao_uso, produto.tipo, produto.unidade)
+                            listaPd.push(ObjPd);
                             linha.innerHTML = `
                         <td>${produto.nome}</td>
                         <td>${produto.fabricante.f_nome}</td>
@@ -360,9 +364,15 @@ function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico,
     document.getElementById('nomeProduto').value = nome;
     document.getElementById('qtde').focus();
     adicionarLote(prod_ID);
-    adicionarUnidade();
+    // Chama a atualização de unidade diretamente após adicionar os lotes
+    atualizarUnidade();
     adicionarMotivos();
 }
+
+function controleQuantidade(){
+
+}
+
 
 function adicionarLote(produto) {
     fetch(urlBase + "/lote" + "?" + "produto=" + produto, {
@@ -376,22 +386,28 @@ function adicionarLote(produto) {
             selectLote.innerHTML = "";
             selectLote.value = "";
             selectLote.text = "";
+
             let listaLot = json.listaLotes;
             if (Array.isArray(listaLot)) {
                 for (let i = 0; i < listaLot.length; i++) {
                     let lote = listaLot[i];
                     let objLote = new Lote(lote.codigo, formataData(lote.data_validade), lote.quantidade, lote.produto, lote.formaFarmaceutica, lote.conteudo_frasco, lote.unidade, lote.total_conteudo);
+                    
                     let optionLote = document.createElement("option");
                     optionLote.value = objLote.codigo;
-                    optionLote.text = objLote.codigo + "/" + objLote.produto.prod_ID;
+                    optionLote.text = objLote.codigo;
                     listaLotes.push(objLote);
                     selectLote.appendChild(optionLote);
+
                     if (!i) {
                         qtdeTotalLoteSelecionado = objLote.total_conteudo;
                         document.getElementById("dataVencimento").value = formataData(objLote.data_validade);
                     }
                 };
             }
+
+            // Atualiza a unidade após carregar os lotes
+            atualizarUnidade();
         });
 }
 
@@ -403,20 +419,12 @@ function adicionarUnidade() {
     })
         .then((json) => {
             listaUni = [];
-            let selectUnidade = document.getElementById("unidade");
-            selectUnidade.innerHTML = "";
-            selectUnidade.value = "";
-            selectUnidade.text = "";
             let listaUn = json.listaUnidades;
             if (Array.isArray(listaUn)) {
                 for (let i = 0; i < listaUn.length; i++) {
                     let un = listaUn[i];
                     let objUn = new Unidade(un.un_cod, un.unidade);
-                    let optionUnidade = document.createElement("option");
-                    optionUnidade.value = objUn.un_cod;
-                    optionUnidade.text = objUn.unidade;
                     listaUni.push(objUn);
-                    selectUnidade.appendChild(optionUnidade);
                 };
             }
         });
@@ -511,6 +519,83 @@ function exibirMensagem(mensagem, estilo) {
         elemMensagem.innerHTML = '';
     }, 7000);//7 Segundos
 }
+
+function atualizarUnidade() {
+    let codLote = document.getElementById('lote').value;
+    let codProd = document.getElementById('produto').value;
+    let objLote = listaLotes.find(item => item.codigo === codLote && item.produto.prod_ID == codProd);
+    
+    if (objLote) {
+        document.getElementById('dataVencimento').value = formataData(objLote.data_validade);
+        qtdeTotalLoteSelecionado = objLote.total_conteudo;
+
+        let selectUnidade = document.getElementById("unidade");
+        selectUnidade.innerHTML = ""; // Limpa as unidades antes de adicionar novas
+
+        // Adicionar unidade do produto
+        let produtoObj = listaProdutos.find(prod => prod.prod_ID == codProd);
+        if (produtoObj) {
+            let optionUniProd = document.createElement("option");
+            optionUniProd.value = produtoObj.unidade.un_cod;
+            optionUniProd.text = produtoObj.unidade.unidade;
+            selectUnidade.appendChild(optionUniProd);
+        }
+
+        // Adicionar unidade do lote selecionado
+        if (objLote) {
+            // Adicionar opções adicionais com base na unidade do lote
+            if (objLote.unidade.un_cod == 2) { // Se a unidade do lote for Frasco
+                let optionFrasco = document.createElement("option");
+                optionFrasco.value = 4;
+                optionFrasco.text = "Frasco";
+                selectUnidade.appendChild(optionFrasco);
+            } else if (objLote.unidade.un_cod == 1) { // Se a unidade do lote for Caixa
+                let optionCaixa = document.createElement("option");
+                optionCaixa.value = 3;
+                optionCaixa.text = "Caixa";
+                selectUnidade.appendChild(optionCaixa);
+            }
+        }
+    }
+}
+
+
+document.getElementById("lote").addEventListener("change", function () {
+    let codLote = document.getElementById('lote').value;
+    let codProd = document.getElementById('produto').value;
+    let objLote = listaLotes.find(item => item.codigo === codLote && item.produto.prod_ID == codProd);
+    document.getElementById('dataVencimento').value = formataData(objLote.data_validade);
+    qtdeTotalLoteSelecionado = objLote.total_conteudo;
+
+    // Atualizar unidade do lote selecionado
+    let selectUnidade = document.getElementById("unidade");
+    selectUnidade.innerHTML = ""; // Limpa as unidades antes de adicionar novas
+
+    // Adicionar unidade do produto
+    let produtoObj = listaProdutos.find(prod => prod.prod_ID == codProd);
+    if (produtoObj) {
+        let optionUniProd = document.createElement("option");
+        optionUniProd.value = produtoObj.unidade.un_cod;
+        optionUniProd.text = produtoObj.unidade.unidade;
+        selectUnidade.appendChild(optionUniProd);
+    }
+
+    // Adicionar unidade do lote selecionado
+    if (objLote) {
+         // Adicionar opções adicionais com base na unidade do lote
+         if (objLote.unidade.un_cod == 2) { // Se a unidade do lote for Frasco
+            let optionFrasco = document.createElement("option");
+            optionFrasco.value = 4;
+            optionFrasco.text = "Frasco";
+            selectUnidade.appendChild(optionFrasco);
+        } else if (objLote.unidade.un_cod == 1) { // Se a unidade do lote for Caixa
+            let optionCaixa = document.createElement("option");
+            optionCaixa.value = 3;
+            optionCaixa.text = "Caixa";
+            selectUnidade.appendChild(optionCaixa);
+        }
+    }
+});
 
 
 function controlaQtde(){
