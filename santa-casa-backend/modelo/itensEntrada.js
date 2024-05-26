@@ -51,7 +51,7 @@ export default class ItensEntrada{
         await itensEnradaDAO.excluir(this, conexao);
     }
 
-    async consultar(conexao){
+    async consultar(termo, conexao){
         const itensEnradaDAO = new ItensEntradaDAO();
         return await itensEnradaDAO.consultar(this, conexao);
     } 

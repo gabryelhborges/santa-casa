@@ -108,6 +108,31 @@ export default class EntradaCtrl{
     }
 
     async consultar(requisicao,resposta){
-        
+        resposta.type('application/json'); 
+        let termo = requisicao.params.termo;
+        if(!termo){
+            termo="";
+        }
+        if(requisicao.method === "GET"){
+            const entrada = new Entrada();
+            const conexao = await conectar();
+            entrada.consultar(termo,conexao).then((listaEntradas)=>{
+                resposta.status(200).json({
+                    "status": true,
+                    "listaEntradas": listaEntradas
+                });
+            }).catch((erro)=>{
+                resposta.status(500).json({
+                    "status": false,
+                    "mensagem": "Erro ao consultar entrada: " + erro.message
+                });
+            });
+        }
+        else{
+            resposta.status(400).json({
+                "status": false,
+                "mensagem": "Utilize o método GET para consultar algum entrada!"
+            });
+        }
     }
 }
