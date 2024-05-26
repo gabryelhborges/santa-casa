@@ -17,11 +17,10 @@ export default class LoteCtrl{
             const total_conteudo = dados.total_conteudo;
             const local = dados.local;
 
-            if(
-            codigo && data_validade && quantidade 
+            if( codigo && data_validade && quantidade 
             && produto && formaFarmaceutica && conteudo_frasco
-            && unidade  && total_conteudo &&  local
-            ) {  
+            && unidade  && total_conteudo &&  local ) 
+            {  
                 const lote = new Lote( codigo, data_validade, quantidade, 
                 produto, formaFarmaceutica, conteudo_frasco, 
                 unidade , total_conteudo, local);

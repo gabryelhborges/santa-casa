@@ -57,9 +57,9 @@ export default class ItensBaixaDAO{
         for(const registro of registros){
             let baixa = new baixa(registro.ib_idProduto);
             /*
-            Ta entrando em loop
-            await baixa.consultar(registro.ic_cons_id, conexao).then((listaCons)=>{
-                baixa = listaCons.pop();
+            Ta entrando em loop infinito
+            await baixa.consultar(registro.baixa.idBaixa, conexao).then((listaBaixa)=>{
+                baixa = listaBaixa.pop();
             });
             */
             let motivo = new Motivo(registro.ib_idMotivo);
