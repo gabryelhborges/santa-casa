@@ -1,4 +1,5 @@
-
+import Entrada from "../modelo/entrada.js";
+import Funcionario from "../modelo/funcionario.js";
 
 export  default class EntradaDAO {
     async gravar(entrada,conexao){
@@ -34,8 +35,20 @@ export  default class EntradaDAO {
                 termo = "";
             }
             sql = `SELECT * FROM entrada WHERE data_entrada like ? ORDER BY  data_entrada ASC`;
-            parametros = ['%'+termo+'%'];
+            parametros = ['%'+ termo +'%'];
         }
-        
+        const [registros, campos]= await conexao.execute(sql, parametros);
+        let listaEntradas = [];
+        for(const registro of registros){
+            let funcionario = new Funcionario();
+            await funcionario.consultar(registro.cons_func_id).then((listaFunc)=>{
+                funcionario = listaFunc.pop();
+            });
+
+            let entrada = new Entrada(registro.entrada_id, funcionario,registro.data_entrada);
+
+            listaEntradas.push(entrada);
+        }
+        return listaEntradas;
     }
 }
