@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const urlBase = 'http://localhost:4040';
 var listaBx = [];
-var listaItBx = [];
 
 function addListaBaixa() {
     fetch(urlBase + "/baixa", {
@@ -82,20 +81,26 @@ function renderBaixas(listaBx) {
 
 function toggleItems(id) {
     const items = document.getElementById(`items-${id}`);
-    if (items.style.display === "none" || items.style.display === "") {
-        items.style.display = "block";
+    if (items.style.maxHeight) {
+        items.style.maxHeight = null;
     } else {
-        items.style.display = "none";
+        items.style.maxHeight = items.scrollHeight + "px";
     }
 }
 
 function applyFilters() {
-    const dateFilter = document.getElementById('filter-date').value;
+    const dateStartFilter = document.getElementById('filter-date-start').value;
+    const dateEndFilter = document.getElementById('filter-date-end').value;
     const productFilter = document.getElementById('filter-product').value.toLowerCase();
     const lotFilter = document.getElementById('filter-lote').value.toLowerCase();
 
     const filteredBaixas = listaBx.filter(baixa => {
-        const matchDate = dateFilter ? new Date(baixa.dataBaixa).toLocaleDateString() === new Date(dateFilter).toLocaleDateString() : true;
+        const dataBaixa = new Date(baixa.dataBaixa);
+        const dataBaixaLocal = new Date(dataBaixa.getTime() - dataBaixa.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+        
+        const matchDate = dateStartFilter ? 
+            (dateEndFilter ? dataBaixaLocal >= dateStartFilter && dataBaixaLocal <= dateEndFilter : dataBaixaLocal === dateStartFilter)
+            : true;
         const matchProduct = productFilter ? baixa.itensBaixa.some(item => item.produto.nome.toLowerCase().includes(productFilter)) : true;
         const matchLot = lotFilter ? baixa.itensBaixa.some(item => item.lote.codigo.toLowerCase().includes(lotFilter)) : true;
 
