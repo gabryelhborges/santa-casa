@@ -1,62 +1,62 @@
 import TransferenciaDAO from "../persistencia/transferenciaDAO.js";
 
 export default class Transferencia{
-    #itf_transf_id;
-    #itf_lote_cod;
-    #itf_qtdetransferida;
-    #itf_unidade;
-    #itf_origem;
-    #itf_destino;
+    #tf_id;
+    #tf_data;
+    #func_id;
+    #tf_origem;
+    #tf_destino;
+    #itensTransferencia;
 
-    constructor(itf_transf_id, itf_lote_cod, itf_qtdetransferida, itf_unidade, itf_origem, itf_destino){
-        this.#itf_transf_id=itf_transf_id;
-        this.#itf_lote_cod=itf_lote_cod;
-        this.#itf_qtdetransferida=itf_qtdetransferida;
-        this.#itf_unidade = itf_unidade;
-        this.#itf_origem = itf_origem;
-        this.#itf_destino = itf_destino;
+    constructor(tf_id, tf_data, func_id, tf_origem, tf_destino,itensTransferencia){
+        this.#tf_id=tf_id;
+        this.#tf_data=tf_data;
+        this.#func_id=func_id;
+        this.#tf_origem = tf_origem;
+        this.#tf_destino = tf_destino;
+        this.#itensTransferencia = itensTransferencia;
     }
     
-    get itf_transf_id(){
-        return this.#itf_transf_id;
+    get tf_id(){
+        return this.#tf_id;
     }
-    set itf_transf_id(novo){
-        this.#itf_transf_id=novo;
-    }
-
-    get itf_lote_cod(){
-        return this.#itf_lote_cod;
-    }
-    set itf_lote_cod(novo){
-        this.#itf_lote_cod = novo;
+    set tf_id(novo){
+        this.#tf_id=novo;
     }
 
-    get itf_qtdetransferida(){
-        return this.#itf_qtdetransferida;
+    get tf_data(){
+        return this.#tf_data;
     }
-    set itf_qtdetransferida(novo){
-        this.#itf_qtdetransferida = novo;
-    }
-
-    get itf_unidade(){
-        return this.#itf_unidade;
-    }
-    set itf_unidade(novo){
-        this.#itf_unidade = novo;
+    set tf_data(novo){
+        this.#tf_data = novo;
     }
 
-    get itf_origem(){
-        return this.#itf_origem;
+    get func_id(){
+        return this.#func_id;
     }
-    set itf_origem(novo){
-        this.#itf_origem = novo;
+    set func_id(novo){
+        this.#func_id = novo;
+    }
+
+    get tf_origem(){
+        return this.#tf_origem;
+    }
+    set tf_origem(novo){
+        this.#tf_origem = novo;
     }
     
-    get itf_destino(){
-        return this.#itf_destino;
+    get tf_destino(){
+        return this.#tf_destino;
     }
-    set itf_destino(novo){
-        this.#itf_destino = novo;
+    set tf_destino(novo){
+        this.#tf_destino = novo;
+    }
+
+    get itensTransferencia(){
+        return this.#itensTransferencia;
+    }
+    set itensTransferencia(novo){
+        this.#itensTransferencia = novo;itensTransferencia
     }
 
     toString(){
@@ -64,22 +64,18 @@ export default class Transferencia{
     }
     toJSON(){
         return{
-            itf_transf_id: this.#itf_transf_id,
-            itf_lote_cod: this.#itf_lote_cod,
-            itf_qtdetransferida: this.#itf_qtdetransferida,
-            itf_unidade: this.#itf_unidade,
-            itf_origem: this.#itf_origem,
-            itf_destino: this.#itf_destino
+            tf_id: this.#tf_id,
+            tf_data: this.#tf_data,
+            func_id: this.#func_id,
+            itf_origem: this.#tf_origem,
+            itf_destino: this.#tf_destino,
+            itensTransferencia: this.#itensTransferencia
         }
     }
 
     async gravar(conexao){
         const itfDAO = new TransferenciaDAO();
         await itfDAO.gravar(this,conexao);
-    }
-    async atualizar(conexao){
-        const itfDAO = new TransferenciaDAO();
-        await itfDAO.atualizar(this,conexao);
     }
     async excluir(conexao){
         const itfDAO = new TransferenciaDAO();
