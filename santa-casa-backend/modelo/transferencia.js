@@ -8,7 +8,7 @@ export default class Transferencia{
     #tf_destino;
     #itensTransferencia;
 
-    constructor(tf_id, tf_data, func_id, tf_origem, tf_destino,itensTransferencia){
+    constructor(tf_id = 0, tf_data = "", func_id = null, tf_origem = null, tf_destino = null,itensTransferencia = []){
         this.#tf_id=tf_id;
         this.#tf_data=tf_data;
         this.#func_id=func_id;
@@ -56,7 +56,7 @@ export default class Transferencia{
         return this.#itensTransferencia;
     }
     set itensTransferencia(novo){
-        this.#itensTransferencia = novo;itensTransferencia
+        this.#itensTransferencia = novo;
     }
 
     toString(){

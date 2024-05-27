@@ -6,6 +6,7 @@ var listaLot = [];
 var listaFab = [];
 var listaLocais = [];
 var ORIG;
+var DEST;
 var valormedida;
 pesquisa.reset();
 pesquisa.onsubmit = PesquisaProd;
@@ -21,6 +22,7 @@ function limparFormulario(){
     document.getElementById("selectOrigem").disabled = false;
     document.getElementById('selectFabricante').value = "";
     document.getElementById('selectDestino').value = "";
+    document.getElementById("selectDestino").disabled = false;
     document.getElementById('iProd').value = "";
     document.getElementById('iLote').value = "";
     document.getElementById('iData').value = "";
@@ -210,10 +212,12 @@ function criarLimpar(){
 document.getElementById("selectOrigem").addEventListener("change", function(){
     ORIG = document.getElementById("selectOrigem").value;
     document.getElementById("selectOrigem").disabled = true;
-})
-document.getElementById("selectDestino").addEventListener("Change", function(){
-    //this.classList.add('readonly');
-})
+});
+
+document.getElementById("selectDestino").addEventListener("change", function(){
+    DEST = document.getElementById("selectDestino").value;
+    document.getElementById("selectDestino").disabled = true;
+});
 
 document.getElementById("iLote").addEventListener("change", function() {
     if(this.value){                                                                                                         
@@ -298,7 +302,7 @@ function adicionarItemTransf() {
     let codLote = val.parte1;
     let codProd = document.getElementById('codProd').value;
     let loc = ORIG;
-    let dest = document.getElementById('selectDestino').value;
+    let dest = DEST;
     if(loc != "" && dest!=""){
         let objLote = listaLot.find(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd && itemLote.local.loc_id == loc);
         let objProd;

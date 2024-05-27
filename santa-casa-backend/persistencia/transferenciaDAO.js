@@ -46,7 +46,7 @@ export default class TransferenciaDAO{
                 origem = listaOr.pop();
             });
             let destino = new Loc();
-            await origem.consultar(registro.tf_origem).then((listaDest)=>{
+            await destino.consultar(registro.tf_destino).then((listaDest)=>{
                 destino = listaDest.pop();
             });
 

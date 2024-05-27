@@ -7,97 +7,87 @@ import Loc from "../modelo/local.js";
 import Singleton from "../implementacoesEngSoftware/singleton.js";
 import DB from "../persistencia/db.js";
 
-export default class ConsumoCtrl{
+export default class TransferenciaCtrl{
     s = Singleton.getInstance();
 
-    async gravar(requisicao,resposta){
+    async gravar(requisicao, resposta) {
         resposta.type('application/json');
-        if(requisicao.method === "POST" && requisicao.is("application/json")){
+        if (requisicao.method === "POST" && requisicao.is("application/json")) {
             const dados = requisicao.body;
             const funcionario = new Funcionario(1);
             const dataTransferencia = dados.dataTransferencia;
             const origem = new Loc(dados.origem);
             const destino = new Loc(dados.destino);
-            const itensTransferencia = new ItensTransferencia = dados.itensTransferencia;
-            if(funcionario instanceof Funcionario && origem instanceof Loc && destino instanceof Loc && itensTransferencia.length > 0){
-                const transf = new Transferencia(0,dataTransferencia,funcionario,origem,destino,itensTransferencia);
+            const itensTransferencia = dados.itensTransferencia.map(item => new ItensTransferencia(item.produto, item.lote, item.quantidade));
+            
+            if (funcionario instanceof Funcionario && origem instanceof Loc && destino instanceof Loc && itensTransferencia.length > 0) {
+                const transf = new Transferencia(0, dataTransferencia, funcionario, origem, destino, itensTransferencia);
                 const conexao = await DB.conectar();
-                try{
+                try {
                     await conexao.beginTransaction();
-                    transf.gravar(conexao).then(async ()=>{
-                        let atualizou = 1;
-                        let gravou2 = 1;
-                        let i = 0;
-                        while (gravou2 && atualizou && i< itensTransferencia.length){
-                            const item = itensTransferencia[i];
-                            let itemTransferencia = new ItensTransferencia(transf, item.produto, item.lote, item.quantidade);
-                            await itemTransferencia.gravar(conexao).catch(()=>{
-                                gravou2=0;
+                    await transf.gravar(conexao);
+                    let atualizou = true;
+                    let gravou2 = true;
+                    let i = 0;
+                    while (gravou2 && atualizou && i < itensTransferencia.length) {
+                        const item = itensTransferencia[i];
+                        let itemTransferencia = new ItensTransferencia(transf, item.produto, item.lote, item.quantidade);
+                        await itemTransferencia.gravar(conexao).catch(() => {
+                            gravou2 = false;
+                        });
+                        if (gravou2) {
+                            let lote1 = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto, item.lote.formaFarmaceutica, item.lote.conteudo_frasco, item.lote.unidade, item.lote.total_conteudo, origem);
+                            await lote1.consultar().then((listaLote) => {
+                                lote1 = listaLote.pop();
                             });
-                            if(gravou2){
-                                let lote1 = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto, item.lote.formaFarmaceutica, item.lote.conteudo_frasco, item.lote.unidade, item.lote.total_conteudo, origem);
-                                await lote1.consultar().then((listaLote)=>{
-                                    lote1 = listaLote.pop();
-                                });
-                                lote1.total_conteudo = lote1.total_conteudo - item.quantidade;
-                                lote1.atualizar().catch((erro)=>{
-                                    atualizou = 0;
-                                });
-                                let lote2 = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto, item.lote.formaFarmaceutica, item.lote.conteudo_frasco, item.lote.unidade, item.lote.total_conteudo, destino);
-                                let loteExiste = await lote2.consultar().then((listaLote) => listaLote.pop());
+                            lote1.total_conteudo = lote1.total_conteudo - item.quantidade;
+                            await lote1.atualizar().catch((erro) => {
+                                atualizou = false;
+                            });
+                            let lote2 = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto, item.lote.formaFarmaceutica, item.lote.conteudo_frasco, item.lote.unidade, item.lote.total_conteudo, destino);
+                            let loteExiste = await lote2.consultar().then((listaLote) => listaLote.pop());
 
-                                if (loteExiste) {
-                                    loteExiste.total_conteudo = loteExiste.total_conteudo + item.quantidade;
-                                    await loteExiste.atualizar().catch((erro) => {
-                                        atualizou = false;
-                                    });
-                                } else {
-                                    lote2.total_conteudo = item.quantidade;
-                                    await lote2.gravar(conexao).catch((erro) => {
-                                        gravou2 = false;
-                                    });
-                                }
-                            }
-                            i++;
-                        }
-                        if(!gravou2 || !atualizou){
-                            if(!gravou2){
-                                throw new Error("Erro de transação. Houve um erro ao cadastrar os itens da transferencia.");
-                            }
-                            else{
-                                throw new Error("Erro de transação. Houve um erro ao atualizar os lotes da transferencia.");
+                            if (loteExiste) {
+                                loteExiste.total_conteudo = loteExiste.total_conteudo + item.quantidade;
+                                await loteExiste.atualizar().catch((erro) => {
+                                    atualizou = false;
+                                });
+                            } else {
+                                lote2.total_conteudo = item.quantidade;
+                                await lote2.gravar(conexao).catch((erro) => {
+                                    gravou2 = false;
+                                });
                             }
                         }
-                        await conexao.commit();
-                        resposta.status(200).json({
-                            "status":true,
-                            "codigoGerado": transf.tf_id,
-                            "mensagem": "Transferencia cadastrada com sucesso!"
-                        });
-                    }).catch(async (erro)=>{
-                        await conexao.rollback();
-                        resposta.status(500).json({
-                            "status":false,
-                            "mensagem":"Houve um erro ao cadastrar um consumo: " + erro.message
-                        });
+                        i++;
+                    }
+                    if (!gravou2 || !atualizou) {
+                        if (!gravou2) {
+                            throw new Error("Erro de transação. Houve um erro ao cadastrar os itens da transferencia.");
+                        } else {
+                            throw new Error("Erro de transação. Houve um erro ao atualizar os lotes da transferencia.");
+                        }
+                    }
+                    await conexao.commit();
+                    resposta.status(200).json({
+                        "status": true,
+                        "codigoGerado": transf.tf_id,
+                        "mensagem": "Transferencia cadastrada com sucesso!"
                     });
-                }
-                catch(erro){
+                } catch (erro) {
                     await conexao.rollback();
                     resposta.status(500).json({
-                        "status":false,
-                        "mensagem":"Houve um erro de transação, todas as alterações foram desfeitas. Erro: "+erro
+                        "status": false,
+                        "mensagem": "Houve um erro ao cadastrar um consumo: " + erro.message
                     });
-                }
-                finally{
+                } finally {
                     conexao.release();
                 }
             }
-        }
-        else{
+        } else {
             resposta.status(400).json({
-                "status":false,
-                "mensagem":"Utilize o método POST para cadastrar uma nova transferência!"
+                "status": false,
+                "mensagem": "Utilize o método POST para cadastrar uma nova transferência!"
             });
         }
     }
