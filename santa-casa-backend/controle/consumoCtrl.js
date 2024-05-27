@@ -6,6 +6,7 @@ import Lote from "../modelo/lote.js";
 import Loc from "../modelo/local.js";
 import Singleton from "../implementacoesEngSoftware/singleton.js";
 import DB from "../persistencia/db.js";
+import Produto from "../modelo/produto.js";
 
 export default class ConsumoCtrl {
     //variável statica dela mesma
@@ -126,15 +127,15 @@ export default class ConsumoCtrl {
                             while (i < listaItCons.length && atualizou) {
                                 let itCons = listaItCons[i];
                                 let lote = itCons.lote;
-                                lote.total_conteudo= lote.total_conteudo + itCons.qtdeConteudoUtilizado;
-                                lote.atualizar().catch(erro =>{
-                                    atualizou= 0;
+                                lote.total_conteudo = lote.total_conteudo + itCons.qtdeConteudoUtilizado;
+                                lote.atualizar().catch(erro => {
+                                    atualizou = 0;
                                     console.log(erro);
                                 });
                                 i++;
                             }
 
-                            if(!atualizou){
+                            if (!atualizou) {
                                 throw new Error("Não foi possível atualizar algum lote.")
                             }
 
@@ -184,14 +185,16 @@ export default class ConsumoCtrl {
 
     async consultar(requisicao, resposta) {
         resposta.type('application/json');
-        let termo = requisicao.params.termo;
-        if (!termo) {
-            termo = "";
-        }
+        const dados = requisicao.query; // Usando query em vez de body
+        let pac;
+        let dataConsumo = dados.dataConsumo;
+        let nomePac = dados.nomePaciente;
+        nomePac ? pac = new Paciente(0, "", nomePac) : pac = null;
+
         if (requisicao.method === "GET") {
-            const cons = new Consumo();
+            const cons = new Consumo(0, pac, null, null, [], dataConsumo);
             const conexao = await DB.conectar();
-            cons.consultar(termo, conexao).then((listaConsumos) => {
+            cons.consultar(conexao).then((listaConsumos) => {
                 resposta.status(200).json({
                     "status": true,
                     "listaConsumos": listaConsumos
@@ -200,12 +203,43 @@ export default class ConsumoCtrl {
                 .catch((erro) => {
                     resposta.status(500).json({
                         "status": false,
-                        "mensagem": "Ocorreu um erro ao consultar os consumos: " + erro.message// + "         Stack:" + erro.stack
+                        "mensagem": "Ocorreu um erro ao consultar os consumos: " + erro.message
                     });
                 });
             conexao.release();
+        } else {
+            resposta.status(400).json({
+                "status": false,
+                "mensagem": "Utilize o método GET para consultar um consumo!"
+            });
         }
-        else {
+    }
+
+    async relatorioProdutosConsumidos(requisicao, resposta) {
+        resposta.type('application/json');
+        const dados = requisicao.query;
+
+        let prod;
+        let nomeProd= dados.nomeProduto;
+        nomeProd ? prod = new Produto(0, null, nomeProd) : prod = null;
+
+        if (requisicao.method === "GET") {
+            const itCons = new ItensConsumo(null, null, prod);
+            const conexao = await DB.conectar();
+            itCons.relatorioProdutosConsumidos(conexao).then((listaConsumos) => {
+                resposta.status(200).json({
+                    "status": true,
+                    "listaConsumos": listaConsumos
+                });
+            })
+                .catch((erro) => {
+                    resposta.status(500).json({
+                        "status": false,
+                        "mensagem": "Ocorreu um erro ao consultar os consumos: " + erro.message
+                    });
+                });
+            conexao.release();
+        } else {
             resposta.status(400).json({
                 "status": false,
                 "mensagem": "Utilize o método GET para consultar um consumo!"

@@ -1,36 +1,33 @@
 /*
-create table consumo(
-    cons_id integer not null auto_increment,
-    cons_pac_id integer not null,
-    cons_func_id integer not null,
-    cons_loc_id integer not null,
-    cons_dataConsumo datetime DEFAULT CURRENT_TIMESTAMP,
-    constraint pk_cons_id primary key (cons_id),
-    constraint fk_cons_pac_id foreign key (cons_pac_id) references Pacientes(id_paciente),
-    constraint fk_cons_func_id foreign key (cons_func_id) references Funcionarios(idFuncionario),
-    constraint fk_cons_loc_id foreign key (cons_loc_id) references Loc(loc_id)
-);
-
-create table itensConsumo(
-    ic_cons_id integer not null,
-    ic_lote_codigo varchar(15) not null,
-    ic_prod_id integer not null,
-    ic_qtdeConteudoUtilizado integer not null,
-    constraint pk_ic primary key (ic_cons_id, ic_lote_codigo, ic_prod_id),
-    constraint fk_ic_cons_id foreign key (ic_cons_id) references Consumo(cons_id) ON DELETE CASCADE,
-    constraint fk_ic_lote_codigo_e_produto_id foreign key (ic_lote_codigo, ic_prod_id) references Lote(codigo, produto_prod_ID)
-);
-*/
-
-/*
     - Relatorio 1: filtrar por paciente mostrar cada consumo com seus itensConsumidos
     - Relatorio 2: Filtrar por produto mostrando a quantidade total consumida (sql sum)
 */
+
+var jsonConsumoInicial = {
+    idConsumo: 0,
+    paciente: {},
+    funcionario: {},
+    itensConsumo: [],
+    local: {},
+    dataConsumo: ""
+};
 
 var varListaCons = [];
 var modal = document.getElementById('myModal');
 var openModalBtn = document.getElementById('openModalBtn');
 var closeModalBtn = document.getElementsByClassName('close')[0];
+
+var divPesquisaRelatorioPaciente = document.getElementById("div-pesquisa-relatorio-paciente");
+var divPesquisaRelatorioConsumo = document.getElementById("div-pesquisa-relatorio-consumo");
+var divPesquisaRelatorioProduto = document.getElementById("div-pesquisa-relatorio-produto");
+
+divPesquisaRelatorioConsumo.style.display = "none";
+divPesquisaRelatorioPaciente.style.display = "none";
+divPesquisaRelatorioProduto.style.display = "none";
+
+divPesquisaRelatorioConsumo.style.display = "flex";
+divPesquisaRelatorioPaciente.style.display = "flex";
+divPesquisaRelatorioProduto.style.display = "flex";
 
 // Quando o usuário clicar no botão, exiba o modal
 /*
@@ -54,42 +51,67 @@ const urlBase = 'http://localhost:4040';
 
 exibirConsumos();
 
+
+
+
+
+
+
+
 function exibirConsumos() {
-    let pesquisa = "";
-    fetch(urlBase + '/consumo' + '/' + pesquisa, {
-        method: "GET"
+    divPesquisaRelatorioPaciente.style.display = "none";
+    divPesquisaRelatorioProduto.style.display = "none";
+
+    divPesquisaRelatorioConsumo.style.display = "flex";
+
+    let pesquisa = document.getElementById("pesquisaConsumo").value;
+    const regexData = /^(\d{2})[-\/](\d{2})[-\/](\d{4})$/;
+
+    let queryParams = [];
+    if (pesquisa) {
+        if (regexData.test(pesquisa)) {
+            queryParams.push(`dataConsumo=${encodeURIComponent(pesquisa)}`);
+        }
+        else {
+            queryParams.push(`nomePaciente=${encodeURIComponent(pesquisa)}`);
+        }
+    }
+    else {
+        pesquisa = "";
+    }
+
+    const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+    fetch(urlBase + '/consumo' + queryString, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
         .then((resposta) => {
             return resposta.json();
         })
         .then((json) => {
-            let divTabConsumo = document.getElementById("tabelaConsumo");
+            let divTabConsumo = document.getElementById("div-tabela-principal");
             if (json.status) {
-                divTabConsumo.innerHTML = "";
                 let listaConsumos = json.listaConsumos;
                 if (Array.isArray(listaConsumos)) {
                     if (listaConsumos.length > 0) {
+                        divTabConsumo.innerHTML = "";
                         let container = document.createElement('div');
-                        container.style.overflowY = 'auto';
-                        container.style.height = '600px'; // Ajuste a altura conforme necessário
-                        container.style.border = '1px solid #ddd';
+                        container.id = "divContainer";
 
                         let tabela = document.createElement('table');
-                        tabela.style.borderCollapse = 'collapse';
-                        tabela.style.width = '1500px';
-                        tabela.style.borderBottom = '1px solid';
+                        tabela.id = "tabela-primaria";
 
                         let cabecalho = document.createElement('thead');
-                        cabecalho.style.borderBottom = '1px solid';
-                        cabecalho.style.position = 'sticky';
-                        cabecalho.style.top = '0';
-                        cabecalho.style.backgroundColor = '#fff';
+                        cabecalho.id = "cabecalho-primario";
                         cabecalho.innerHTML = `
                             <tr>
                                 <th>ID</th>
                                 <th>Nome funcionário</th>
                                 <th>Nome Paciente</th>
-                                <th>CPF Paciente</th>
+                                <th>CPF</th>
                                 <th>Local</th>
                                 <th>Data Consumo</th>
                                 <th>Itens Consumidos</th>
@@ -109,22 +131,31 @@ function exibirConsumos() {
                                 <td>${consumo.paciente.nome}</td>
                                 <td>${consumo.paciente.cpf}</td>
                                 <td>${consumo.local.loc_nome}</td>
-                                <td>${formataDataHora(consumo.dataConsumo)}</td>
-                                <td>
-                                    <button class-"" onclick="exibirItensConsumidos(${consumo.idConsumo})">
-                                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 50 50">
+                                <td class="">${formataDataHora(consumo.dataConsumo)}</td>
+                                <td class="coluna-menor">
+                                    <button class="botaoItCons" onclick="exibirItensConsumidosModal(${consumo.idConsumo})">
+                                        <svg  xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 50 50">
                                             <path d="M 3 9 A 1.0001 1.0001 0 1 0 3 11 L 47 11 A 1.0001 1.0001 0 1 0 47 9 L 3 9 z M 3 24 A 1.0001 1.0001 0 1 0 3 26 L 47 26 A 1.0001 1.0001 0 1 0 47 24 L 3 24 z M 3 39 A 1.0001 1.0001 0 1 0 3 41 L 47 41 A 1.0001 1.0001 0 1 0 47 39 L 3 39 z"></path>
                                         </svg>
                                     </button>
                                 </td>
-                                <td>
-                                    <button class="" onclick="excluirConsumo(${consumo.idConsumo})">
-                                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 64 64">
-                                            <path d="M 28 11 C 26.895 11 26 11.895 26 13 L 26 14 L 13 14 C 11.896 14 11 14.896 11 16 C 11 17.104 11.896 18 13 18 L 14.160156 18 L 16.701172 48.498047 C 16.957172 51.583047 19.585641 54 22.681641 54 L 41.318359 54 C 44.414359 54 47.041828 51.583047 47.298828 48.498047 L 49.839844 18 L 51 18 C 52.104 18 53 17.104 53 16 C 53 14.896 52.104 14 51 14 L 38 14 L 38 13 C 38 11.895 37.105 11 36 11 L 28 11 z M 18.173828 18 L 45.828125 18 L 43.3125 48.166016 C 43.2265 49.194016 42.352313 50 41.320312 50 L 22.681641 50 C 21.648641 50 20.7725 49.194016 20.6875 48.166016 L 18.173828 18 z"></path>
-                                        </svg>
-                                    </button>
-                                </td>
-                            `;
+                                `;
+                            if (ehDataAtual(consumo.dataConsumo)) {
+                                linha.innerHTML += `
+                                        <td class="coluna-menor">
+                                            <button class="botaoExcluir" onclick="excluirConsumo(${consumo.idConsumo})">
+                                                <svg  xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 64 64">
+                                                    <path d="M 28 11 C 26.895 11 26 11.895 26 13 L 26 14 L 13 14 C 11.896 14 11 14.896 11 16 C 11 17.104 11.896 18 13 18 L 14.160156 18 L 16.701172 48.498047 C 16.957172 51.583047 19.585641 54 22.681641 54 L 41.318359 54 C 44.414359 54 47.041828 51.583047 47.298828 48.498047 L 49.839844 18 L 51 18 C 52.104 18 53 17.104 53 16 C 53 14.896 52.104 14 51 14 L 38 14 L 38 13 C 38 11.895 37.105 11 36 11 L 28 11 z M 18.173828 18 L 45.828125 18 L 43.3125 48.166016 C 43.2265 49.194016 42.352313 50 41.320312 50 L 22.681641 50 C 21.648641 50 20.7725 49.194016 20.6875 48.166016 L 18.173828 18 z"></path>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                `;
+                            }
+                            else {
+                                linha.innerHTML += `
+                                    <td></td>
+                                `;
+                            }
                             linha.style.borderBottom = '1px solid';
                             corpo.appendChild(linha);
                         }
@@ -132,12 +163,11 @@ function exibirConsumos() {
                         container.appendChild(tabela);
                         divTabConsumo.appendChild(container);
                     } else {
-                        divTabConsumo.innerHTML = `<div> 
-                                    Não existem consumos com essa descrição
-                                </div>`;
+                        //divTabConsumo.innerHTML = `<div>Não existem consumos com essa descrição</div>`;
                     }
                 }
-            } else {
+            }
+            else {
                 divTabConsumo.innerHTML = "Não foi possível consultar os consumos";
             }
         })
@@ -154,7 +184,7 @@ function resetaConteudoModal() {
 
 }
 
-function exibirItensConsumidos(consumoId) {
+function exibirItensConsumidosModal(consumoId) {
     let cons = varListaCons.find(item => item.idConsumo == consumoId);
     let listaItensConsumidos = cons.itensConsumo;
 
@@ -167,7 +197,7 @@ function exibirItensConsumidos(consumoId) {
     container.className = 'divTabela';
 
     let tabela = document.createElement('table');
-    tabela.className = 'tabItCons';
+    tabela.id = 'tabela-primaria';
 
     let cabecalho = document.createElement('thead');
     cabecalho.innerHTML = `
@@ -187,7 +217,7 @@ function exibirItensConsumidos(consumoId) {
         linha.innerHTML = `
             <td>${itCons.produto.nome}</td>
             <td>${itCons.lote.codigo}</td>
-            <td>${itCons.qtdeConteudoUtilizado}</td>
+            <td>${itCons.qtdeConteudoUtilizado} ${itCons.produto.unidade.unidade}</td>
         `;
         linha.style.border = '1px solid';
         linha.className = 'linhaItCons';
@@ -205,20 +235,28 @@ function excluirConsumo(idConsumo) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({idConsumo})
+        body: JSON.stringify({ idConsumo })
     })
-    .then((resposta)=>{
-        return resposta.json();
-    })
-    .then((dados)=>{
-        exibirMensagem(dados.mensagem, 'ok');
-        exibirConsumos();
-    })
-    .catch((erro)=>{
-        exibirMensagem(erro);
-    });
+        .then((resposta) => {
+            return resposta.json();
+        })
+        .then((dados) => {
+            exibirMensagem(dados.mensagem, 'ok');
+            exibirConsumos();
+        })
+        .catch((erro) => {
+            exibirMensagem(erro);
+        });
 }
 
+function formataData(dataP) {
+    let data = new Date(dataP);
+    let ano = data.getFullYear();
+    let mes = ('0' + (data.getMonth() + 1)).slice(-2);
+    let dia = ('0' + data.getDate()).slice(-2);
+    let dataFormatada = dia + '/' + mes + '/' + ano;
+    return dataFormatada;
+}
 
 function formataDataHora(dataParametro) {
     // Convertendo a string em um objeto Date
@@ -235,83 +273,362 @@ function formataDataHora(dataParametro) {
     let segundos = ('0' + data.getSeconds()).slice(-2);
 
     // Formatando a data e a hora no formato esperado
-    let dataFormatada = ano + '-' + mes + '-' + dia + ' | ' + horas + ':' + minutos + ':' + segundos;
+    let dataFormatada = dia + '/' + mes + '/' + ano + ' | ' + horas + ':' + minutos + ':' + segundos;
 
     // Atribuindo a data e hora formatadas ao campo
     return dataFormatada;
 }
 
-/*
-function exibirConsumos() {
-    let pesquisa = "";
-    fetch(urlBase + '/consumo' + '/' + pesquisa, {
-        method: "GET"
+function ehDataAtual(dataParametro) {
+    // Convertendo a string em um objeto Date
+    formataDataHora(dataParametro);
+    let data = new Date(dataParametro);
+
+    // Obtendo o ano, mês e dia da data fornecida
+    let ano = data.getFullYear();
+    let mes = data.getMonth() + 1; // Adicionando 1 porque os meses são zero indexados
+    let dia = data.getDate();
+
+    // Obtendo o ano, mês e dia da data atual
+    let dataAtual = new Date();
+    let anoAtual = dataAtual.getFullYear();
+    let mesAtual = dataAtual.getMonth() + 1;
+    let diaAtual = dataAtual.getDate();
+
+    // Verificando se a data fornecida é do dia atual
+    return ano === anoAtual && mes === mesAtual && dia === diaAtual;
+}
+
+
+
+
+
+
+
+
+
+function exibirConsumoPorPaciente() {
+    divPesquisaRelatorioConsumo.style.display = "none";
+    divPesquisaRelatorioProduto.style.display = "none";
+
+    divPesquisaRelatorioPaciente.style.display = "flex";
+
+    let pesquisa = document.getElementById("input-pesquisa-relatorio-paciente").value;
+    let queryParams = [];
+    queryParams.push(`nomePaciente=${encodeURIComponent(pesquisa)}`);
+
+    let query = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+    fetch(urlBase + '/consumo' + query, {method: "GET"})
+        .then(resposta => resposta.json())
+        .then(json => {
+            let divTabPrincipal = document.getElementById("div-tabela-principal");
+            if (json.status) {
+                divTabPrincipal.innerHTML = "";
+                let listaConsumos = json.listaConsumos;
+                if (Array.isArray(listaConsumos) && listaConsumos.length > 0) {
+                    let listaPacientesComConsumo = getPacientesComConsumo(listaConsumos);
+                    let tabelaPaciente = criarTabelaPaciente(listaPacientesComConsumo, listaConsumos);
+                    divTabPrincipal.appendChild(tabelaPaciente);
+                }
+                else {
+                    console.log("Não existem consumos");
+                }
+            } 
+            else {
+                divTabPrincipal.innerHTML = "Não foi possível consultar os consumos";
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao consultar os consumos:', error);
+            let divTabPrincipal = document.getElementById("div-tabela-principal");
+            divTabPrincipal.innerHTML = "Erro ao consultar os consumos";
+        });
+}
+
+function getPacientesComConsumo(listaConsumos) {
+    let listaPacientesComConsumo = [];
+    for (let cons of listaConsumos) {
+        if (!listaPacientesComConsumo.find(reg => reg.idPaciente == cons.paciente.idPaciente)) {
+            listaPacientesComConsumo.push(cons.paciente);
+        }
+    }
+    return listaPacientesComConsumo;
+}
+
+
+function criarTabelaPaciente(listaPacientesComConsumo, listaConsumos) {
+    let tabelaPaciente = document.createElement('table');
+    tabelaPaciente.className = 'tabPaciente';
+    let cabecalhoPaciente = document.createElement('thead');
+    cabecalhoPaciente.innerHTML = `
+        <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Data Nascimento</th>
+            <th>Sexo</th>
+        </tr>
+    `;
+    tabelaPaciente.appendChild(cabecalhoPaciente);
+
+    let corpoTabPac = document.createElement('tbody');
+    for (let pac of listaPacientesComConsumo) {
+        let consumosDessePaciente = listaConsumos.filter(c => c.paciente.idPaciente == pac.idPaciente);
+        listaConsumos = listaConsumos.filter(c => c.paciente.idPaciente != pac.idPaciente);
+
+        let linhaPac = document.createElement('tr');
+        linhaPac.innerHTML = `
+            <td>${pac.nome}</td>
+            <td>${pac.cpf}</td>
+            <td>${formataData(pac.data_nascimento)}</td>
+            <td>${pac.sexo}</td>
+        `;
+        corpoTabPac.appendChild(linhaPac);
+
+        let linhaConsumo = document.createElement('tr');
+        let tdTabConsumo = document.createElement('td');
+        tdTabConsumo.colSpan = 4;  // Span across all columns for a better layout
+        tdTabConsumo.appendChild(criarTabelaConsumo(consumosDessePaciente));
+        linhaConsumo.appendChild(tdTabConsumo);
+        corpoTabPac.appendChild(linhaConsumo);
+    }
+    tabelaPaciente.appendChild(corpoTabPac);
+    return tabelaPaciente;
+}
+
+function criarTabelaConsumo(consumosDessePaciente) {
+    let tabelaConsumo = document.createElement('table');
+    tabelaConsumo.classList.add('tabela-aninhada');
+    let cabecalhoConsumo = document.createElement('thead');
+    cabecalhoConsumo.innerHTML = `
+        <tr>
+            <th>Funcionário</th>
+            <th>Local</th>
+            <th>Data e hora consumo</th>
+            <th>Itens Consumidos</th>
+        </tr>
+    `;
+    tabelaConsumo.appendChild(cabecalhoConsumo);
+
+    let corpoTabCons = document.createElement('tbody');
+    for (let consumo of consumosDessePaciente) {
+        let linhaCons = document.createElement('tr');
+        linhaCons.innerHTML = `
+            <td>${consumo.funcionario.nome_funcionario}</td>
+            <td>${consumo.local.loc_nome}</td>
+            <td>${formataDataHora(consumo.dataConsumo)}</td>
+        `;
+        let tdTabItCons = document.createElement('td');
+        tdTabItCons.appendChild(criarTabelaItensConsumo(consumo.itensConsumo));
+        linhaCons.appendChild(tdTabItCons);
+        corpoTabCons.appendChild(linhaCons);
+    }
+    tabelaConsumo.appendChild(corpoTabCons);
+    return tabelaConsumo;
+}
+
+function criarTabelaItensConsumo(itensCons) {
+    let tabelaItCons = document.createElement('table');
+    tabelaItCons.classList.add('tabela-aninhada');
+    let cabecalhoItCons = document.createElement('thead');
+    cabecalhoItCons.innerHTML = `
+        <tr>
+            <th>Produto</th>
+            <th>Lote</th>
+            <th>Quantidade utilizada</th>
+        </tr>
+    `;
+    tabelaItCons.appendChild(cabecalhoItCons);
+
+    let corpoTabItCons = document.createElement('tbody');
+    for (let itemConsumido of itensCons) {
+        let linhaItCons = document.createElement('tr');
+        linhaItCons.innerHTML = `
+            <td>${itemConsumido.produto.nome}</td>
+            <td>${itemConsumido.lote.codigo}</td>
+            <td>${itemConsumido.qtdeConteudoUtilizado} ${itemConsumido.produto.unidade.unidade}</td>
+        `;
+        corpoTabItCons.appendChild(linhaItCons);
+    }
+    tabelaItCons.appendChild(corpoTabItCons);
+    return tabelaItCons;
+}
+
+
+
+
+
+
+
+
+
+
+function exibirConsumoPorProduto() {
+    divPesquisaRelatorioConsumo.style.display = "none";
+    divPesquisaRelatorioPaciente.style.display = "none";
+
+    divPesquisaRelatorioProduto.style.display = "flex";
+
+    let pesquisa = document.getElementById("input-pesquisa-relatorio-produto").value;
+    let queryParams = [];
+    queryParams.push(`nomeProduto=${encodeURIComponent(pesquisa)}`);
+
+    let query = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+    fetch(urlBase + '/consumo/relatorio-produtos-consumidos/' + query, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
         .then((resposta) => {
             return resposta.json();
         })
         .then((json) => {
-            let divTabConsumo = document.getElementById("tabelaConsumo");
+            let divTabConsumo = document.getElementById("div-tabela-principal");
             if (json.status) {
-                divTabConsumo.innerHTML = "";
                 let listaConsumos = json.listaConsumos;
                 if (Array.isArray(listaConsumos)) {
                     if (listaConsumos.length > 0) {
+                        divTabConsumo.innerHTML = "";
+                        let container = document.createElement('div');
+                        container.id = "divContainer";
+
                         let tabela = document.createElement('table');
-                        tabela.style.borderCollapse = 'collapse';
-                        tabela.style.width = '95%';
-                        tabela.style.borderBottom = '1px solid';
-                        //tabela.className = 'table table-striped table-hover';
+                        tabela.id = "tabela-primaria";
+
                         let cabecalho = document.createElement('thead');
-                        cabecalho.style.borderBottom = '1px solid';
+                        cabecalho.id = "cabecalho-primario";
                         cabecalho.innerHTML = `
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome funcionário</th>
-                        <th>Nome Paciente</th>
-                        <th>CPF Paciente</th>
-                        <th>Local</th>
-                        <th>Data Consumo</th>
-                        <th>Itens Consumidos</th>
-                    </tr>
-                    `;
+                            <tr>
+                                <th>Produto</th>
+                                <th>Lote</th>
+                                <th>Quantidade total utilizada</th>
+                                <th>Conteúdo Restante no Lote</th>
+                            </tr>
+                        `;
                         tabela.appendChild(cabecalho);
+
                         let corpo = document.createElement('tbody');
                         for (let i = 0; i < listaConsumos.length; i++) {
                             let linha = document.createElement('tr');
                             let consumo = listaConsumos[i];
                             linha.innerHTML = `
-                        <td>${consumo.idConsumo}</td>
-                        <td>${consumo.funcionario.nome_funcionario}</td>
-                        <td>${consumo.paciente.nome}</td>
-                        <td>${consumo.paciente.cpf}</td>
-                        <td>${consumo.local.loc_nome}</td>
-                        <td>${formataDataHora(consumo.dataConsumo)}</td>
-                        <td>${consumo.itensConsumo}</td>
-                        <td>
-                            <button class="" onclick="excluirConsumo(${gerarParametrosConsumo(consumo)})">
-                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 64 64">
-                                    <path d="M 28 11 C 26.895 11 26 11.895 26 13 L 26 14 L 13 14 C 11.896 14 11 14.896 11 16 C 11 17.104 11.896 18 13 18 L 14.160156 18 L 16.701172 48.498047 C 16.957172 51.583047 19.585641 54 22.681641 54 L 41.318359 54 C 44.414359 54 47.041828 51.583047 47.298828 48.498047 L 49.839844 18 L 51 18 C 52.104 18 53 17.104 53 16 C 53 14.896 52.104 14 51 14 L 38 14 L 38 13 C 38 11.895 37.105 11 36 11 L 28 11 z M 18.173828 18 L 45.828125 18 L 43.3125 48.166016 C 43.2265 49.194016 42.352313 50 41.320312 50 L 22.681641 50 C 21.648641 50 20.7725 49.194016 20.6875 48.166016 L 18.173828 18 z"></path>
-                                </svg>
-                            </button>
-                        </td>
-                        `;
+                                <td>${consumo.produto.nome}</td>
+                                <td>${consumo.lote.codigo}</td>
+                                <td>${consumo.total} ${consumo.produto.unidade.un_min}</td>
+                                <td>${consumo.lote.total_conteudo} ${consumo.produto.unidade.un_min}</td>
+                                `;
+                            
                             linha.style.borderBottom = '1px solid';
                             corpo.appendChild(linha);
                         }
                         tabela.appendChild(corpo);
-                        divTabConsumo.appendChild(tabela);
-                    }
-                    else {
-                        divTabConsumo.innerHTML = `<div> 
-                                    Não existem pacientes com essa descrição
-                                </div>`;
+                        container.appendChild(tabela);
+                        divTabConsumo.appendChild(container);
+                    } else {
+                        //divTabConsumo.innerHTML = `<div>Não existem consumos com essa descrição</div>`;
                     }
                 }
             }
             else {
-                divTabConsumo.innerHTML = "Não foi possível consultar os produtos";
+                divTabConsumo.innerHTML = "Não foi possível consultar os consumos";
             }
         })
+}
+
+/*
+//Jeito antigo exibindo por linha
+
+function criarTabelaPaciente(listaPacientesComConsumo, listaConsumos) {
+    let tabelaPaciente = document.createElement('table');
+    tabelaPaciente.className= 'tabPaciente';
+    let cabecalhoPaciente = document.createElement('thead');
+    cabecalhoPaciente.innerHTML = `
+        <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Data Nascimento</th>
+            <th>Sexo</th>
+            <th>Detalhes Consumo</th>
+        </tr>
+    `;
+    tabelaPaciente.appendChild(cabecalhoPaciente);
+
+    let corpoTabPac = document.createElement('tbody');
+    for (let pac of listaPacientesComConsumo) {
+        let consumosDessePaciente = listaConsumos.filter(c => c.paciente.idPaciente == pac.idPaciente);
+        listaConsumos = listaConsumos.filter(c => c.paciente.idPaciente != pac.idPaciente);
+
+        let linhaPac = document.createElement('tr');
+        linhaPac.innerHTML = `
+            <td>${pac.nome}</td>
+            <td>${pac.cpf}</td>
+            <td>${formataData(pac.data_nascimento)}</td>
+            <td>${pac.sexo}</td>
+        `;
+        let tdTabConsumo = document.createElement('td');
+        tdTabConsumo.appendChild(criarTabelaConsumo(consumosDessePaciente));
+        linhaPac.appendChild(tdTabConsumo);
+        corpoTabPac.appendChild(linhaPac);
+    }
+    tabelaPaciente.appendChild(corpoTabPac);
+    return tabelaPaciente;
+}
+
+function criarTabelaConsumo(consumosDessePaciente) {
+    let tabelaConsumo = document.createElement('table');
+    tabelaConsumo.classList.add('tabela-aninhada');
+    let cabecalhoConsumo = document.createElement('thead');
+    cabecalhoConsumo.innerHTML = `
+        <tr>
+            <th>Local</th>
+            <th>Data e hora consumo</th>
+            <th>Itens Consumidos</th>
+        </tr>
+    `;
+    tabelaConsumo.appendChild(cabecalhoConsumo);
+
+    let corpoTabCons = document.createElement('tbody');
+    for (let consumo of consumosDessePaciente) {
+        let linhaCons = document.createElement('tr');
+        linhaCons.innerHTML = `
+            <td>${consumo.local.loc_nome}</td>
+            <td>${formataDataHora(consumo.dataConsumo)}</td>
+        `;
+        let tdTabItCons = document.createElement('td');
+        tdTabItCons.appendChild(criarTabelaItensConsumo(consumo.itensConsumo));
+        linhaCons.appendChild(tdTabItCons);
+        corpoTabCons.appendChild(linhaCons);
+    }
+    tabelaConsumo.appendChild(corpoTabCons);
+    return tabelaConsumo;
+}
+
+function criarTabelaItensConsumo(itensCons) {
+    let tabelaItCons = document.createElement('table');
+    tabelaItCons.classList.add('tabela-aninhada');
+    let cabecalhoItCons = document.createElement('thead');
+    cabecalhoItCons.innerHTML = `
+        <tr>
+            <th>Produto</th>
+            <th>Lote</th>
+            <th>Quantidade utilizada</th>
+        </tr>
+    `;
+    tabelaItCons.appendChild(cabecalhoItCons);
+
+    let corpoTabItCons = document.createElement('tbody');
+    for (let itemConsumido of itensCons) {
+        let linhaItCons = document.createElement('tr');
+        linhaItCons.innerHTML = `
+            <td>${itemConsumido.produto.nome}</td>
+            <td>${itemConsumido.lote.codigo}</td>
+            <td>${itemConsumido.qtdeConteudoUtilizado} ${itemConsumido.produto.unidade.unidade}</td>
+        `;
+        corpoTabItCons.appendChild(linhaItCons);
+    }
+    tabelaItCons.appendChild(corpoTabItCons);
+    return tabelaItCons;
 }
 */
