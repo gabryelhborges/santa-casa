@@ -1,4 +1,7 @@
 import Produto from "../modelo/produto.js"
+import Fabricante from "../modelo/fabricante.js";
+import Unidade from "../modelo/unidade.js";
+import NomeFarmacologico from "../modelo/nomeFarmacologico.js";
 
 export default class ProdutoCtrl {
     gravar(requisicao, resposta) {
@@ -6,19 +9,20 @@ export default class ProdutoCtrl {
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
             const dados = requisicao.body;
             const prod_ID = dados.prod_ID;
-            const Fabricante_idFabricante = dados.Fabricante_idFabricante;
+            const fabricante = new Fabricante(dados.fabricante.idFabricante);
             const nome = dados.nome;
             const psicotropico = dados.psicotropico;
             const valor_custo = dados.valor_custo;
-            const far_cod = dados.far_cod;
+            const nomeFar = new NomeFarmacologico(dados.nomeFar.far_cod);
             const observacao = dados.observacao || null;
             const descricao_uso = dados.descricao_uso || null;
             const tipo = dados.tipo ;
-            const un_min = dados.un_min;
+            const unidade =  new Unidade(dados.unidade.un_cod);
             
             //Validar apenas os atributos que são NOT NULL?
-            if (prod_ID && Fabricante_idFabricante && nome && psicotropico && valor_custo && tipo && far_cod && un_min ) {
-                const produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod,  observacao, descricao_uso, tipo, un_min);
+            if (prod_ID && fabricante instanceof Fabricante && nome && psicotropico && valor_custo && tipo && nomeFar instanceof NomeFarmacologico && unidade instanceof Unidade) {
+                
+                const produto = new Produto(prod_ID, fabricante, nome, psicotropico, valor_custo, nomeFar,  observacao, descricao_uso, tipo, unidade);
                 produto.gravar().then(() => {
                     resposta.status(200).json({
                         "status": true,
@@ -52,17 +56,17 @@ export default class ProdutoCtrl {
         if ((requisicao.method === "PUT" || requisicao.method === "PATCH") && requisicao.is("application/json")){
             const dados = requisicao.body;
             const prod_ID = dados.prod_ID;
-            const Fabricante_idFabricante = dados.Fabricante_idFabricante;
+            const fabricante = new Fabricante(dados.fabricante.idFabricante);
             const nome = dados.nome;
             const psicotropico = dados.psicotropico;
             const valor_custo = dados.valor_custo;
-            const far_cod = dados.far_cod;
+            const nomeFar = new NomeFarmacologico(dados.nomeFar.far_cod);
             const observacao = dados.observacao || null;
             const descricao_uso = dados.descricao_uso || null;
             const tipo = dados.tipo;
-            const un_min = dados.un_min;
-            if(Fabricante_idFabricante && nome && psicotropico && valor_custo && tipo &&  far_cod && un_min){
-                const produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, un_min);
+            const unidade = new Unidade(dados.unidade.un_cod);
+            if(fabricante instanceof Fabricante && nome && psicotropico && valor_custo && tipo && nomeFar instanceof NomeFarmacologico && unidade instanceof Unidade){
+                const produto = new Produto(prod_ID, fabricante, nome, psicotropico, valor_custo, nomeFar, observacao, descricao_uso, tipo, unidade);
                 produto.atualizar().then(()=>{
                     resposta.status(200).json({
                         "status": true,

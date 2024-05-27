@@ -1,16 +1,16 @@
 import Baixa from "../modelo/baixa.js";
+import Produto from "../modelo/produto.js";
+import Motivo from "../modelo/motivo.js"
 import Unidade from "../modelo/unidade.js";
-
 import ItensBaixa from "../modelo/itensBaixa.js";
 import Lote from "../modelo/lote.js";
-import Produto from "../modelo/produto.js";
 
 export default class ItensBaixaDAO{
     async gravar(itemBaixa, conexao){
         if(itemBaixa instanceof ItensBaixa){
-            const sql = `INSERT INTO ItensBaixa(ib_idBaixa, ib_idProduto, ib_idMotivo, quantidade, ib_idLote, ib_idUnidade, ib_idObservacao) 
-            VALUES(?,?,?,?)`;
-            const parametros = [itemBaixa.baixa.idBaixa,itemBaixa.produto.prod_ID,itemBaixa.motivo.motivo_id, itemBaixa.quantidade, itemBaixa.lote.codigo, itemBaixa.unidade.un_cod, itemBaixa.ib_idObservacao];
+            const sql = `INSERT INTO ItensBaixa(ib_idBaixa, ib_idProduto, ib_idMotivo, ib_idQtde, ib_idLote, ib_idUnidade, ib_idObservacao) 
+            VALUES(?,?,?,?,?,?,?)`;
+            const parametros = [itemBaixa.baixa.idBaixa, itemBaixa.produto.prod_ID,itemBaixa.motivo.motivo_id, itemBaixa.quantidade, itemBaixa.lote.codigo, itemBaixa.unidade.un_cod, itemBaixa.ib_idObservacao];
             await conexao.execute(sql, parametros);
         }
     }
@@ -55,13 +55,8 @@ export default class ItensBaixaDAO{
         const [registros, campos]= await conexao.execute(sql, parametros);
         let listaItensBaixa= [];
         for(const registro of registros){
-            let baixa = new baixa(registro.ib_idProduto);
-            /*
-            Ta entrando em loop
-            await baixa.consultar(registro.ic_cons_id, conexao).then((listaCons)=>{
-                baixa = listaCons.pop();
-            });
-            */
+            let baixa = new Baixa(registro.ib_idBaixa);
+         
             let motivo = new Motivo(registro.ib_idMotivo);
             await motivo.consultar(registro.ib_idMotivo).then((listaMotivo)=>{
                 motivo = listaMotivo.pop();
@@ -76,11 +71,13 @@ export default class ItensBaixaDAO{
             await produto.consultar(registro.ib_idProduto).then((listaProd)=>{
                 produto = listaProd.pop();
             });
+
             let lote = new Lote(registro.ib_idLote, null, null, produto);
             await lote.consultar().then((listaLote)=>{
                 lote= listaLote.pop();
             });
-            let novoItBaixa = new ItensBaixa(baixa, lote, produto, registro.ic_qtdeConteudoUtilizado);
+
+            let novoItBaixa = new ItensBaixa(baixa, produto, motivo, registro.ib_idQtde, lote, unidade, registro.ib_idObservacao);
             listaItensBaixa.push(novoItBaixa);
         }
         return listaItensBaixa;

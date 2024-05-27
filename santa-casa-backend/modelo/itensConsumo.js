@@ -71,4 +71,9 @@ export default class ItensConsumo{
         const icDAO = new ItensConsumoDAO();
         return await icDAO.consultar(this, conexao);
     }
+
+    async relatorioProdutosConsumidos(conexao){
+        const icDAO= new ItensConsumoDAO();
+        return await icDAO.relatorioProdutosConsumidos(this, conexao);
+    }
 }

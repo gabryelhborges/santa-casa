@@ -73,4 +73,47 @@ export default class ItensConsumoDAO{
         }
         return listaItensConsumo;
     }
+
+    async relatorioProdutosConsumidos(itCons, conexao) {
+        let sql;
+        let parametros = [];
+
+        sql = `SELECT p.nome, l.total_conteudo, ic.ic_lote_codigo, u.unidade, sum(ic.ic_qtdeConteudoUtilizado) total FROM 
+        ItensConsumo ic INNER JOIN Produtos p ON ic.ic_prod_id = p.prod_ID
+        INNER JOIN Lote l ON l.produto_prod_ID = p.prod_ID
+        INNER JOIN Unidade u ON u.un_cod = p.un_min
+        GROUP BY ic.ic_lote_codigo
+        `;
+
+        //Pesquisar por produto
+        if (itCons.produto) {
+            sql+= ` HAVING p.nome LIKE ?`;
+            parametros= ['%'+itCons.produto.nome+'%'];
+        }
+
+        const [registros, campos] = await conexao.execute(sql, parametros);
+        let listaRelatorio = [];
+        for(const registro of registros){
+            let objRelatorio= {
+                produto: {
+                    nome: "",
+                    unidade:{
+                        un_min: ""
+                    }
+                },
+                lote: {
+                    codigo: "",
+                    total_conteudo: 0 
+                },
+                total: 0
+            };
+            objRelatorio.produto.nome= registro.nome;
+            objRelatorio.lote.codigo= registro.ic_lote_codigo;
+            objRelatorio.lote.total_conteudo= registro.total_conteudo;
+            objRelatorio.total= registro.total;
+            objRelatorio.produto.unidade.un_min= registro.unidade;
+            listaRelatorio.push(objRelatorio);
+        }
+        return listaRelatorio;
+    }
 }

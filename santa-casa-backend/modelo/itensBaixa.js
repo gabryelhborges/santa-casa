@@ -1,4 +1,4 @@
-import ItensBaixaDAO from "../persistencia/itensBaixaDAO.js"
+import ItensBaixaDAO from "../persistencia/itensBaixaDao.js";
 
 export default class ItensBaixa{
     #baixa;
@@ -9,7 +9,7 @@ export default class ItensBaixa{
     #unidade; //obj unidade
     #ib_idObservacao;
     
-    constructor(baixa= null, produto= null, motivo= "", quantidade= "", lote= "", unidade= "", ib_idObservacao=""){
+    constructor(baixa= null, produto= null, motivo= null, quantidade= 0, lote= null, unidade= null, ib_idObservacao=""){
         this.#baixa = baixa;
         this.#produto = produto;
         this.#motivo = motivo;
@@ -19,54 +19,68 @@ export default class ItensBaixa{
         this.#ib_idObservacao = ib_idObservacao;
     }
 
-    get baixa(){
+    
+    get baixa() {
         return this.#baixa;
     }
-    set baixa(novoib_idBaixa){
-        this.#baixa= novoib_idBaixa;
+
+    set baixa(value) {
+        this.#baixa = value;
     }
 
-    get produto(){
+    get produto() {
         return this.#produto;
     }
-    set produto(novoproduto){
-        this.#produto = novoproduto
+
+    set produto(value) {
+        this.#produto = value;
     }
 
-    get motivo(){
+    // Motivo
+    get motivo() {
         return this.#motivo;
     }
-    set motivo(novomotivo){
-        this.#motivo = novomotivo;
+
+    set motivo(value) {
+        this.#motivo = value;
     }
 
-    get quantidade(){
+    // Quantidade
+    get quantidade() {
         return this.#quantidade;
     }
-    set quantidade(novoquantidade){
-        this.#quantidade= novoquantidade;
+
+    set quantidade(value) {
+        this.#quantidade = value;
     }
 
-    get lote(){
+    // Lote
+    get lote() {
         return this.#lote;
     }
-    set lote(novolote){
-        this.#lote = novolote;
+
+    set lote(value) {
+        this.#lote = value;
     }
 
-    get unidade(){
+    // Unidade
+    get unidade() {
         return this.#unidade;
     }
-    set unidade(novounidade){
-        this.#unidade = novounidade;
+
+    set unidade(value) {
+        this.#unidade = value;
     }
 
-    get ib_idObservacao(){
+    // Ib_idObservacao
+    get ib_idObservacao() {
         return this.#ib_idObservacao;
     }
-    set ib_idObservacao(novoib_idObservacao){
-        this.#ib_idObservacao = novoib_idObservacao;
+
+    set ib_idObservacao(value) {
+        this.#ib_idObservacao = value;
     }
+
 
     toString(){
 
@@ -98,8 +112,8 @@ export default class ItensBaixa{
         await icDao.excluir(this, conexao);
     }
 
-    async consultar(termo, conexao){
+    async consultar(conexao){
         const icDao = new ItensBaixaDAO();
-        return await icDao.consultar(termo, conexao);
+        return await icDao.consultar(this, conexao);
     }
 }

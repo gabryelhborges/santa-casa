@@ -1,6 +1,4 @@
-const urlBase = 'http://localhost:4040/produto';
-const urlFab = 'http://localhost:4040/fabricante';
-const urlNomeFarmaco = 'http://localhost:4040/nomeFarmaco';
+const urlBase = 'http://localhost:4040';
 var formProd = document.getElementById('formProduto');
 
 
@@ -11,24 +9,26 @@ formProd.onsubmit = validarFormulario;
 inpuNomeFarmaco();
 inputFabricantesNome();
 exibirProdutos();
-PreencheFabricantes();
+//PreencheFabricantes();
+inputUnidade();
 var acao = 'cadastrar';
 
 function validarFormulario(evento) {
     if (formProd.checkValidity()) {
         let prod_ID = document.getElementById('prod_ID').value;
-        let Fabricante_idFabricante = document.getElementById('Fabricante_idFabricante').value;
+        let fabricante = new Fabricante(document.getElementById('fabricante').value);
         let nome = document.getElementById('nome').value;
         let psicotropico = document.getElementById('psicotropico').value;
         let valor_custo = stringParaDecimal(document.getElementById('valor_custo').value);
-        let far_cod = document.getElementById('far_cod').value;
+        let nomeFar = new NomeFarmacologico(document.getElementById('nomeFar').value);
         let observacao = document.getElementById('observacao').value;
         let descricao_uso = document.getElementById('descricao_uso').value;
         let tipo = document.getElementById('tipo').value;
-        let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod,  observacao, descricao_uso, tipo);
+        let unidade = new Unidade(document.getElementById('unidade').value);
+        let produto = new Produto(prod_ID, fabricante, nome, psicotropico, valor_custo, nomeFar,  observacao, descricao_uso, tipo, unidade);
 
         if (acao === 'cadastrar') {
-            fetch(urlBase, {
+            fetch(urlBase + "/produto", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -55,16 +55,17 @@ function validarFormulario(evento) {
         else if (acao === 'alterar') {
             if (confirm('Deseja realmente alterar esse produto?')) {
                 let prod_ID = document.getElementById('prod_ID').value;
-                let Fabricante_idFabricante = document.getElementById('Fabricante_idFabricante').value;
+                let fabricante = new Fabricante(document.getElementById('fabricante').value);
                 let nome = document.getElementById('nome').value;
                 let psicotropico = document.getElementById('psicotropico').value;
                 let valor_custo = stringParaDecimal(document.getElementById('valor_custo').value);
-                let far_cod = document.getElementById('far_cod').value;
+                let nomeFar = new NomeFarmacologico(document.getElementById('nomeFar').value);
                 let observacao = document.getElementById('observacao').value;
                 let descricao_uso = document.getElementById('descricao_uso').value;
                 let tipo = document.getElementById('tipo').value;
-                let produto = new Produto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod,  observacao, descricao_uso, tipo);
-                fetch(urlBase, {
+                let unidade = new Unidade(document.getElementById('unidade').value);
+                let produto = new Produto(prod_ID, fabricante, nome, psicotropico, valor_custo, nomeFar,  observacao, descricao_uso, tipo, unidade);
+                fetch(urlBase + "/produto", {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
@@ -93,7 +94,7 @@ function validarFormulario(evento) {
             if (confirm('Deseja realmente excluir esse produto?')) {
                 let prod_ID = document.getElementById('prod_ID').value;
                 let produto = new Produto(prod_ID);
-                fetch(urlBase, {
+                fetch(urlBase + "/produto", {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -122,7 +123,7 @@ function validarFormulario(evento) {
 }
 
 function inputFabricantesNome() {
-    fetch(urlFab, {
+    fetch(urlBase + "/fabricante", {
         method: 'GET',
         redirect: 'follow'
     })
@@ -130,7 +131,7 @@ function inputFabricantesNome() {
             return resposta.json();
         })
         .then((json) => {
-            let select = document.getElementById('Fabricante_idFabricante');
+            let select = document.getElementById('fabricante');
 
             listaFor = json.listaFabricante;
             if (Array.isArray(listaFor)) {
@@ -158,7 +159,7 @@ function inputFabricantesNome() {
 
 
 function inpuNomeFarmaco() {
-    fetch(urlNomeFarmaco, {
+    fetch(urlBase + "/nomeFarmaco", {
         method: 'GET',
         redirect: 'follow'
     })
@@ -166,7 +167,7 @@ function inpuNomeFarmaco() {
             return resposta.json();
         })
         .then((json) => {
-            let select = document.getElementById('far_cod');
+            let select = document.getElementById('nomeFar');
 
             listaNomeFar = json.listaNomeFarmacologico;
             if (Array.isArray(listaNomeFar)) {
@@ -189,38 +190,45 @@ function inpuNomeFarmaco() {
         });
 }
 
-//retornar lista geral
-async function listaNomeFab() {
-    return await fetch(urlFab, {
+function inputUnidade() {
+    fetch(urlBase + "/unidade", {
         method: 'GET',
         redirect: 'follow'
     })
         .then((resposta) => {
-            if (!resposta.ok) {
-                throw new Error('Erro na requisição: ' + resposta.status);
-            }
             return resposta.json();
         })
         .then((json) => {
-            let listaNome = [];
-            listaNome = json.listaFabricante;
-            if (Array.isArray(listaNome)) {
-                console.log(listaNome);
-                return listaNome; // Retorna a lista de fabricantes
-            } else {
-                throw new Error('Dados inválidos do backend: lista não é um array.');
+            let selectUn = document.getElementById('unidade');
+
+            listaUn = json.listaUnidades;
+            if (Array.isArray(listaUn)) {
+                if (listaUn.length > 0) {
+                    for (let i = 0; i < listaUn.length; i++) {
+                        let un = listaUn[i];
+                        let option = document.createElement('option');
+                        option.text = un.unidade;
+                        option.value = un.un_cod;
+                        selectUn.appendChild(option);
+                    }
+                }
+                else {
+                    selectUn.innerHTML = `<option>Erro Unidades</option>`;
+                }
             }
         })
         .catch((erro) => {
-            console.error('Erro ao recuperar os fabricantes do backend:', erro.message);
-            throw erro; // Propaga o erro para quem chamou a função
+            exibirMensagem('Não foi possível recuperar as unidades do backend: ' + erro.message);
         });
 }
 
 
+
+
+
 function exibirProdutos() {
     //chamar func lista
-    fetch(urlBase, {
+    fetch(urlBase + "/produto", {
         method: 'GET',
         redirect: 'follow'
     })
@@ -240,6 +248,7 @@ function exibirProdutos() {
                     <tr>
                         <th>Código Produto</th>
                         <th>Produto</th>
+                        <th>Tipo</th>
                         <th>Fabricante</th>
                         <th>Valor</th>
                     </tr>
@@ -254,7 +263,8 @@ function exibirProdutos() {
                         linha.innerHTML = `
                         <td>${produto.prod_ID}</td>
                         <td>${produto.nome}</td>
-                        <td id="${produto.Fabricante_idFabricante}" value="${produto.Fabricante_idFabricante}"></td>
+                        <td>${produto.tipo}</td>
+                        <td>${produto.fabricante.f_nome}</td>
                         <td>${produto.valor_custo}</td>
                         <td>
                             <button class="btn btn-danger☺" onclick="selecionarProduto(${gerarParametrosProduto(produto)},'excluir')">
@@ -287,55 +297,50 @@ function exibirProdutos() {
         });
 }
 
-async function PreencheFabricantes() {
-    let listaNomes = await listaNomeFab();
-    for (const fabricante of listaNomes) {
-        idFabricanteProcurado = document.getElementById(fabricante.idFabricante);
-        if (idFabricanteProcurado) 
-             idFabricanteProcurado.innerHTML = fabricante.f_nome;
-    }
-}
+
 
 function gerarParametrosProduto(produto) {
-    return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
-    '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}', '${produto.observacao}','${produto.descricao_uso}',
-    '${produto.tipo}'`;
+    return `'${produto.prod_ID}','${produto.fabricante.idFabricante}','${produto.nome}',
+    '${produto.psicotropico}','${produto.valor_custo}','${produto.nomeFar.far_cod}', '${produto.observacao}','${produto.descricao_uso}',
+    '${produto.tipo}', '${produto.unidade.un_cod}'`;
 }
 
 
-function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, observacao, descricao_uso, tipo, modo) {
 
+function selecionarProduto(prod_ID, fabricanteId, nome, psicotropico, valor_custo, nomeFarId, observacao, descricao_uso, tipo, unidadeId, modo) {
     document.getElementById('prod_ID').value = prod_ID;
-    document.getElementById('Fabricante_idFabricante').value = Fabricante_idFabricante;
+    document.getElementById('fabricante').value = fabricanteId;
     document.getElementById('nome').value = nome;
     document.getElementById('psicotropico').value = psicotropico;
     document.getElementById('valor_custo').value = valor_custo;
-    document.getElementById('far_cod').value = far_cod;
+    document.getElementById('nomeFar').value = nomeFarId;
     document.getElementById('observacao').value = observacao;
     document.getElementById('descricao_uso').value = descricao_uso;
     document.getElementById('tipo').value = tipo;
+    document.getElementById('unidade').value = unidadeId;
 
     let bttForm = document.getElementById('bttForm');
     if (modo == 'alterar') {
         acao = 'alterar';
         bttForm.innerHTML = 'Alterar';
-    }
-    else if (modo == 'excluir') {
+    } else if (modo == 'excluir') {
         acao = 'excluir';
         bttForm.innerHTML = 'Excluir';
     }
 }
 
+
 function limparFormulario() {
     document.getElementById('prod_ID').value = '';
-    document.getElementById('Fabricante_idFabricante').value = '';
+    document.getElementById('fabricante').value = '';
     document.getElementById('nome').value = '';
     document.getElementById('psicotropico').value = '';
     document.getElementById('valor_custo').value = '';
-    document.getElementById('far_cod').value = '';
+    document.getElementById('nomeFar').value = '';
     document.getElementById('observacao').value = '';
     document.getElementById('descricao_uso').value = '';
     document.getElementById('tipo').value = '';
+    document.getElementById('unidade').value = '';
 
     acao = "cadastrar";
     let bttForm = document.getElementById('bttForm');

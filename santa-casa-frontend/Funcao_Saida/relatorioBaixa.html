@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Baixas</title>
+    <link rel="stylesheet" href="../estilização/relBaixa.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Relatório de Baixas</h1>
+
+        <div id="filter-container">
+            <div class="filter-item">
+                <label for="filter-date">Data:</label>
+                <input type="date" id="filter-date" class="filter-input">
+            </div>
+            <div class="filter-item">
+                <label for="filter-product">Produto:</label>
+                <input type="text" id="filter-product" placeholder="Digite o nome do produto" class="filter-input">
+            </div>
+            <div class="filter-item">
+                <label for="filter-lote">Lote:</label>
+                <input type="text" id="filter-lote" placeholder="Ex: L001" class="filter-input">
+            </div>
+            <button class="filter-button" onclick="applyFilters()">Filtrar</button>
+        </div>
+
+        <div id="baixas-container"></div>
+    </div>
+    <script src="../controle/relatorioBaixaCtrl.js"></script>
+    <script src="../modelo/baixa.js"></script>
+</body>
+</html>

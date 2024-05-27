@@ -13,20 +13,69 @@ var jsonItBaixa = {
     quantidade: 0,
     lote: {},
     unidade: {},
-    ib_idObservacao: 0
+    ib_idObservacao: ""
 };
+
+/* requisição JSON para testar backend
+{
+    "itensBaixa": [
+        {
+            "produto": {
+                "prod_ID": 1
+            },
+            "motivo": {
+                "motivo_id": 1
+            },
+            "quantidade": 17,
+            "lote": {
+                "codigo": "L001"
+            },
+            "unidade": {
+                "un_cod": 1
+            },
+            "ib_idObservacao": "Teste"
+        },
+
+        {
+            "produto": {
+                "prod_ID": 2
+            },
+            "motivo": {
+                "motivo_id": 2
+            },
+            "quantidade": 17,
+            "lote": {
+                "codigo": "L002"
+            },
+            "unidade": {
+                "un_cod": 2
+            },
+            "ib_idObservacao": "Teste DOIS"
+        }
+    ],
+    "funcionario": {
+        "idFuncionario": 3
+    },
+    "dataBaixa": "2024-06-29",
+    "local": {
+        "loc_id": 1
+    }
+}
+
+*/
 
 const urlBase = 'http://localhost:4040';
 var formBaixa = document.getElementById('formBaixa');
 formBaixa.reset();
 formBaixa.onsubmit = validarFormulario;
-document.getElementById("funcionario").value = 1;//a partir do login, identificar funcionario
+document.getElementById("funcionario").value = 3;//a partir do login, identificar funcionario
 var listaItensBaixa = [];
 var qtdeTotalLoteSelecionado = 0;
 var listaLotes = [];
 var funcBaixa;
 var listaUni = [];
 var listaMt = [];
+var listaPd = [];
 
 procuraFuncionario();
 adicionarUnidade();
@@ -51,7 +100,7 @@ carregaProdutos();
 
 
 function validarFormulario(evento) {
-    if ( listaItensBaixa.length && pac) {
+    if (listaItensBaixa.length) {
         let dataAtual = new Date();
         dataAtual.setHours(dataAtual.getHours() - 3);
         // Formata a data para o formato compatível com o MySQL
@@ -106,7 +155,7 @@ function adicionarItemBaixa() {
     let obs = document.getElementById("observacao").value;
     let objLote = listaLotes.find(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd);
     let objProd;
-    let objMotivo = listaMotivos.find(itemMotivo => itemMotivo.motivo_id == codMotivo);
+    let objMotivo = listaMt.find(itemMotivo => itemMotivo.motivo_id == codMotivo);
     let objUnidade = listaUni.find(itemUnidade => itemUnidade.un_cod == codUnidade);
 
     objLote ? objProd = objLote.produto : objProd = null;
@@ -131,16 +180,25 @@ function adicionarItemBaixa() {
         }
         limparFormItemBaixa();
         exibirListaItensBaixa();
+        //adicionarUnidade();
+        adicionarMotivos();
+        
     }
     else {
         if (!objProd) {
-            exibirMensagem("Para consumir um produto voce deve selecionar um produto!");
+            exibirMensagem("Para dar baixa voce deve selecionar um produto!");
         }
         else if (!objLote) {
-            exibirMensagem("Para consumir um produto voce deve selecionar um lote");
+            exibirMensagem("Para dar baixa voce deve selecionar um lote");
+        }
+        else if (!objMotivo) {
+            exibirMensagem("Para dar baixa voce deve selecionar um motivo");
         }
         else if (!qtde) {
-            exibirMensagem("Para consumir um produto voce deve informar a quantidade utilizada!");
+            exibirMensagem("Para dar baixa voce deve informar a quantidade utilizada!");
+        }
+        else if (!obs) {
+            exibirMensagem("Para dar baixa voce deve deixar uma observação!");
         }
         else if (qtde > qtdeTotalLoteSelecionado) {
             exibirMensagem("Não é possível consumir mais do que há disponível no lote!");
@@ -168,6 +226,11 @@ function limparFormItemBaixa() {
     document.getElementById('lote').innerHTML = '';
     document.getElementById('dataVencimento').value = '';
     document.getElementById('qtde').value = '';
+    document.getElementById('unidade').value = '';
+    document.getElementById('unidade').innerHTML = '';
+    document.getElementById('motivo').value = '';
+    document.getElementById('motivo').innerHTML = '';
+    document.getElementById('observacao').value = '';
 }
 
 function exibirListaItensBaixa() {
@@ -241,6 +304,7 @@ function carregaProdutos() {
             if (json.status) {
                 divTabProduto.innerHTML = "";
                 listaProdutos = json.listaProdutos;
+                listaPd = [];
                 if (Array.isArray(listaProdutos)) {
                     if (listaProdutos.length > 0) {
                         let tabela = document.createElement('table');
@@ -262,9 +326,11 @@ function carregaProdutos() {
                         for (let i = 0; i < listaProdutos.length; i++) {
                             let linha = document.createElement('tr');
                             let produto = listaProdutos[i];
+                            let ObjPd = new Produto(produto.prod_ID, produto.fabricante, produto.nome, produto.psicotropico, produto.valor_custo, produto.nomeFar, produto.observacao, produto.descricao_uso, produto.tipo, produto.unidade)
+                            listaPd.push(ObjPd);
                             linha.innerHTML = `
                         <td>${produto.nome}</td>
-                        <td>${produto.Fabricante_idFabricante}</td>
+                        <td>${produto.fabricante.f_nome}</td>
                         <td>${produto.psicotropico}</td>
                         <td>
                             <button class="" onclick="selecionarProduto(${gerarParametrosProduto(produto)})">
@@ -293,12 +359,20 @@ function carregaProdutos() {
         })
 }
 
-function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo) {
+function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo, un_min) {
     document.getElementById('produto').value = prod_ID;
     document.getElementById('nomeProduto').value = nome;
     document.getElementById('qtde').focus();
     adicionarLote(prod_ID);
+    // Chama a atualização de unidade diretamente após adicionar os lotes
+    atualizarUnidade();
+    adicionarMotivos();
 }
+
+function controleQuantidade(){
+
+}
+
 
 function adicionarLote(produto) {
     fetch(urlBase + "/lote" + "?" + "produto=" + produto, {
@@ -312,22 +386,28 @@ function adicionarLote(produto) {
             selectLote.innerHTML = "";
             selectLote.value = "";
             selectLote.text = "";
+
             let listaLot = json.listaLotes;
             if (Array.isArray(listaLot)) {
                 for (let i = 0; i < listaLot.length; i++) {
                     let lote = listaLot[i];
                     let objLote = new Lote(lote.codigo, formataData(lote.data_validade), lote.quantidade, lote.produto, lote.formaFarmaceutica, lote.conteudo_frasco, lote.unidade, lote.total_conteudo);
+                    
                     let optionLote = document.createElement("option");
                     optionLote.value = objLote.codigo;
-                    optionLote.text = objLote.codigo + "/" + objLote.produto.prod_ID;
+                    optionLote.text = objLote.codigo;
                     listaLotes.push(objLote);
                     selectLote.appendChild(optionLote);
+
                     if (!i) {
                         qtdeTotalLoteSelecionado = objLote.total_conteudo;
                         document.getElementById("dataVencimento").value = formataData(objLote.data_validade);
                     }
                 };
             }
+
+            // Atualiza a unidade após carregar os lotes
+            atualizarUnidade();
         });
 }
 
@@ -339,20 +419,12 @@ function adicionarUnidade() {
     })
         .then((json) => {
             listaUni = [];
-            let selectUnidade = document.getElementById("unidade");
-            selectUnidade.innerHTML = "";
-            selectUnidade.value = "";
-            selectUnidade.text = "";
             let listaUn = json.listaUnidades;
             if (Array.isArray(listaUn)) {
                 for (let i = 0; i < listaUn.length; i++) {
                     let un = listaUn[i];
                     let objUn = new Unidade(un.un_cod, un.unidade);
-                    let optionUnidade = document.createElement("option");
-                    optionUnidade.value = objUn.un_cod;
-                    optionUnidade.text = objUn.unidade;
                     listaUni.push(objUn);
-                    selectUnidade.appendChild(optionUnidade);
                 };
             }
         });
@@ -370,10 +442,10 @@ function adicionarMotivos() {
             selectMotivo.innerHTML = "";
             selectMotivo.value = "";
             selectMotivo.text = "";
-            let listaMt = json.listaMotivos;
-            if (Array.isArray(listaMt)) {
-                for (let i = 0; i < listaMt.length; i++) {
-                    let mt = listaMt[i];
+            let mtLista = json.listaMotivos;
+            if (Array.isArray(mtLista)) {
+                for (let i = 0; i < mtLista.length; i++) {
+                    let mt = mtLista[i];
                     let ObjMt = new Motivo(mt.motivo_id, mt.motivo);
                     let optionMotivo = document.createElement("option");
                     optionMotivo.value = ObjMt.motivo_id;
@@ -416,7 +488,7 @@ function formataData(dataParametro) {
 function gerarParametrosProduto(produto) {
     return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
     '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}',
-    '${produto.observacao}','${produto.tipo}'`;
+    '${produto.observacao}','${produto.tipo}','${produto.un_min}'`;
 }
 
 
@@ -447,6 +519,83 @@ function exibirMensagem(mensagem, estilo) {
         elemMensagem.innerHTML = '';
     }, 7000);//7 Segundos
 }
+
+function atualizarUnidade() {
+    let codLote = document.getElementById('lote').value;
+    let codProd = document.getElementById('produto').value;
+    let objLote = listaLotes.find(item => item.codigo === codLote && item.produto.prod_ID == codProd);
+    
+    if (objLote) {
+        document.getElementById('dataVencimento').value = formataData(objLote.data_validade);
+        qtdeTotalLoteSelecionado = objLote.total_conteudo;
+
+        let selectUnidade = document.getElementById("unidade");
+        selectUnidade.innerHTML = ""; // Limpa as unidades antes de adicionar novas
+
+        // Adicionar unidade do produto
+        let produtoObj = listaProdutos.find(prod => prod.prod_ID == codProd);
+        if (produtoObj) {
+            let optionUniProd = document.createElement("option");
+            optionUniProd.value = produtoObj.unidade.un_cod;
+            optionUniProd.text = produtoObj.unidade.unidade;
+            selectUnidade.appendChild(optionUniProd);
+        }
+
+        // Adicionar unidade do lote selecionado
+        if (objLote) {
+            // Adicionar opções adicionais com base na unidade do lote
+            if (objLote.unidade.un_cod == 2) { // Se a unidade do lote for Frasco
+                let optionFrasco = document.createElement("option");
+                optionFrasco.value = 4;
+                optionFrasco.text = "Frasco";
+                selectUnidade.appendChild(optionFrasco);
+            } else if (objLote.unidade.un_cod == 1) { // Se a unidade do lote for Caixa
+                let optionCaixa = document.createElement("option");
+                optionCaixa.value = 3;
+                optionCaixa.text = "Caixa";
+                selectUnidade.appendChild(optionCaixa);
+            }
+        }
+    }
+}
+
+
+document.getElementById("lote").addEventListener("change", function () {
+    let codLote = document.getElementById('lote').value;
+    let codProd = document.getElementById('produto').value;
+    let objLote = listaLotes.find(item => item.codigo === codLote && item.produto.prod_ID == codProd);
+    document.getElementById('dataVencimento').value = formataData(objLote.data_validade);
+    qtdeTotalLoteSelecionado = objLote.total_conteudo;
+
+    // Atualizar unidade do lote selecionado
+    let selectUnidade = document.getElementById("unidade");
+    selectUnidade.innerHTML = ""; // Limpa as unidades antes de adicionar novas
+
+    // Adicionar unidade do produto
+    let produtoObj = listaProdutos.find(prod => prod.prod_ID == codProd);
+    if (produtoObj) {
+        let optionUniProd = document.createElement("option");
+        optionUniProd.value = produtoObj.unidade.un_cod;
+        optionUniProd.text = produtoObj.unidade.unidade;
+        selectUnidade.appendChild(optionUniProd);
+    }
+
+    // Adicionar unidade do lote selecionado
+    if (objLote) {
+         // Adicionar opções adicionais com base na unidade do lote
+         if (objLote.unidade.un_cod == 2) { // Se a unidade do lote for Frasco
+            let optionFrasco = document.createElement("option");
+            optionFrasco.value = 4;
+            optionFrasco.text = "Frasco";
+            selectUnidade.appendChild(optionFrasco);
+        } else if (objLote.unidade.un_cod == 1) { // Se a unidade do lote for Caixa
+            let optionCaixa = document.createElement("option");
+            optionCaixa.value = 3;
+            optionCaixa.text = "Caixa";
+            selectUnidade.appendChild(optionCaixa);
+        }
+    }
+});
 
 
 function controlaQtde(){
