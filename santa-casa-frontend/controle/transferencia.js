@@ -5,12 +5,12 @@ var listaItensTransferencia = [];
 var listaLot = [];
 var listaFab = [];
 var listaLocais = [];
+var ORIG;
 var valormedida;
 pesquisa.reset();
 pesquisa.onsubmit = PesquisaProd;
 
 listalocais();
-nomeDoFabricante();
 adicionarOrigem();
 adicionarDestino();
 exibirListaItensTransferencia();
@@ -18,6 +18,7 @@ exibirListaItensTransferencia();
 function limparFormulario(){
     document.getElementById('codProd').value=""
     document.getElementById('selectOrigem').value = "";
+    document.getElementById("selectOrigem").disabled = false;
     document.getElementById('selectFabricante').value = "";
     document.getElementById('selectDestino').value = "";
     document.getElementById('iProd').value = "";
@@ -108,12 +109,10 @@ function PesquisaProd(evento) {
                     let corpo = document.createElement('tbody');
                     for (let i = 0; i < listaProdutos.length; i++) {
                         let linha = document.createElement('tr');
-                        let nomeDoFab;
                         let produto = listaProdutos[i];
-                        nomeDoFab = listaFab.find(nomeDoFabricante => nomeDoFabricante.idFabricante === produto.Fabricante_idFabricante).f_nome;
                         linha.innerHTML = `
                             <td>${produto.nome}</td>
-                            <td>${nomeDoFab}</td>
+                            <td>${produto.fabricante.f_nome}</td>
                             <td>${produto.psicotropico}</td>
                             <td>
                                 <button class="" style="border-radius:50%" onclick="selecionarProduto(${gerarParametrosProduto(produto)})">
@@ -148,30 +147,11 @@ function PesquisaProd(evento) {
 }
 
 
-function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso,tipo) {
+function selecionarProduto(prod_ID, fabricante, nome) {
     document.getElementById('iProd').value = nome;
     document.getElementById('codProd').value = prod_ID;
-    fetch(urlBase + "/fabricante" + "/" + Fabricante_idFabricante, {
-        method: "GET"
-    }).then((resposta) => {
-        return resposta.json();
-    })
-    .then((json) => {
-        listaFabricante = json.listaFabricante;
-        document.getElementById('selectFabricante').value = listaFabricante[0].f_nome;
-    });
+    document.getElementById('selectFabricante').value = fabricante;
     adicionarLote(prod_ID);
-}
-
-function nomeDoFabricante(){
-    fetch(urlBase + "/fabricante", {
-        method: "GET"
-    }).then((resposta) => {
-        return resposta.json();
-    })
-    .then((json) => {
-        listaFab = json.listaFabricante;
-    });
 }
 
 
@@ -218,7 +198,7 @@ function separarPorHifen(str) {
             parte7: partes[6]
         };
     } else {
-        return null; // ou throw new Error('A string não contém um hífen.');
+        return null;
     }
 }
 
@@ -228,8 +208,8 @@ function criarLimpar(){
 }
 
 document.getElementById("selectOrigem").addEventListener("change", function(){
-    //this.classList.add('readonly');
-    this.ariaReadOnly=true;
+    ORIG = document.getElementById("selectOrigem").value;
+    document.getElementById("selectOrigem").disabled = true;
 })
 document.getElementById("selectDestino").addEventListener("Change", function(){
     //this.classList.add('readonly');
@@ -297,7 +277,7 @@ function formataData(dataParametro){
 
 
 function gerarParametrosProduto(produto) {
-    return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
+    return `'${produto.prod_ID}','${produto.fabricante.f_nome}','${produto.nome}',
     '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}',
     '${produto.observacao}','${produto.tipo}'`;
 }
@@ -317,35 +297,41 @@ function adicionarItemTransf() {
     let val = separarPorHifen(document.getElementById('iLote').value);
     let codLote = val.parte1;
     let codProd = document.getElementById('codProd').value;
-    let loc = document.getElementById('selectOrigem').value;
+    let loc = ORIG;
     let dest = document.getElementById('selectDestino').value;
-    let objLote = listaLot.find(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd && itemLote.local.loc_id == loc);
-    let objProd;
-    objLote ? objProd = objLote.produto : objProd = null;
-    let qtde = document.getElementById('iQtde').value * valormedida;
-    if (objLote && objProd && qtde > 0) {
-        let itemExistente = listaItensTransferencia.find(item => item.lote.codigo === objLote.codigo && item.produto.prod_ID === objProd.prod_ID);
-        // Verifica se já existe um item com o mesmo produto e lote
-        if (itemExistente) {
-            // Se existir, apenas aumenta a quantidade
-            let num = parseInt(itemExistente.qtdeConteudoUtilizado);
-            num += parseInt(qtde);
-            itemExistente.qtdeConteudoUtilizado = parseInt(num);
+    if(loc != "" && dest!=""){
+        let objLote = listaLot.find(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd && itemLote.local.loc_id == loc);
+        let objProd;
+        objLote ? objProd = objLote.produto : objProd = null;
+        let qtde = document.getElementById('iQtde').value * valormedida;
+        if (objLote && objProd && qtde > 0) {
+            let itemExistente = listaItensTransferencia.find(item => item.lote.codigo === objLote.codigo && item.produto.prod_ID === objProd.prod_ID);
+            // Verifica se já existe um item com o mesmo produto e lote
+            if (itemExistente) {
+                // Se existir, apenas aumenta a quantidade
+                let num = parseInt(itemExistente.qtdeConteudoUtilizado);
+                num += parseInt(qtde);
+                itemExistente.qtdeConteudoUtilizado = parseInt(num);
+            }
+            else {
+                let novoItem = {
+                    lote: objLote, 
+                    produto: objProd, 
+                    quantidade: parseInt(qtde),
+                    origem: loc,
+                    destino: dest
+                };
+                listaItensTransferencia.push(novoItem);
+            }
         }
         else {
-            let novoItem = {
-                lote: objLote, 
-                produto: objProd, 
-                quantidade: parseInt(qtde),
-                origem: loc,
-                destino: dest
-            };
-            listaItensTransferencia.push(novoItem);
+            alert('Faltam dados ou dados estão incorretos.')
         }
     }
-    else {
-        alert('Faltam dados ou dados estão incorretos.')
+    else{
+        alert('Por favor, adicione corretamente uma origem e um destino!');
     }
+    
     limparFormItemTransf();
     exibirListaItensTransferencia();
 }
@@ -400,14 +386,14 @@ function exibirListaItensTransferencia() {
             let linha = document.createElement('tr');
             let nomelocaldestino;
             let itTransf = listaItensTransferencia[i];
-            nomelocaldestino = listaLocais.find(nomedolocal => nomedolocal.loc_id == itTransf.destino).loc_nome;
+            nomelocaldestino = listaLocais.find(nomedolocal => nomedolocal.loc_id == itTransf.destino);
             linha.innerHTML = `
                         <td>${itTransf.lote.codigo}</td>
                         <td>|${itTransf.produto.nome}</td>
                         <td>|${itTransf.quantidade}</td>
                         <td>|${itTransf.lote.conteudo_frasco + " " + itTransf.lote.unidade.unidade}</td>
                         <td>|${itTransf.lote.local.loc_nome}</td>
-                        <td>|${nomelocaldestino}</td>
+                        <td>|${nomelocaldestino.loc_nome}</td>
                         <td>
                             <button class="" onclick="onclick="removerItemTransferencia(${i})"">
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 64 64">

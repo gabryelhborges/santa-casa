@@ -159,23 +159,24 @@ create table itensConsumo(
 
 create table transferencia(
     tf_id integer not null auto_increment,
-    tf_data date DEFAULT CURRENT_TIMESTAMP,
+    tf_data datetime default CURRENT_TIMESTAMP,
     tf_func_id integer not null,
     tf_origem integer not null,
     tf_destino integer not null,
-    constraint fk_origem foreign key (tf_origem) references loc(loc_id,),
+    constraint fk_origem foreign key (tf_origem) references loc(loc_id),
     constraint fk_destino foreign key (tf_destino) references loc(loc_id),
     constraint fk_func foreign key (tf_func_id) references Funcionarios(idFuncionario),
-    constraint pk_tf primary key(if_id)
+    constraint pk_tf primary key(tf_id)
 );
 
+-- drop table itensTransferidos
 create table itensTransferidos(
     itf_transf_id int not null auto_increment,
     itf_tf_id int not null,
-    itf_lote_cod integer not null,
-    itf_qtdetransferida decimal(5,2) not null,
-    itf_unidade varchar(30),
-    constraint fk_itf_lote foreign key (itf_lote_cod) references lote(codigo),
+    itf_lote_cod varchar(15) not null,
+    itf_qtdetransferida integer not null,
+    constraint fk_itf_transf_id foreign key (itf_transf_id) references transferencia(tf_id),
+    constraint fk_itf_lote_cod foreign key (itf_lote_cod) references lote(codigo),
     constraint pk_itf primary key (itf_transf_id)
 );
 

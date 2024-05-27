@@ -14,6 +14,8 @@ import rotaLocal from "./rotas/rotaLocal.js"
 import rotaEntrada from "./rotas/rotaEntrada.js";
 import rotaMotivo from "./rotas/rotaMotivo.js";
 import rotaBaixa from "./rotas/rotaBaixa.js";
+import rotaTransferencia from "../rotas/rotaTransferencia.js";
+import rotaItensTransferencia from "../rotas/rotaItensTransferencia";
 
 
 //Aplicação HTTP pronta, bastando parametrizá-la
@@ -39,6 +41,8 @@ app.use('/local', rotaLocal);
 app.use('/entrada', rotaEntrada);
 app.use('/motivo',rotaMotivo);
 app.use('/baixa',rotaBaixa);
+app.use('/transferencia',rotaTransferencia);
+app.use('/itenstransferencia',rotaItensTransferencia);
 
 
 
