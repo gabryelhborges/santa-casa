@@ -102,8 +102,7 @@ CREATE TABLE entrada(
     data_entrada DATE NOT NULL,
     constraint pk_id PRIMARY key (entrada_id),
     constraint fk_fun FOREIGN KEY (entrada_funcionario_id) REFERENCES funcionarios(idFuncionario)
-
-)
+);
 
 -- drop table lote;
 create table lote(
@@ -131,8 +130,8 @@ CREATE TABLE itensEntrada(
     constraint pk_ent_id PRIMARY KEY (ent_id,lote_cod,prod_id),
     constraint fk_entrada foreign key (ent_id) REFERENCES entrada(entrada_id),
     constraint fk_lote Foreign Key (lote_cod,prod_id) REFERENCES lote(codigo,produto_prod_ID)
-
 );
+
 
 
 create table consumo(

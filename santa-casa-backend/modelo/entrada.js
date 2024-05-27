@@ -1,14 +1,24 @@
 import EntradaDAO from "../persistencia/EntradaDAO.js";
 
 export default class Entrada{
-    #entrada_id
-    #funcionario
-    #data_entrada
+    #entrada_id;
+    #funcionario;
+    #data_entrada;
+    #itensEntrada;
 
-    constructor(entrada_id = 0,funcionario = null ,data_entrada = ""){
+    constructor(entrada_id = 0,funcionario = null ,data_entrada = "",itensEntrada = []){
         this.#entrada_id = entrada_id;
         this.#funcionario = funcionario;
         this.#data_entrada = data_entrada;
+        this.#itensEntrada = itensEntrada;
+    }
+
+    get itensEntrada(){
+        return this.#itensEntrada;
+    }
+
+    set itensEntrada(valor){
+        this.#itensEntrada = valor;
     }
 
     get entrada_id(){
@@ -39,7 +49,8 @@ export default class Entrada{
         return{
             "entrada_id" : this.entrada_id ,
             "funcionario": this.funcionario,
-            "data_entrada": this.data_entrada
+            "data_entrada": this.data_entrada,
+            "itensEntrada": this.itensEntrada
         };
     }
 

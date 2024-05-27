@@ -1,39 +1,57 @@
-import ItensEntradaDAO from "../persistencia/itensEntradaDAO";
-import Entrada from "./entrada";
+import ItensEntradaDAO from "../persistencia/itensEntradaDAO.js";
 
 export default class ItensEntrada{
-    #lote;
     #entrada;
+    #lote;
+    #produto;
     #quantidade;
 
-    constructor(lote = null, entrada = null, quantidade = 0){
+    constructor( entrada = null, lote = null, produto = null, quantidade = 0){
         this.lote = lote;
         this.entrada = entrada;
+        this.produto = produto;
         this.quantidade = quantidade;
     }
 
+    get produto(){
+        return this.#produto;
+    }
+
+    set produto(valor){
+        this.#produto = valor;
+    }
+
     get lote(){
-        return this.lote;
+        return this.#lote;
     }
 
     set lote(valor){
-        this.lote = valor;
+        this.#lote = valor;
     }
 
     get entrada(){
-        return this.entrada;
+        return this.#entrada;
     }
 
     set entrada(valor){
-        this.entrada = valor;
+        this.#entrada = valor;
     }
 
     get quantidade(){
-        return this.quantidade;
+        return this.#quantidade;
     }
 
     set quantidade(valor){
-        this.quantidade = valor;
+        this.#quantidade = valor;
+    }
+
+    toJSON(){
+        return {
+            "entrada": this.entrada,
+            "lote": this.lote,
+            "produto": this.produto,
+            "quantidade": this.quantidade
+        };
     }
 
     async gravar(conexao){
@@ -51,7 +69,7 @@ export default class ItensEntrada{
         await itensEnradaDAO.excluir(this, conexao);
     }
 
-    async consultar(termo, conexao){
+    async consultar(conexao){
         const itensEnradaDAO = new ItensEntradaDAO();
         return await itensEnradaDAO.consultar(this, conexao);
     } 

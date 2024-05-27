@@ -1,5 +1,6 @@
 import Entrada from "../modelo/entrada.js";
 import Funcionario from "../modelo/funcionario.js";
+import ItensEntrada from "../modelo/itensEntrada.js";
 
 export  default class EntradaDAO {
     async gravar(entrada,conexao){
@@ -45,8 +46,14 @@ export  default class EntradaDAO {
                 funcionario = listaFunc.pop();
             });
 
-            let entrada = new Entrada(registro.entrada_id, funcionario,registro.data_entrada);
-
+            let entrada = new Entrada(registro.entrada_id, funcionario,registro.data_entrada,[]);
+            let lista_ItensEntradas = [];
+            let itensEntrada = new ItensEntrada(entrada);
+            await itensEntrada.consultar(conexao).then((listaItensEntradas)=>{
+                lista_ItensEntradas = listaItensEntradas;
+            })
+            entrada.itensEntrada = lista_ItensEntradas;
+            
             listaEntradas.push(entrada);
         }
         return listaEntradas;

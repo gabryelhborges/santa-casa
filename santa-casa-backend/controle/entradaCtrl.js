@@ -1,39 +1,87 @@
 import Entrada from "../modelo/entrada.js";
-import conectar from "../persistencia/conexao.js";
+import Funcionario from "../modelo/funcionario.js";
+import ItensEntrada from "../modelo/itensEntrada.js";
+import Lote from "../modelo/lote.js";
+import Singleton from "../implementacoesEngSoftware/singleton.js";
+import DB from "../persistencia/db.js";
 
 export default class EntradaCtrl{
+
+    s = Singleton.getInstance();
+
     async gravar(requisicao,resposta){
         resposta.type('application/json');
         if(requisicao.method === "POST" && requisicao.is("application/json")){
             const dados =  requisicao.body;
-            const funcionario = dados.funcionario;
+            const funcionario = new Funcionario(dados.funcionario.idFuncionario);
             const data_entrada = dados.data_entrada;
-            if(data_entrada && funcionario){
+            const itensEnrada = dados.itensEnrada;
+            if(data_entrada && funcionario instanceof Funcionario && itensEnrada.length > 0){
                 const entrada = new Entrada(0,
                     funcionario,
-                    data_entrada);
-                const conexao = await conectar();
-                entrada.gravar(conexao).then(()=>{
+                    data_entrada,
+                    itensEnrada
+                    );
+                const conexao = await DB.conectar();
+                try{
+                    await conexao.beginTransaction();
+                    entrada.gravar(conexao).then(async() =>{
+                        let atualizou = 1;
+                        let gravou2 = 1;
+                        let i = 0;
+                        while (gravou2 && atualizou && i < itensEnrada.length) {
+                            const item = itensEnrada[i];
+                            let itemEntrada = new ItensEntrada(entrada, item.lote, item.produto, item.quantidade);
+                            await itemEntrada.gravar(conexao).catch(() => {
+                                gravou2 = 0;
+                            });
+                            // incrementar o lote
+                            if (gravou2) {
+                                let lote = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto, item.lote.formaFarmaceutica, item.lote.conteudo_frasco, item.lote.unidade, item.lote.total_conteudo, "farmacia");
+                                await lote.consultar().then((listaLote) => {
+                                    lote = listaLote.pop();
+                                });
+                                lote.total_conteudo = lote.total_conteudo + item.qtdeConteudoUtilizado;
+                                lote.atualizar().catch((erro) => {
+                                    atualizou = 0;
+                                    //console.log(erro);
+                                });
+                            }
+                            i++;
+                        }
+                    })
+                    if (!gravou2 || !atualizou) {
+                        if (!gravou2) {
+                            throw new Error("Erro de transação. Houve um erro ao cadastrar os itens da entrada.");
+                        }
+                        else {
+                            throw new Error("Erro de transação. Não foi possível atualizar o lote.")
+                        }
+                    }
+                    await conexao.commit();
                     resposta.status(200).json({
                         "status": true,
                         "codigoGerado": entrada.entrada_id,
                         "mensagem": "Entrada cadastrada com sucesso!"
-                    
                     });
-                }).catch((erro) => {
+                }
+                catch (erro) {
+                    await conexao.rollback();
                     resposta.status(500).json({
                         "status": false,
-                        "mensagem": "Houve um erro ao cadastrar uma entrada: " + erro.message
+                        "mensagem": "Houve um erro de transação, todas as alterações foram desfeitas. Erro: " + erro
                     });
-                });
+                }
+                finally {
+                    conexao.release();
+                }
             }
-            else{
+            else {
                 resposta.status(400).json({
                     "status": false,
-                    "mensagem": "Informe a entrada!"
+                    "mensagem": "Informe todos as informações de uma entrada!"
                 });
             }
-            
         }else{
             resposta.status(400).json({
                 "status": false,
@@ -49,20 +97,23 @@ export default class EntradaCtrl{
             const id = dados.entrada_id;
             const funcionario = dados.funcionario;
             const data_entrada = dados.data_entrada;
-            if(id && data_entrada && funcionario){
-                const entrada = new Entrada(id,funcionario,data_entrada);
-                const conexao = await conectar();
+            const itensEntrada = dados.itensEnrada;
+            if(id && data_entrada && funcionario instanceof Funcionario && itensEnrada.length > 0){
+                const entrada = new Entrada(id,funcionario,data_entrada,itensEntrada);
+                const conexao = await DB.conectar();
                 entrada.atualizar(conexao).then(()=>{
                     resposta.status(200).json({
                         "status":true,
                         "mensagem":"Entrada Atualizada"
                     });
-                }).catch((erro)=>{
+                })
+                .catch((erro)=>{
                     resposta.status(500).json({
                         "status":false,
                         "mensagem":"Erro na atualização da entrada:"+erro.message
                     });
-                })
+                });
+                conexao.release();
             }else{
                 resposta.status(400).json({
                     "status": false,
@@ -83,7 +134,8 @@ export default class EntradaCtrl{
             const id = requisicao.body.entrada_id;
             if (id) {
                 const entrada = new Entrada(id);
-                const conexao = await conectar();
+                const conexao = await DB.conectar();
+
                 entrada.excluir(conexao).then(() => {
                     resposta.status(200).json({
                         "status": true,
@@ -96,7 +148,7 @@ export default class EntradaCtrl{
                             "mensagem": "Erro ao excluir a entrada: " + erro.message
                         });
                     });
-                global.poolConexoes.releaseConnection(conexao);
+                conexao.release();
             }
         }
         else {
@@ -115,7 +167,7 @@ export default class EntradaCtrl{
         }
         if(requisicao.method === "GET"){
             const entrada = new Entrada();
-            const conexao = await conectar();
+            const conexao = await DB.conectar();
             entrada.consultar(termo,conexao).then((listaEntradas)=>{
                 resposta.status(200).json({
                     "status": true,
