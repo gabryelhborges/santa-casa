@@ -27,15 +27,6 @@ function addListaBaixa() {
     });
 }
 
-function formatarData(dataString) {
-    const data = new Date(dataString);
-    return data.toLocaleDateString('pt-BR', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    });
-}
-
 function renderBaixas(listaBx) {
     const container = document.getElementById('baixas-container');
     container.innerHTML = '';
@@ -47,7 +38,7 @@ function renderBaixas(listaBx) {
 
         const baixaHeader = document.createElement('div');
         baixaHeader.classList.add('baixa-header');
-        baixaHeader.textContent = `Baixa ID: ${baixa.idBaixa} - Data: ${formatarData(baixa.dataBaixa)} - Funcionario: ${baixa.funcionario.nome_funcionario}`;
+        baixaHeader.textContent = `Baixa ID: ${baixa.idBaixa} - Data: ${new Date(baixa.dataBaixa).toLocaleDateString()} - Funcionario: ${baixa.funcionario.nome_funcionario}`;
 
         const baixaItems = document.createElement('div');
         baixaItems.classList.add('baixa-items');
@@ -96,4 +87,20 @@ function toggleItems(id) {
     } else {
         items.style.display = "none";
     }
+}
+
+function applyFilters() {
+    const dateFilter = document.getElementById('filter-date').value;
+    const productFilter = document.getElementById('filter-product').value.toLowerCase();
+    const lotFilter = document.getElementById('filter-lote').value.toLowerCase();
+
+    const filteredBaixas = listaBx.filter(baixa => {
+        const matchDate = dateFilter ? new Date(baixa.dataBaixa).toLocaleDateString() === new Date(dateFilter).toLocaleDateString() : true;
+        const matchProduct = productFilter ? baixa.itensBaixa.some(item => item.produto.nome.toLowerCase().includes(productFilter)) : true;
+        const matchLot = lotFilter ? baixa.itensBaixa.some(item => item.lote.codigo.toLowerCase().includes(lotFilter)) : true;
+
+        return matchDate && matchProduct && matchLot;
+    });
+
+    renderBaixas(filteredBaixas);
 }
