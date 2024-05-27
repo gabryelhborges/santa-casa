@@ -1,47 +1,70 @@
-.baixa-container {
-    text-align: center;
-    margin: 20px auto;
+/* styles.css */
+.container {
     width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Alinha os elementos na parte inferior */
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.filter-input, .filter-button {
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+.filter-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 0; /* Remove a margem superior */
+}
+
+.filter-button:hover {
+    background-color: #45a049;
+}
+
+.baixa-container {
+    margin: 10px 0;
     border: 1px solid #ccc;
     padding: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 5px;
 }
 
-/* Centralizar o cabeçalho da baixa */
 .baixa-header {
-    font-size: 18px;
     font-weight: bold;
-    margin-bottom: 10px;
+    cursor: pointer;
 }
 
-/* Centralizar a tabela dentro do container */
 .baixa-items {
     display: none;
-    justify-content: center;
+    margin-top: 10px;
 }
 
-/* Centralizar o texto dentro da tabela */
-.baixa-items table {
+table {
     width: 100%;
     border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
     text-align: center;
 }
 
-/* Estilo para as células da tabela */
-.baixa-items th, .baixa-items td {
-    padding: 8px;
-    border: 1px solid #ddd;
-}
-
-/* Cabeçalho da tabela */
-.baixa-items th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-.title {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 24px;
-    font-weight: bold;
+th, td {
+    padding: 10px;
 }
