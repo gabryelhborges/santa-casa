@@ -4,32 +4,9 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="">
-    <meta name="description" content="">
     <title>Relatório consumo</title>
-    <link rel="stylesheet" href="../estilização/nicepage.css" media="screen">
-    <link rel="stylesheet" href="../estilização/efetuar_consumo.css" media="screen">
-    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
-    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
-    <meta name="generator" content="Nicepage 6.9.2, nicepage.com">
-    <meta name="referrer" content="origin">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link id="u-theme-google-font" rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
-
-
-
-    <script type="application/ld+json">{
-		"@context": "http://schema.org",
-		"@type": "Organization",
-		"name": ""
-}</script>
-    <meta name="theme-color" content="#478ac9">
-    <meta property="og:title" content="Página 3">
-    <meta property="og:type" content="website">
-    <meta data-intl-tel-input-cdn-path="intlTelInput/">
-
     <style>
         * {
             margin: 0;
@@ -40,11 +17,12 @@
         html {
             margin: 0;
             padding: 0;
-            height: 100%;
+            height: auto;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 2000px;
+            width: 100%;
         }
 
         .divTabela {
@@ -60,38 +38,120 @@
             border-collapse: collapse;
         }
 
-        thead th {
-            position: sticky;
-            top: 0;
-            background-color: #fff;
-            z-index: 1;
-        }
-
-        th,
-        td {
-            padding: 8px;
+        /* Estilos para a tabela de exibirConsumos */
+        #tabela-primaria,
+        #tabela-primaria th,
+        #tabela-primaria td {
+            padding: 10px;
             text-align: center;
-            border-bottom: 1px solid #ddd;
+            border: 1px solid #ddd;
         }
 
-        tbody tr:nth-child(even) {
+        #tabela-primaria th {
+            background-color: #249AE2;
+            color: white;
+        }
+
+        #tabela-primaria tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #tabela-primaria tbody tr:hover {
+            background-color: #ddd;
+        }
+
+        #tabela-primaria .botaoItCons {
+            background-color: #249AE2;
+            padding: 3px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #tabela-primaria .botaoExcluir {
+            background-color: #ff8c8c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Estilos para a tabela de exibirConsumoPorPaciente */
+        .tabPaciente,
+        .tabPaciente th,
+        .tabPaciente td,
+        .tabela-aninhada,
+        .tabela-aninhada th,
+        .tabela-aninhada td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #aaa;
+        }
+
+        .tabela-aninhada{
+            width: 100%;
+        }
+
+        .tabPaciente th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tabPaciente tbody tr:nth-child(even) {
+            background-color: #ebebeb;
+        }
+
+        /*
+        .tabPaciente tbody tr:hover {
+            background-color: #000000;
+        }
+        */
+
+        .tabela-aninhada th {
+            background-color: #a0a0a0;
+        }
+        /*
+        .tabela-aninhada tbody tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+        */
+        /*
+        .tabela-aninhada tbody tr:hover {
+            background-color: #eee;
+        }
+        */
 
-        tbody tr:hover {
-            background-color: #f1f1f1;
+        /* Estilos para botões */
+        .botoes-exibicao {
+            padding: 10px 20px;
+            background-color: #249AE2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin: 5px;
         }
 
-        #tabelaConsumo {
+        .botoes-exibicao:hover {
+            background-color: #1E87C1;
+            transform: scale(1.05);
+        }
+
+        .botoes-exibicao:active {
+            transform: scale(1);
+        }
+
+        .div-opcoes-filtro {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
+        /* Estilos para modal */
         .modal {
             display: none;
-            /* Oculta o modal por padrão */
             position: fixed;
             z-index: 1;
             left: 0;
@@ -100,10 +160,17 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
-            /* Fundo semi-transparente */
         }
 
-        /* Estilo para o conteúdo do modal */
+        .modal-content {
+            position: relative;
+            background-color: #ddd;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
         .close {
             color: #aaa;
             font-size: 28px;
@@ -111,21 +178,8 @@
             position: absolute;
             padding-right: 10px;
             top: 10px;
-            /* Define a posição vertical do botão */
             right: 10px;
-            /* Define a posição horizontal do botão */
             cursor: pointer;
-        }
-
-        /* Estilo para o conteúdo do modal */
-        .modal-content {
-            position: relative;
-            /* Adiciona posição relativa ao conteúdo */
-            background-color: #ddd;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
         }
 
         .close:hover,
@@ -148,7 +202,7 @@
             border: 1px solid;
         }
 
-        .tabItCons thead{
+        .tabItCons thead {
             border: 1px solid black;
         }
 
@@ -156,29 +210,146 @@
             border: 1px solid black;
             position: sticky;
             top: 0;
-            background-color: rgb(0, 0, 0);
+            background-color: rgb(148, 148, 148);
         }
-        
-        .linhaItCons, .linhaItCons td{
+
+        .linhaItCons,
+        .linhaItCons td {
             background-color: #fff;
             border: 1px solid black;
+        }
+
+        .botaoExcluir {
+            background-color: rgb(255, 140, 140);
+        }
+
+        #cabecalho-primario {
+            border-bottom: 1px solid;
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+        }
+
+        #tabela-primaria {
+            border-collapse: collapse;
+            width: 100%;
+            border-bottom: 1px solid;
+        }
+
+        #divContainer {
+            overflow-y: auto;
+            height: 650px;
+            width: 100%;
+            border: 3px solid #ddd;
+        }
+
+        .info-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .info-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid;
+            border-radius: 100%;
+            margin-left: 8px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .information {
+            width: 20px;
+            height: 20px;
+        }
+
+        .botoes-exibicao {
+            padding: 10px 20px;
+            background-color: #249AE2;
+            /* Cor azul */
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin: 5px;
+        }
+
+        .botoes-exibicao:hover {
+            background-color: #1E87C1;
+            /* Cor azul mais escura */
+            transform: scale(1.05);
+        }
+
+        .botoes-exibicao:active {
+            transform: scale(1);
+        }
+
+        .div-opcoes-filtro {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #div-tabela-principal{
+            width: 98%;
+            margin-bottom: 70px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .coluna-menor{
+            width: 5px;
         }
     </style>
 </head>
 
 <body>
-    <div class="divTabela">
-        <div id="tabelaConsumo">
-
-        </div>
+    <div class="div-opcoes-filtro">
+        <button class="botoes-exibicao" onclick="exibirConsumos()">Listar todos</button>
+        <button class="botoes-exibicao" onclick="exibirConsumoPorPaciente()">Filtrar por paciente</button>
+        <button class="botoes-exibicao" onclick="exibirConsumoPorProduto()">Filtrar por produto</button>
     </div>
+
+    <div class="info-container" id="div-pesquisa-relatorio-consumo">
+        <input oninput="exibirConsumos()" name="pesquisa" id="pesquisaConsumo" type="text" placeholder="Consumo">
+        <span class="info-icon" title="Informe a data no formato DD/MM/YYYY ou DD-MM-YYYY, ou o nome do paciente.">
+            <img class="information" src="../image/info.png" alt="Informação sobre como pesquisar">
+        </span>
+    </div>
+
+
+    <div class="info-container" id="div-pesquisa-relatorio-paciente">
+        <input oninput="exibirConsumoPorPaciente()" name="pesquisa" id="input-pesquisa-relatorio-paciente" type="text" placeholder="Paciente">
+        <span class="info-icon" title="Informe a data no formato DD/MM/YYYY ou DD-MM-YYYY, ou o nome do paciente.">
+            <img class="information" src="../image/info.png" alt="Informação sobre como pesquisar">
+        </span>
+    </div>
+
+
+    <div class="info-container" id="div-pesquisa-relatorio-produto">
+        <input oninput="exibirConsumoPorProduto()" name="pesquisa" id="input-pesquisa-relatorio-produto" type="text" placeholder="Produto">
+        <span class="info-icon" title="Informe a data no formato DD/MM/YYYY ou DD-MM-YYYY, ou o nome do paciente.">
+            <img class="information" src="../image/info.png" alt="Informação sobre como pesquisar">
+        </span>
+    </div>
+
+
+    <div id="div-tabela-principal">
+
+    </div>
+
 
     <!-- Modal -->
     <div id="myModal" class="modal">
         <!-- Conteúdo do modal -->
         <div id="modalContent" class="modal-content">
             <span class="close">&times;</span>
-            
+
         </div>
     </div>
 
@@ -186,6 +357,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
+<script src="../controle/exibirMensagem.js"></script>
 <script src="./relatorioConsumo.js"></script>
 
 </html>

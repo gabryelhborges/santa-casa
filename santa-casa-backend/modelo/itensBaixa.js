@@ -1,4 +1,4 @@
-import ItensBaixaDAO from "../persistencia/itensBaixaDAO.js"
+import ItensBaixaDAO from "../persistencia/itensBaixaDao.js";
 
 export default class ItensBaixa{
     #baixa;
@@ -112,8 +112,8 @@ export default class ItensBaixa{
         await icDao.excluir(this, conexao);
     }
 
-    async consultar(termo, conexao){
+    async consultar(conexao){
         const icDao = new ItensBaixaDAO();
-        return await icDao.consultar(termo, conexao);
+        return await icDao.consultar(this, conexao);
     }
 }

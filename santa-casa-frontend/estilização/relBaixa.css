@@ -1,0 +1,70 @@
+/* styles.css */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Alinha os elementos na parte inferior */
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.filter-input, .filter-button {
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+.filter-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 0; /* Remove a margem superior */
+}
+
+.filter-button:hover {
+    background-color: #45a049;
+}
+
+.baixa-container {
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.baixa-header {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.baixa-items {
+    display: none;
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+    text-align: center;
+}
+
+th, td {
+    padding: 10px;
+}

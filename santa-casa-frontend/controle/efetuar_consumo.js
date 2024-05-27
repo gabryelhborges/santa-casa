@@ -319,7 +319,7 @@ function carregaProdutos() {
                             let produto = listaProdutos[i];
                             linha.innerHTML = `
                         <td>${produto.nome}</td>
-                        <td>${produto.Fabricante_idFabricante}</td>
+                        <td>${produto.fabricante.f_nome}</td>
                         <td>${produto.psicotropico}</td>
                         <td>
                             <button class="" onclick="selecionarProduto(${gerarParametrosProduto(produto)})">

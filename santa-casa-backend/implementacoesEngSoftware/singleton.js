@@ -1,8 +1,8 @@
 export default class Singleton {
     #instance;
-    #total=0;
+    //#total=0;
     constructor() {
-      this.#total= this.#total+1;
+      //this.#total= this.#total+1;
     }
 
     static getInstance() {
