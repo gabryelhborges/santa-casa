@@ -130,8 +130,8 @@ CREATE TABLE itensEntrada(
     constraint pk_ent_id PRIMARY KEY (ent_id,lote_cod,prod_id),
     constraint fk_entrada foreign key (ent_id) REFERENCES entrada(entrada_id),
     constraint fk_lote Foreign Key (lote_cod,prod_id) REFERENCES lote(codigo,produto_prod_ID)
-
 );
+
 
 
 create table consumo(

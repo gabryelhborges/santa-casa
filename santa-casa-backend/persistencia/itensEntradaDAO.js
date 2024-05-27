@@ -11,7 +11,7 @@ export default class ItensEntradaDAO{
             qtde) VALUES (?,?,?,?);`
         const parametros = [itens.entrada.entrada_id,
             itens.lote.cod_lote,
-            itens.lote.produto.produto_id,
+            itens.produto.prod_ID,
             itens.quantidade
         ];
         await conexao.execute(sql,parametros);
