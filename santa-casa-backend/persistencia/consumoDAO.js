@@ -45,9 +45,9 @@ export default class ConsumoDAO {
                 partesData = cons.dataConsumo.split('/');
             }
         }
-        if (cons.consumoId) {
+        if (cons.idConsumo) {
             sql = "SELECT * FROM Consumo WHERE cons_id = ?";
-            parametros = [cons.consumoId];
+            parametros = [cons.idConsumo];
         }
         else {
             if (cons.paciente && cons.dataConsumo) {

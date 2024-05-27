@@ -112,9 +112,9 @@ export default class ConsumoCtrl {
         if (requisicao.method === "DELETE" && requisicao.is("application/json")) {
             const idConsumo = requisicao.body.idConsumo;
             if (idConsumo) {
-                let cons = new Consumo();
+                let cons = new Consumo(idConsumo);
                 const conexao = await DB.conectar();
-                cons.consultar(idConsumo, conexao).then(async (listCons) => {
+                cons.consultar(conexao).then(async (listCons) => {
                     if (listCons.length == 0) {
                         throw new Error("Não foi possível encontrar esse consumo");
                     }
