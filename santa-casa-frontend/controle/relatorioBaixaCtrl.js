@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const urlBase = 'http://localhost:4040';
 var listaBx = [];
+var listaItBx = [];
 
 function addListaBaixa() {
     fetch(urlBase + "/baixa", {
@@ -81,12 +82,17 @@ function renderBaixas(listaBx) {
 
 function toggleItems(id) {
     const items = document.getElementById(`items-${id}`);
-    if (items.style.maxHeight) {
-        items.style.maxHeight = null;
-    } else {
+    if (items.style.display === "none" || items.style.display === "") {
+        items.style.display = "block";
         items.style.maxHeight = items.scrollHeight + "px";
+    } else {
+        items.style.maxHeight = "0";
+        items.addEventListener('transitionend', () => {
+            items.style.display = "none";
+        }, { once: true });
     }
 }
+
 
 function applyFilters() {
     const dateStartFilter = document.getElementById('filter-date-start').value;
@@ -109,3 +115,57 @@ function applyFilters() {
 
     renderBaixas(filteredBaixas);
 }
+
+function printBaixas() {
+    const dateStartFilter = document.getElementById('filter-date-start').value;
+    const dateEndFilter = document.getElementById('filter-date-end').value;
+    const productFilter = document.getElementById('filter-product').value.toLowerCase();
+    const lotFilter = document.getElementById('filter-lote').value.toLowerCase();
+
+    // Filtrar as baixas
+    const filteredBaixas = listaBx.filter(baixa => {
+        const dataBaixa = new Date(baixa.dataBaixa);
+        const dataBaixaLocal = new Date(dataBaixa.getTime() - dataBaixa.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+
+        const matchDate = dateStartFilter ?
+            (dateEndFilter ? dataBaixaLocal >= dateStartFilter && dataBaixaLocal <= dateEndFilter : dataBaixaLocal === dateStartFilter)
+            : true;
+
+        const matchProduct = productFilter ? baixa.itensBaixa.some(item => item.produto.nome.toLowerCase().includes(productFilter)) : true;
+        const matchLot = lotFilter ? baixa.itensBaixa.some(item => item.lote.codigo.toLowerCase().includes(lotFilter)) : true;
+
+        return matchDate && matchProduct && matchLot;
+    });
+
+    // Renderizar baixas filtradas ou todas as baixas
+    if (filteredBaixas.length > 0) {
+        renderBaixas(filteredBaixas);
+    } else {
+        renderBaixas(listaBx);
+    }
+
+    // Garantir que todas as tabelas renderizadas estão abertas
+    const baixaItemsContainers = document.querySelectorAll('.baixa-items');
+    baixaItemsContainers.forEach(items => {
+        items.style.display = 'block';
+        items.style.maxHeight = items.scrollHeight + "px";
+    });
+
+    // Atrasar a impressão para garantir que as tabelas estejam abertas
+    setTimeout(() => {
+        window.print();
+
+        // Fechar todas as tabelas após a impressão
+        baixaItemsContainers.forEach(items => {
+            items.style.display = 'none';
+            items.style.maxHeight = '0';
+        });
+
+        // Aplicar filtros novamente para restaurar a exibição original
+        applyFilters();
+    }, 500); // Ajuste o tempo, se necessário
+}
+
+
+
+
