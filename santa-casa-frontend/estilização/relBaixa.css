@@ -38,6 +38,25 @@
     background-color: #45a049;
 }
 
+.print-button {
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+.print-button {
+    background-color: #2a9dda;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 0; /* Remove a margem superior */
+}
+
+.print-button:hover {
+    background-color: #0a547b;
+}
+
 .baixa-container {
     margin: 10px 0;
     border: 1px solid #ccc;
@@ -53,6 +72,8 @@
 .baixa-items {
     display: none;
     margin-top: 10px;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
 }
 
 table {

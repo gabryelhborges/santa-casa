@@ -248,10 +248,9 @@ function exibirListaItensBaixa() {
                     <tr'>
                         <th>Lote</th>
                         <th>Produto</th>
-                        <th>Qtde</th>
                         <th>Unidade</th>
                         <th>Motivo</th>
-                        <th>Observacao</th>
+                        <th>Qtde</th>       
                     </tr>
                     `;
         tabela.appendChild(cabecalho);
@@ -262,10 +261,9 @@ function exibirListaItensBaixa() {
             linha.innerHTML = `
                         <td>${itBaixa.lote.codigo}</td>
                         <td>${itBaixa.produto.nome}</td>
-                        <td>${itBaixa.quantidade}</td>
                         <td>${itBaixa.unidade.unidade}</td>
-                        <td>${itBaixa.motivo.motivo}</td>
-                        <td>${itBaixa.ib_idObservacao}</td>
+                        <td>${itBaixa.motivo.motivo}</td>   
+                        <td>${itBaixa.quantidade}</td>    
                         <td>
                             <button class="" onclick="removerItemBaixa(${gerarParametrosItemBaixa(itBaixa)})">
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 64 64">
