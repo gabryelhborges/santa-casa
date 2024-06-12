@@ -5,16 +5,18 @@ import ItensEntrada from "../modelo/itensEntrada.js";
 
 export default class ItensEntradaDAO{
     async gravar(itens,conexao){
-        const sql = `INSERT INTO itensEntrada(ent_id,
-            lote_cod,
-            prod_id,
-            qtde) VALUES (?,?,?,?);`
-        const parametros = [itens.entrada.entrada_id,
-            itens.lote.cod_lote,
-            itens.produto.prod_ID,
-            itens.quantidade
-        ];
-        await conexao.execute(sql,parametros);
+        if(itens instanceof ItensEntrada){
+            const sql = `INSERT INTO itensentrada(ent_id,
+                lote_cod,
+                prod_id,
+                qtde) VALUES (?,?,?,?);`
+            const parametros = [itens.entrada.entrada_id,
+                itens.lote.codigo,
+                itens.produto.prod_ID,
+                itens.quantidade
+            ];
+            await conexao.execute(sql, parametros);
+        }
     }
 
     async excluir(itens,conexao){

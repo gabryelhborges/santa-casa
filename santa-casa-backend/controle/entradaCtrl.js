@@ -15,12 +15,12 @@ export default class EntradaCtrl{
             const dados =  requisicao.body;
             const funcionario = new Funcionario(dados.funcionario.idFuncionario);
             const data_entrada = dados.data_entrada;
-            const itensEnrada = dados.itensEnrada;
-            if(data_entrada && funcionario instanceof Funcionario && itensEnrada.length > 0){
+            const itensEntrada = dados.itensEntrada;
+            if(data_entrada && funcionario instanceof Funcionario && itensEntrada.length > 0){
                 const entrada = new Entrada(0,
                     funcionario,
                     data_entrada,
-                    itensEnrada
+                    itensEntrada
                     );
                 const conexao = await DB.conectar();
                 try{
@@ -28,20 +28,28 @@ export default class EntradaCtrl{
                     entrada.gravar(conexao).then(async() =>{
                         let atualizou = 1;
                         let gravou2 = 1;
+                        let novo = 1;
                         let i = 0;
-                        while (gravou2 && atualizou && i < itensEnrada.length) {
-                            const item = itensEnrada[i];
+                        while (gravou2 && atualizou && i < itensEntrada.length) {
+                            const item = itensEntrada[i];
                             let itemEntrada = new ItensEntrada(entrada, item.lote, item.produto, item.quantidade);
-                            await itemEntrada.gravar(conexao).catch(() => {
-                                gravou2 = 0;
+                            let lote = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto, item.lote.formaFarmaceutica, item.lote.conteudo_frasco, item.lote.unidade, item.lote.total_conteudo, item.lote.local);
+                            await lote.consultar().then((listaLote) => {
+                                if(listaLote.length==1){
+                                    lote = listaLote.pop();
+                                }else{
+                                    lote.gravar().then((idLote) => {})
+                                    novo = 0;
+                                }
                             });
+                            if(novo){
+                                await itemEntrada.gravar(conexao).catch(() => {
+                                    gravou2 = 0;
+                                });
+                            }
                             // incrementar o lote
                             if (gravou2) {
-                                let lote = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto, item.lote.formaFarmaceutica, item.lote.conteudo_frasco, item.lote.unidade, item.lote.total_conteudo, "farmacia");
-                                await lote.consultar().then((listaLote) => {
-                                    lote = listaLote.pop();
-                                });
-                                lote.total_conteudo = lote.total_conteudo + item.qtdeConteudoUtilizado;
+                                lote.total_conteudo = lote.total_conteudo + item.quantidade;
                                 lote.atualizar().catch((erro) => {
                                     atualizou = 0;
                                     //console.log(erro);
@@ -49,20 +57,27 @@ export default class EntradaCtrl{
                             }
                             i++;
                         }
+                        if (!gravou2 || !atualizou) {
+                            if (!gravou2) {
+                                throw new Error("Erro de transação. Houve um erro ao cadastrar os itens da entrada.");
+                            }
+                            else {
+                                throw new Error("Erro de transação. Não foi possível atualizar o lote.")
+                            }
+                        }
+                        await conexao.commit();
+                        resposta.status(200).json({
+                            "status": true,
+                            "codigoGerado": entrada.entrada_id,
+                            "mensagem": "Entrada cadastrada com sucesso!"
+                        });
                     })
-                    if (!gravou2 || !atualizou) {
-                        if (!gravou2) {
-                            throw new Error("Erro de transação. Houve um erro ao cadastrar os itens da entrada.");
-                        }
-                        else {
-                            throw new Error("Erro de transação. Não foi possível atualizar o lote.")
-                        }
-                    }
-                    await conexao.commit();
-                    resposta.status(200).json({
-                        "status": true,
-                        "codigoGerado": entrada.entrada_id,
-                        "mensagem": "Entrada cadastrada com sucesso!"
+                    .catch(async (erro) => {
+                        await conexao.rollback();
+                        resposta.status(500).json({
+                            "status": false,
+                            "mensagem": "Houve um erro ao cadastrar uma entrada: " + erro.message
+                        });
                     });
                 }
                 catch (erro) {
@@ -97,8 +112,8 @@ export default class EntradaCtrl{
             const id = dados.entrada_id;
             const funcionario = dados.funcionario;
             const data_entrada = dados.data_entrada;
-            const itensEntrada = dados.itensEnrada;
-            if(id && data_entrada && funcionario instanceof Funcionario && itensEnrada.length > 0){
+            const itensEntrada = dados.itensEntrada;
+            if(id && data_entrada && funcionario instanceof Funcionario && itensEntrada.length > 0){
                 const entrada = new Entrada(id,funcionario,data_entrada,itensEntrada);
                 const conexao = await DB.conectar();
                 entrada.atualizar(conexao).then(()=>{
