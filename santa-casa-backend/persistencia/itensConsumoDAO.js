@@ -82,7 +82,7 @@ export default class ItensConsumoDAO{
         ItensConsumo ic INNER JOIN Produtos p ON ic.ic_prod_id = p.prod_ID
         INNER JOIN Lote l ON l.produto_prod_ID = p.prod_ID
         INNER JOIN Unidade u ON u.un_cod = p.un_min
-        GROUP BY ic.ic_lote_codigo
+        GROUP BY ic.ic_lote_codigo ORDER BY nome;
         `;
 
         //Pesquisar por produto

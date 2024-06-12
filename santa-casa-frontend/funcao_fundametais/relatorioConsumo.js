@@ -230,6 +230,7 @@ function exibirItensConsumidosModal(consumoId) {
 }
 
 function excluirConsumo(idConsumo) {
+    
     fetch(urlBase + "/consumo", {
         method: 'DELETE',
         headers: {

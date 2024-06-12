@@ -41,8 +41,8 @@ app.use('/local', rotaLocal);
 app.use('/entrada', rotaEntrada);
 app.use('/motivo',rotaMotivo);
 app.use('/baixa',rotaBaixa);
-app.use('/transferencia',rotaTransferencia);
-app.use('/itenstransferencia',rotaItensTransferencia);
+//app.use('/transferencia',rotaTransferencia);
+//app.use('/itenstransferencia',rotaItensTransferencia);
 
 
 
