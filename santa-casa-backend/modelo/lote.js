@@ -123,9 +123,9 @@ export default class Lote{
         await loteDAO.gravar(this);
     }
 
-    async atualizar(){
+    async atualizar(conexao){
         const  loteDAO = new LoteDAO();
-        await loteDAO.atualizar(this);
+        await loteDAO.atualizar(this,conexao);
     }
 
     async excluir(){
