@@ -83,6 +83,7 @@ create table produtos(
 
 
 
+ -- Embalagem
 create table formafarmaceutica(
     ffa_cod integer not null auto_increment,
     forma varchar(40) not null, -- solução oral, comprimido, capsula, dragea 
