@@ -48,7 +48,7 @@ export default class LoteDAO{
         return false;
     }
 
-    async atualizar(lote){
+    async atualizar(lote, conexao){
         if(lote instanceof Lote) { 
             const sql= `UPDATE lote SET 
                 quantidade = ?,
@@ -70,9 +70,7 @@ export default class LoteDAO{
                 lote.codigo,
                 lote.produto.prod_ID
             ];
-            const conexao = await conectar();
             await conexao.execute(sql, parametros);
-            global.poolConexoes.releaseConnection(conexao);
         }
     }
 

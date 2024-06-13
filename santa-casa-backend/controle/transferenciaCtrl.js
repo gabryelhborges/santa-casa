@@ -51,7 +51,7 @@ export default class TransferenciaCtrl{
                                 lote1 = listaLote.pop();
                             });
                             lote1.total_conteudo = lote1.total_conteudo - item.lote_cod;
-                            await lote1.atualizar().catch((erro) => {
+                            await lote1.atualizar(conexao).catch((erro) => {
                                 atualizou = false;
                             });
                             let lote2 = new Lote(item.prod_cod.codigo, item.prod_cod.data_validade, item.lote_cod, item.prod_cod.produto, item.prod_cod.formaFarmaceutica, item.prod_cod.conteudo_frasco, item.prod_cod.unidade, item.prod_cod.total_conteudo, destino);
@@ -59,7 +59,7 @@ export default class TransferenciaCtrl{
 
                             if (loteExiste) {
                                 loteExiste.total_conteudo = loteExiste.total_conteudo + item.loc_cod;
-                                await loteExiste.atualizar().catch((erro) => {
+                                await loteExiste.atualizar(conexao).catch((erro) => {
                                     atualizou = false;
                                 });
                             } else {
