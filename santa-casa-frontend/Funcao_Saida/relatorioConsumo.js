@@ -158,7 +158,7 @@ function exibirConsumos() {
                         container.appendChild(tabela);
                         divTabConsumo.appendChild(container);
                     } else {
-                        //divTabConsumo.innerHTML = `<div>Não existem consumos com essa descrição</div>`;
+                        divTabConsumo.innerHTML = `<div>Não existem consumos com essa descrição</div>`;
                     }
                 }
             }
@@ -442,6 +442,19 @@ function criarTabelaItensConsumo(itensCons) {
     tabelaItCons.appendChild(corpoTabItCons);
     return tabelaItCons;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
