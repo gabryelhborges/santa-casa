@@ -53,7 +53,7 @@ export default class ItensEntrada{
             "quantidade": this.quantidade
         };
     }
-
+    
     async gravar(conexao){
         const itensEnradaDAO = new ItensEntradaDAO();
         await itensEnradaDAO.gravar(this, conexao);

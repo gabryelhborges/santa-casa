@@ -173,6 +173,7 @@ const vapp ={
         this.forma_farmacologica = '';
         this.validade = '';
         this.quantidade = 0;
+        this.conteudo_frasco = 0;
         this.isNovoLote = true;
         this.codigo_novo_lote = '';
         this.produto = '';
@@ -281,7 +282,7 @@ const vapp ={
                   <input min="1" v-model="quantidade" type="number" id="i2ojo"/>
                 </div>
                 <div id="izzdy" class="gjs-cell">
-                  <label id="ist0b">Unidade:</label>
+                  <label id="ist0b">Embalagem:</label>
                   <select :disabled="isNovoLote" v-model="forma_farmacologica" type="text" required id="icxq9">
                     <option value="Selecione uma Unidade">Selecione uma Unidade</option>
                     <option v-for="u in unidades" :value="u">{{u.forma}}</option>
@@ -314,14 +315,24 @@ const vapp ={
             <div id="ivgil" class="gjs-row">
               <div id="i180j2" class="gjs-cell">
                 <div id="iz5242" class="gjs-row">
-                  <div id="isvn01" class="gjs-cell">
-                    <table v-if="lista.length > 0">
+                  <div id="isvn01" style="max-height: 100%; overflow-y: auto;" class="gjs-cell">
+                    <table class="table table-striped" style="background: white;" v-if="lista.length > 0">
+                        <thead v-if="lista.length > 0">
+                          <tr>
+                            <th scope="col">Codigo</th>
+                            <th scope="col">Produto</th>
+                            <th scope="col">Quantidade</th>
+                            <th scope="col">Total({{unidade.unidade}})</th>
+                            <th scope="col">Excluir</th>
+                          </tr>
+                        </thead>
                         <tbody>
                             <tr v-for="l in lista" :key="l.lote.codigo">
                                 <td>{{l.lote.codigo}}</td>
                                 <td>{{l.produto.nome}}</td>
                                 <td>{{l.quantidade}}</td>
-                                <td><button @click="excluirItemLista(l)"></button></td>
+                                <td>{{ l.quantidade * l.lote.conteudo_frasco}}</td>
+                                <td><button @click="excluirItemLista(l)">-</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -361,8 +372,8 @@ const vapp ={
                   </div>
                 </div>
                 <div id="inog5k" class="gjs-row">
-                  <div id="ird6mh"  class="gjs-cell">
-                    <table class="table table-striped table-hover" style="background: white;border-radius: 5px;overflow: auto;max-height: 100%;" v-if="produtos.length > 0">
+                  <div id="ird6mh" style="max-height: 100%; overflow-y: auto;" class="gjs-cell">
+                    <table class="table table-striped table-hover" style="background: white;" v-if="produtos.length > 0">
                         <thead v-if="produtos.length > 0">
                           <tr>
                             <th scope="col">Nome</th>
@@ -376,7 +387,7 @@ const vapp ={
                                 <td>{{c.nome}}</td>
                                 <td>{{c.nomeFar.nome_far}}</td>
                                 <td>{{c.fabricante.f_nome}}</td>
-                                <td><button @click="adicionar(c)"></button></td>
+                                <td><button @click="adicionar(c)">+</button></td>
                             </tr>
                         </tbody>
                     </table>
