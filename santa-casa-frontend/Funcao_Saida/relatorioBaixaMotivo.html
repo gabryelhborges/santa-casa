@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Baixas por Motivo</title>
+    <link rel="stylesheet" href="../estilização/relBaixaMotivo.css">
+</head>
+<body>
+    <header>
+        <button onclick="window.location.href='C:/Users/gabri/Downloads/santa-casa/santa-casa-frontend/funcao_fundametais/baixa_produto.html'">Cadastro de Baixa</button>
+        <button onclick="window.location.href='C:/Users/gabri/Downloads/santa-casa/santa-casa-frontend/Funcao_Saida/relatorioBaixa.html'">Relatório de Baixas</button>
+        <button onclick="window.location.href='C:/Users/gabri/Downloads/santa-casa/santa-casa-frontend/Funcao_Saida/relatorioBaixaMotivo.html'">Relatório de Baixa por Motivo</button>
+   </header>
+    <div class="container">
+        <h1>Relatório de Baixas por Motivo</h1>
+
+        <div id="filter-container">
+            <div class="filter-item">
+                <label for="filter-motivo">Motivo:</label>
+                <input type="text" id="filter-motivo" placeholder="Digite o motivo" class="filter-input">
+            </div>
+            <button class="filter-button" onclick="applyFilters()">Filtrar</button>
+            <button class="filter-button" onclick="printPage()">Imprimir</button>
+        </div>
+
+        <div id="baixas-container"></div>
+
+    </div>
+    <script src="../controle/relatorioBaixaMotivoCtrl.js"></script>
+    <script src="../modelo/baixa.js"></script>
+</body>
+</html>

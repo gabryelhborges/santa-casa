@@ -1,11 +1,17 @@
-/* styles.css */
+/* relBaixaMotivo.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
 .container {
     width: 80%;
     margin: 0 auto;
     text-align: center;
 }
 
-#header {
+header {
     display: flex;
     justify-content: center; /* Centraliza os elementos horizontalmente */
     align-items: center;
@@ -15,7 +21,7 @@
     color: white;
 }
 
-.header-button {
+header button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -25,7 +31,7 @@
     margin: 0 10px; /* Espaçamento entre os botões */
 }
 
-.header-button:hover {
+header button:hover {
     background-color: #395976;
 }
 
@@ -63,55 +69,44 @@
 }
 
 .filter-button:hover {
-    background-color: #395976
+    background-color: #395976;
+}
+.motivo-table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.motivo-table th, .motivo-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.motivo-table th {
+    background-color: #f2f2f2;
 }
 
 .baixa-container {
     margin: 10px 0;
-    border: 1px solid #ccc;
     padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    position: relative; /* Necessário para o botão de exclusão */
+    text-align: left;
 }
 
 .baixa-header {
     font-weight: bold;
     cursor: pointer;
+    background-color: #f0f0f0;
 }
 
 .baixa-items {
     display: none;
-    margin-top: 10px;
-    overflow: hidden;
-    transition: max-height 0.5s ease-out;
-}
-
-.delete-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid black;
-    text-align: center;
-}
-
-th, td {
-    padding: 10px;
 }
 
 @media print {
-    #header, .filter-button, .delete-button {
+    .header, .filter-button  {
         display: none; /* Oculta os botões do header na impressão */
     }
 }
@@ -134,3 +129,4 @@ th, td {
 .print-button:hover {
     background-color: #0a547b;
 }
+

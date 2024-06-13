@@ -76,6 +76,17 @@ function renderBaixas(listaBx) {
         baixaItems.appendChild(tabela);
         baixaContainer.appendChild(baixaHeader);
         baixaContainer.appendChild(baixaItems);
+        
+        // Adiciona o botão de lixeira
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('delete-button');
+        deleteButton.innerHTML = '🗑️';
+        deleteButton.onclick = function(event) {
+            event.stopPropagation(); // Previne o clique de abrir/fechar itens
+            confirmDelete(baixa.idBaixa);
+        };
+        baixaContainer.appendChild(deleteButton);
+
         container.appendChild(baixaContainer);
     });
 }
@@ -84,29 +95,20 @@ function toggleItems(id) {
     const items = document.getElementById(`items-${id}`);
     if (items.style.display === "none" || items.style.display === "") {
         items.style.display = "block";
-        items.style.maxHeight = items.scrollHeight + "px";
     } else {
-        items.style.maxHeight = "0";
-        items.addEventListener('transitionend', () => {
-            items.style.display = "none";
-        }, { once: true });
+        items.style.display = "none";
     }
 }
 
-
 function applyFilters() {
-    const dateStartFilter = document.getElementById('filter-date-start').value;
-    const dateEndFilter = document.getElementById('filter-date-end').value;
+    const startDateFilter = document.getElementById('filter-start-date').value;
+    const endDateFilter = document.getElementById('filter-end-date').value;
     const productFilter = document.getElementById('filter-product').value.toLowerCase();
     const lotFilter = document.getElementById('filter-lote').value.toLowerCase();
 
     const filteredBaixas = listaBx.filter(baixa => {
-        const dataBaixa = new Date(baixa.dataBaixa);
-        const dataBaixaLocal = new Date(dataBaixa.getTime() - dataBaixa.getTimezoneOffset() * 60000).toISOString().split('T')[0];
-        
-        const matchDate = dateStartFilter ? 
-            (dateEndFilter ? dataBaixaLocal >= dateStartFilter && dataBaixaLocal <= dateEndFilter : dataBaixaLocal === dateStartFilter)
-            : true;
+        const matchDate = (startDateFilter || endDateFilter) ? 
+            (new Date(baixa.dataBaixa) >= new Date(startDateFilter) && new Date(baixa.dataBaixa) <= new Date(endDateFilter || startDateFilter)) : true;
         const matchProduct = productFilter ? baixa.itensBaixa.some(item => item.produto.nome.toLowerCase().includes(productFilter)) : true;
         const matchLot = lotFilter ? baixa.itensBaixa.some(item => item.lote.codigo.toLowerCase().includes(lotFilter)) : true;
 
@@ -116,56 +118,37 @@ function applyFilters() {
     renderBaixas(filteredBaixas);
 }
 
-function printBaixas() {
-    const dateStartFilter = document.getElementById('filter-date-start').value;
-    const dateEndFilter = document.getElementById('filter-date-end').value;
-    const productFilter = document.getElementById('filter-product').value.toLowerCase();
-    const lotFilter = document.getElementById('filter-lote').value.toLowerCase();
-
-    // Filtrar as baixas
-    const filteredBaixas = listaBx.filter(baixa => {
-        const dataBaixa = new Date(baixa.dataBaixa);
-        const dataBaixaLocal = new Date(dataBaixa.getTime() - dataBaixa.getTimezoneOffset() * 60000).toISOString().split('T')[0];
-
-        const matchDate = dateStartFilter ?
-            (dateEndFilter ? dataBaixaLocal >= dateStartFilter && dataBaixaLocal <= dateEndFilter : dataBaixaLocal === dateStartFilter)
-            : true;
-
-        const matchProduct = productFilter ? baixa.itensBaixa.some(item => item.produto.nome.toLowerCase().includes(productFilter)) : true;
-        const matchLot = lotFilter ? baixa.itensBaixa.some(item => item.lote.codigo.toLowerCase().includes(lotFilter)) : true;
-
-        return matchDate && matchProduct && matchLot;
-    });
-
-    // Renderizar baixas filtradas ou todas as baixas
-    if (filteredBaixas.length > 0) {
-        renderBaixas(filteredBaixas);
-    } else {
-        renderBaixas(listaBx);
+function confirmDelete(idBaixa) {
+    const confirmed = confirm("Tem certeza de que deseja excluir esta baixa?");
+    if (confirmed) {
+        deleteBaixa(idBaixa);
     }
-
-    // Garantir que todas as tabelas renderizadas estão abertas
-    const baixaItemsContainers = document.querySelectorAll('.baixa-items');
-    baixaItemsContainers.forEach(items => {
-        items.style.display = 'block';
-        items.style.maxHeight = items.scrollHeight + "px";
-    });
-
-    // Atrasar a impressão para garantir que as tabelas estejam abertas
-    setTimeout(() => {
-        window.print();
-
-        // Fechar todas as tabelas após a impressão
-        baixaItemsContainers.forEach(items => {
-            items.style.display = 'none';
-            items.style.maxHeight = '0';
-        });
-
-        // Aplicar filtros novamente para restaurar a exibição original
-        applyFilters();
-    }, 500); // Ajuste o tempo, se necessário
 }
 
+function deleteBaixa(idBaixa) {
+    fetch(`${urlBase}/baixa`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ idBaixa: idBaixa })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro ao deletar a baixa');
+        }
+        // Atualizar a lista de baixas após a exclusão
+        addListaBaixa();
+    })
+    .catch(error => console.error('Erro ao deletar a baixa:', error));
+}
 
-
-
+function printPage() {
+    // Abre todos os itens antes de imprimir
+    const baixaItems = document.querySelectorAll('.baixa-items');
+    baixaItems.forEach(item => {
+        item.style.display = 'block';
+    });
+    
+    window.print();
+}
