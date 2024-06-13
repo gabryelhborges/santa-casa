@@ -8,12 +8,12 @@ export default class ItensTransferenciaDAO{
         if(itemTransferencia instanceof ItensTransferencia){
             const sql = `INSERT INTO itensTransferidos(itf_tf_id,itf_prod_id,itf_lote_cod,itf_qtdetransferida)
             values(?,?,?,?)`;
-            const parametros = [itemTransferencia.transf_id.tf_id, itemTransferencia.prod_cod.prod_ID, itemTransferencia.lote_cod.lote_cod, itemTransferencia.quantidade];
+            const parametros = [itemTransferencia.transf_id, itemTransferencia.prod_cod, itemTransferencia.lote_cod, itemTransferencia.quantidade];
             await conexao.execute(sql,parametros);
         }
     }
 
-    async atualizar(itemTransferencia, conexao){
+    async atualizar(itemTransferencia, conexao){ //nem vou usar
         if(itemTransferencia instanceof ItensTransferencia){
             const sql = `UPDATE itensTransferidos SET itf_qtdetransferida = ? WHERE itf_tf_id = ? AND itf_prod_id = ? AND itf_lote_cod = ?`;
             const parametros = [itemTransferencia.quantidade, itemTransferencia.transf_id.tf_id, itemTransferencia.prod_cod.prod_ID, itemTransferencia.lote_cod.lote_cod];
