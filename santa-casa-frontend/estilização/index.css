@@ -48,6 +48,7 @@ header{
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
+  border: solid gray 1px;
 }
 
 /* Links inside the dropdown */
@@ -60,7 +61,7 @@ header{
 
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {
-  background-color: #f1f1f1;
+  background-color: #999999;
 }
 
 /* Show the dropdown menu on hover */
