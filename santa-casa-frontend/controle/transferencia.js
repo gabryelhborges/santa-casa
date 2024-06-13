@@ -422,13 +422,16 @@ function gerarParametrosTransferencia(itens) {
 }
 
 function validarFormulario(evento) {
+    let itenstransf = {
+        "itensTransferencia":listaItensTransferencia
+    }
     if(formTransferir.checkValidity() && listaItensTransferencia.length){
         fetch(urlBase + '/transferencia', {
             method:'POST',
             headers:{
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(listaItensTransferencia)
+            body: JSON.stringify(itenstransf)
         }).then((resposta)=>{
             return resposta.json();
         }).then((dados)=>{
