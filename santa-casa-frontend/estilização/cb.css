@@ -1,0 +1,23 @@
+#cb {
+    display: flex;
+    justify-content: center; /* Centraliza os elementos horizontalmente */
+    align-items: center;
+    background-color: #425465;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    color: white;
+  }
+  
+  .cb-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4f7ba4;
+    color: white;
+    cursor: pointer;
+    margin: 0 10px; /* Espaçamento entre os botões */
+  }
+  
+  .cb-button:hover {
+    background-color: #395976;
+  }
