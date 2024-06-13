@@ -7,15 +7,15 @@ import Loc from "../modelo/local.js";
 export default class TransferenciaDAO{
     async gravar(itens, conexao){
         if(itens instanceof Transferencia){
-            const sql = "INSERT INTO Transferencia(tf_func_id, tf_origem, tf_destino) values(?,?,?,?)";
-            const parametros = [1,itens.origem,itens.destino];
+            const sql = "INSERT INTO transferencia(tf_func_id, tf_origem, tf_destino) values (?,?,?)";
+            const parametros = [1,itens.tf_origem,itens.tf_destino];
             const retorno = await conexao.execute(sql, parametros);
             itens.tf_id = retorno[0].insertId;
         }
     }
     async excluir(itens, conexao){
         if(itens instanceof Transferencia){
-            const sql = "DELETE FROM Transferencia WHERE tf_id = ?";
+            const sql = "DELETE FROM transferencia WHERE tf_id = ?";
             const parametros = [itens.tf_id];
             await conexao.execute(sql, parametros);
         }

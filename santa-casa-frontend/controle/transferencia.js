@@ -420,10 +420,10 @@ function exibirListaItensTransferencia() {
 function gerarParametrosTransferencia(itens) {
     return `'${itens.lote.codigo}','${itens.produto.prod_ID}','${itens.qtdeConteudoUtilizado}','${itens.unidade}','${itens.origem}','${itens.destino}'`;
 }
-/*
+
 function validarFormulario(evento) {
     if(formTransferir.checkValidity() && listaItensTransferencia.length){
-        fetch(urlBase + '/transferir', {
+        fetch(urlBase + '/transferencia', {
             method:'POST',
             headers:{
                 'Content-Type': 'application/json'
@@ -452,4 +452,3 @@ function validarFormulario(evento) {
     evento.preventDefault();
     evento.stopPropagation();
 }
-*/

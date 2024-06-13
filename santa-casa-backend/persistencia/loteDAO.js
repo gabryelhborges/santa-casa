@@ -51,7 +51,6 @@ export default class LoteDAO{
     async atualizar(lote){
         if(lote instanceof Lote) { 
             const sql= `UPDATE lote SET 
-                data_validade = ?,
                 quantidade = ?,
                 formafarmaceutica_ffa_cod = ?,
                 conteudo_frasco = ?,
@@ -60,7 +59,6 @@ export default class LoteDAO{
                 loc = ?
                 WHERE codigo = ? AND produto_prod_ID = ?`;
             const parametros = [
-                lote.data_validade,
                 lote.quantidade,
                 lote.formaFarmaceutica.ffa_cod,
                 lote.conteudo_frasco,  
