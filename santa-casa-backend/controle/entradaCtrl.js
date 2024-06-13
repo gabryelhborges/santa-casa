@@ -100,68 +100,90 @@ export default class EntradaCtrl{
         }
     }
 
-    async atualizar(requisicao,resposta){
+    async excluir(requisicao, resposta) {
         resposta.type('application/json');
-        if((requisicao.method === "PUT" || requisicao.method === "PATCH") && requisicao.is("application/json")){
-            const dados =  requisicao.body;
-            const id = dados.entrada_id;
-            const funcionario = dados.funcionario;
-            const data_entrada = dados.data_entrada;
-            const itensEntrada = dados.itensEntrada;
-            if(id && data_entrada && funcionario instanceof Funcionario && itensEntrada.length > 0){
-                const entrada = new Entrada(id,funcionario,data_entrada,itensEntrada);
-                const conexao = await DB.conectar();
-                entrada.atualizar(conexao).then(()=>{
-                    resposta.status(200).json({
-                        "status":true,
-                        "mensagem":"Entrada Atualizada"
-                    });
-                })
-                .catch((erro)=>{
-                    resposta.status(500).json({
-                        "status":false,
-                        "mensagem":"Erro na atualização da entrada:"+erro.message
-                    });
-                });
-                conexao.release();
-            }else{
-                resposta.status(400).json({
-                    "status": false,
-                    "mensagem": "Informe todos os dados de uma entrada para atualizá-lo!"
-                });
-            }
-        }else{
-            resposta.status(400).json({
-                "status": false,
-                "mensagem": "Utilize o método PATCH/PUT para alterar uma entrada!"
-            });
-        }
-    }
 
-    async excluir(requisicao,resposta){
-        resposta.type('application/json');
         if (requisicao.method === "DELETE" && requisicao.is("application/json")) {
-            const id = requisicao.body.entrada_id;
+            const id = requisicao.params.termo;
+
             if (id) {
                 const entrada = new Entrada(id);
                 const conexao = await DB.conectar();
 
-                entrada.excluir(conexao).then(() => {
-                    resposta.status(200).json({
-                        "status": true,
-                        "mensagem": "Entrada excluido com sucesso!"
-                    });
-                })
-                    .catch((erro) => {
-                        resposta.status(500).json({
+                try {
+                    const listaEntradas = await entrada.consultar(id, conexao);
+
+                    if (listaEntradas.length === 0) {
+                        resposta.status(404).json({
                             "status": false,
-                            "mensagem": "Erro ao excluir a entrada: " + erro.message
+                            "mensagem": "Entrada não encontrada!"
                         });
+                    }
+
+                    const dataEntrada = new Date(listaEntradas[0].data_entrada);
+
+                    if (Date.now() < dataEntrada.getTime() + 24 * 60 * 60 * 1000) {
+                        await conexao.beginTransaction();
+
+                        for (let item of listaEntradas[0].itensEntrada) {
+                            const lote = new Lote(item.lote.codigo);
+
+                            try {
+                                await lote.consultar(conexao);
+
+                                if (item.lote.data_entrada === listaEntradas[0].data_entrada) {
+                                    await lote.excluir(conexao);
+                                }
+
+                                await item.excluir(conexao);
+
+                            } catch (erro) {
+                                await conexao.rollback();
+                                resposta.status(500).json({
+                                    "status": false,
+                                    "mensagem": "Erro ao excluir item de entrada ou lote: " + erro.message
+                                });
+                            }
+                        }
+
+                        try {
+                            await entrada.excluir(conexao);
+                            await conexao.commit();
+                            resposta.status(200).json({
+                                "status": true,
+                                "mensagem": "Entrada excluída com sucesso!"
+                            });
+                        } catch (erro) {
+                            await conexao.rollback();
+                            resposta.status(500).json({
+                                "status": false,
+                                "mensagem": "Erro ao excluir entrada: " + erro.message
+                            });
+                        }
+
+                    } else {
+                        resposta.status(400).json({
+                            "status": false,
+                            "mensagem": "Não é possível excluir a entrada, mais de um dia se passou!"
+                        });
+                    }
+
+                } catch (erro) {
+                    await conexao.rollback();
+                    resposta.status(500).json({
+                        "status": false,
+                        "mensagem": "Houve um erro ao consultar a entrada: " + erro.message
                     });
-                conexao.release();
+                } finally {
+                    conexao.release();
+                }
+            } else {
+                resposta.status(400).json({
+                    "status": false,
+                    "mensagem": "ID de entrada não fornecido!"
+                });
             }
-        }
-        else {
+        } else {
             resposta.status(400).json({
                 "status": false,
                 "mensagem": "Utilize o método DELETE para excluir uma entrada!"

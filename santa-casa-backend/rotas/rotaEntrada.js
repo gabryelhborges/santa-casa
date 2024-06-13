@@ -6,9 +6,7 @@ const entradaCtrl = new EntradaCtrl();
 const rotaEntrada = new Router();
 
 rotaEntrada.post('/',entradaCtrl.gravar)
-.put('/',entradaCtrl.atualizar)
-.patch('/',entradaCtrl.atualizar)
-.delete('/', entradaCtrl.excluir)
+.delete('/:termo', entradaCtrl.excluir)
 .get('/',entradaCtrl.consultar)
 .get('/:termo', entradaCtrl.consultar)
 

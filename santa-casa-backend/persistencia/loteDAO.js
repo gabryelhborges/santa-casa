@@ -74,13 +74,11 @@ export default class LoteDAO{
         }
     }
 
-    async excluir(lote){
+    async excluir(lote,conexao){
         if(lote instanceof Lote){
             const sql = "DELETE FROM lote WHERE codigo = ? AND produto_prod_ID = ?";
             const parametros =[lote.codigo, lote.produto.prod_ID];
-            const conexao = await conectar();
             await conexao.execute(sql, parametros);
-            global.poolConexoes.releaseConnection(conexao);
         }
     }
 

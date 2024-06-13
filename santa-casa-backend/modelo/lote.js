@@ -140,9 +140,9 @@ export default class Lote{
         await loteDAO.atualizar(this,conexao);
     }
 
-    async excluir(){
+    async excluir(conexao){
         const  loteDAO = new LoteDAO();
-        await loteDAO.excluir(this);
+        await loteDAO.excluir(this,conexao);
     }
 
     async consultar(){
