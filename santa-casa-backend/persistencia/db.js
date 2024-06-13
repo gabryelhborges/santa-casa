@@ -9,7 +9,7 @@ class DB {
                 host: 'localhost',
                 port: '3306',
                 user: 'root',
-                password: '1234',
+                password: '',
                 database: 'santa_casa',
                 waitForConnections: true, // Espera por conexões livres
                 connectionLimit: 10, // Limite máximo de conexões no pool

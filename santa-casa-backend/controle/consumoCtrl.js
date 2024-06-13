@@ -220,13 +220,15 @@ export default class ConsumoCtrl {
         const dados = requisicao.query;
 
         let prod;
-        let nomeProd= dados.nomeProduto;
+        let nomeProd = dados.nomeProduto;
         nomeProd ? prod = new Produto(0, null, nomeProd) : prod = null;
+        let dataInicio = dados.dataInicio;
+        let dataFim = dados.dataFim;
 
         if (requisicao.method === "GET") {
             const itCons = new ItensConsumo(null, null, prod);
             const conexao = await DB.conectar();
-            itCons.relatorioProdutosConsumidos(conexao).then((listaConsumos) => {
+            itCons.relatorioProdutosConsumidos(conexao, dataInicio, dataFim).then((listaConsumos) => {
                 resposta.status(200).json({
                     "status": true,
                     "listaConsumos": listaConsumos
@@ -239,7 +241,8 @@ export default class ConsumoCtrl {
                     });
                 });
             conexao.release();
-        } else {
+        }
+        else {
             resposta.status(400).json({
                 "status": false,
                 "mensagem": "Utilize o método GET para consultar um consumo!"

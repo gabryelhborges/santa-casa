@@ -11,9 +11,47 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="shortcut icon" type="imagex/png" href="../image/farmacia.png">
+    <link rel="stylesheet" href="../estilização/index.css" />
 </head>
 
 <body class="body">
+
+    
+    <header>
+        <img src="../image/farmacia.png" alt="" class="logo_tamanho">
+
+        <div class="div-header">
+            <div class="dropdown">
+                <button class="dropbtn">Cadastros</button>
+                <div class="dropdown-content">
+                    <a href="../Formularios/cadastro_funcionario.html">Funcionário</a>
+                    <a href="../Formularios/formulario_paciente.html">Paciente</a>
+                    <a href="../Formularios/formulario_produto.html">Produto</a>
+                    <a href="../Formularios/formulario_farbicante.html">Fabricante</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">Operações</button>
+                <div class="dropdown-content">
+                    <a href="../funcao_fundametais/efetuar_consumo.html">Efetuar consumo</a>
+                    <a href="../funcao_fundametais/baixa_produto.html">Baixa de produto</a>
+                    <a href="../funcao_fundametais/entrada_de_produto.html">Entrada de produto</a>
+                    <a href="../funcao_fundametais/transferir_produtos.html">Transferência de produto</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">Relatórios</button>
+                <div class="dropdown-content">
+                    <a href="../Funcao_Saida/relatorioConsumo.html">Relatório de Consumo</a>
+                    <a href="../Funcao_Saida/relatorioBaixa.html">Relatório de Baixa</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
     <div class="corpo" style="padding-top: 250px;">
         <div class="fundo-formulario">
             <div class="titulo-form">
@@ -31,8 +69,8 @@
                         <label>Fabricante<strong style="color: red;">*</strong></label>
                     </div>
                     <div class="dual-input-container">
-                        <input id="prod_ID" type="text" class="input-style" placeholder="Código identificador de produto"
-                        name="codigo_produto" required>
+                        <input id="prod_ID" type="text" class="input-style"
+                            placeholder="Código identificador de produto" name="codigo_produto" required>
                         <select id="fabricante" name="selectFabricante" class="input-style" required> </select>
                     </div>
                 </div>
@@ -42,10 +80,11 @@
                         <label>Nome do Produto <strong style="color: red;">*</strong></label>
                     </div>
                     <div class="dual-input-container">
-                        <input id="nome" type="text" class="input-style" placeholder="Nome do Produto" name="nome" required>
+                        <input id="nome" type="text" class="input-style" placeholder="Nome do Produto" name="nome"
+                            required>
                     </div>
                 </div>
-                
+
                 <div class="dual-input-container">
                     <div class="dual-input-container">
                         <label>Tipo do Produto<strong style="color: red;">*</strong></label>
@@ -56,7 +95,7 @@
                             <option value="Remedio" selected> Remedio </option>
                             <option value="Material"> Material </option>
                         </select>
-    
+
                         <input oninput="mascaraValor(this)" id="valor_custo" type="text" class="input-style"
                             placeholder="R$ 0,00" name="valor_custo" required>
                     </div>
@@ -72,7 +111,7 @@
                     </div>
                 </div>
 
-                
+
                 <div class="dual-input-container" id="div1">
                     <div class="dual-input-container">
                         <label>Descrição de uso<strong style="color: red;">*</strong></label>
@@ -80,11 +119,11 @@
                     </div>
                     <div class="dual-input-container">
                         <textarea id="descricao_uso" class="input-style" rows="4" cols="50" name="descricao_uso"
-                        placeholder="Descrição de uso" maxlength="2000" required></textarea>
+                            placeholder="Descrição de uso" maxlength="2000" required></textarea>
 
                         <textarea id="observacao" class="input-style" rows="4" cols="50" name="observacao"
-                        placeholder="Observações" maxlength="2000" ></textarea>
-                     </div>
+                            placeholder="Observações" maxlength="2000"></textarea>
+                    </div>
                 </div>
                 <div class="dual-input-container" id="div1">
                     <div class="dual-input-container">

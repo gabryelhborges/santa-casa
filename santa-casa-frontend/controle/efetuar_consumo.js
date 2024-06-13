@@ -22,6 +22,7 @@ document.getElementById("funcionario").value = 1;//a partir do login, identifica
 var listaItensConsumo = [];
 var qtdeTotalLoteSelecionado = 0;
 var listaLotes = [];
+var listaUnidadesMedida= [];
 var pacConsumo;
 var funcConsumo;
 procuraFuncionario();
@@ -112,6 +113,17 @@ function adicionarItemConsumo() {
     let objProd;
     objLote ? objProd = objLote.produto : objProd = null;
     let qtde = document.getElementById('qtde').value;
+
+    //Se unidade for igual a lote, fazer a conversão pra unidade minima
+    let unidadeMedidaSelecionada = document.getElementById('unidadeMedida').value;
+    if(unidadeMedidaSelecionada == objLote.unidade.un_cod){
+        let unidadeLote = objLote.unidade.unidade;
+        let qtdeUnidade = unidadeLote.match(/\d+/g);
+        if(qtdeUnidade !== null){
+            let numInteiro = qtdeUnidade.map(num => parseInt(num, 10));
+            qtde = qtde * numInteiro;
+        }
+    }
     if (objLote && objProd && qtde > 0 && qtde <= qtdeTotalLoteSelecionado) {
         let itemExistente = listaItensConsumo.find(item => item.lote.codigo === objLote.codigo && item.produto.prod_ID === objProd.prod_ID);
         // Verifica se já existe um item com o mesmo produto e lote
@@ -166,6 +178,7 @@ function limparFormItemConsumo() {
     document.getElementById('lote').innerHTML = '';
     document.getElementById('dataVencimento').value = '';
     document.getElementById('qtde').value = '';
+    document.getElementById('unidadeMedida').innerHTML= '';
 }
 
 function exibirListaItensConsumo() {
@@ -180,10 +193,12 @@ function exibirListaItensConsumo() {
         let cabecalho = document.createElement('thead');
         cabecalho.style.borderBottom = '1px solid';
         cabecalho.innerHTML = `
-                    <tr'>
+                    <tr>
                         <th>Lote</th>
                         <th>Produto</th>
                         <th>Qtde</th>
+                        <th>Unidade Mínima</th>
+                        <th>Ação</th>
                     </tr>
                     `;
         tabela.appendChild(cabecalho);
@@ -195,6 +210,7 @@ function exibirListaItensConsumo() {
                         <td>${itCons.lote.codigo}</td>
                         <td>${itCons.produto.nome}</td>
                         <td>${itCons.qtdeConteudoUtilizado}</td>
+                        <td>${itCons.produto.unidade.unidade}</td>
                         <td>
                             <button class="" onclick="removerItemConsumo(${gerarParametrosItemConsumo(itCons)})">
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 64 64">
@@ -348,11 +364,32 @@ function carregaProdutos() {
         })
 }
 
-function selecionarProduto(prod_ID, Fabricante_idFabricante, nome, psicotropico, valor_custo, far_cod, ffa_cod, uni_cod, observacao, descricao_uso, tipo) {
+function selecionarProduto(prod_ID, nome, psicotropico, valor_custo, 
+    observacao, tipo, cod_unidade, desc_unidade) {
     document.getElementById('produto').value = prod_ID;
     document.getElementById('nomeProduto').value = nome;
     document.getElementById('qtde').focus();
     adicionarLote(prod_ID);
+    resetaSelectUnidadeMedida();
+    adicionarUnidadeMedida(cod_unidade, desc_unidade);
+}
+
+function gerarParametrosProduto(produto) {
+    return `'${produto.prod_ID}','${produto.nome}',
+    '${produto.psicotropico}','${produto.valor_custo}',
+    '${produto.observacao}','${produto.tipo}', '${produto.unidade.un_cod}', '${produto.unidade.unidade}'`;
+}
+
+function adicionarUnidadeMedida(codUnidade, descUnidade){
+    let selectUnidade= document.getElementById('unidadeMedida');
+    let opt = document.createElement('option');
+    opt.value= codUnidade;
+    opt.text= descUnidade;
+    selectUnidade.appendChild(opt);
+}
+
+function resetaSelectUnidadeMedida(){
+    document.getElementById('unidadeMedida').innerHTML= '';
 }
 
 function adicionarLote(produto) {
@@ -371,8 +408,10 @@ function adicionarLote(produto) {
             if (Array.isArray(listaLot)) {
                 for (let i = 0; i < listaLot.length; i++) {
                     let lote = listaLot[i];
-                    let objLote = new Lote(lote.codigo, formataData(lote.data_validade), lote.quantidade, lote.produto, lote.formaFarmaceutica, lote.conteudo_frasco, lote.unidade, lote.total_conteudo);
+                    let objLote = new Lote(lote.codigo, formataData(lote.data_validade), lote.quantidade, lote.produto, 
+                    lote.formaFarmaceutica, lote.conteudo_frasco, lote.unidade, lote.total_conteudo);
                     let optionLote = document.createElement("option");
+                    adicionarUnidadeMedida(lote.unidade.un_cod, lote.unidade.unidade);
                     optionLote.value = objLote.codigo;
                     optionLote.text = objLote.codigo + "/" + objLote.produto.prod_ID;
                     listaLotes.push(objLote);
@@ -389,7 +428,7 @@ function adicionarLote(produto) {
 document.getElementById("lote").addEventListener("change", function () {
     let codLote = document.getElementById('lote').value;
     let codProd = document.getElementById('produto').value;
-    let objLote = listaLotes.find(item => item.codigo === codLote && item.produto.prod_ID == codProd);
+    let objLote = listaLotes.find(item => item.codigo == codLote && item.produto.prod_ID == codProd);
     document.getElementById('dataVencimento').value = formataData(objLote.data_validade);
     qtdeTotalLoteSelecionado = objLote.total_conteudo;
 });
@@ -425,12 +464,6 @@ function gerarParametrosPaciente(paciente) {
     '${paciente.naturalidade}','${paciente.nome_pai}','${paciente.nome_responsavel}',
     '${paciente.nome_mae}','${paciente.nome_social}','${paciente.utilizar_nome_social}',
     '${paciente.religiao}','${paciente.orientacao_sexual}'`;
-}
-
-function gerarParametrosProduto(produto) {
-    return `'${produto.prod_ID}','${produto.Fabricante_idFabricante}','${produto.nome}',
-    '${produto.psicotropico}','${produto.valor_custo}','${produto.far_cod}',
-    '${produto.observacao}','${produto.tipo}'`;
 }
 
 
