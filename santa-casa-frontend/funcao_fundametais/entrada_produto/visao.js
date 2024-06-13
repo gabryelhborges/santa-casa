@@ -216,6 +216,39 @@ const vapp ={
     },
     template:
     `
+    <header>
+  <img src="../image/farmacia.png" alt="" class="logo_tamanho">
+
+  <div class="div-header">
+      <div class="dropdown">
+          <button class="dropbtn">Cadastros</button>
+          <div class="dropdown-content">
+              <a href="../Formularios/formulario_funcionario/cadastro_funcionario.html">Funcionário</a>
+              <a href="../Formularios/formulario_paciente.html">Paciente</a>
+              <a href="../Formularios/formulario_produto.html">Produto</a>
+              <a href="../Formularios/formulario_farbicante.html">Fabricante</a>
+          </div>
+      </div>
+
+      <div class="dropdown">
+          <button class="dropbtn">Operações</button>
+          <div class="dropdown-content">
+              <a href="../funcao_fundametais/efetuar_consumo.html">Efetuar consumo</a>
+              <a href="../funcao_fundametais/baixa_produto.html">Baixa de produto</a>
+              <a href="../funcao_fundametais/entrada_de_produto.html">Entrada de produto</a>
+              <a href="../funcao_fundametais/transferir_produtos.html">Transferência de produto</a>
+          </div>
+      </div>
+
+      <div class="dropdown">
+          <button class="dropbtn">Relatórios</button>
+          <div class="dropdown-content">
+              <a href="../Funcao_Saida/relatorioConsumo.html">Relatório de Consumo</a>
+              <a href="../Funcao_Saida/relatorioBaixa.html">Relatório de Baixa</a>
+          </div>
+      </div>
+  </div>
+</header>
     <div id="ig9e" class="gjs-row">
     </div>
     <div class="gjs-row" id="i9k6ut">
