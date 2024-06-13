@@ -425,7 +425,7 @@ function gerarParametrosTransferencia(itens) {
     return `'${itens.lote.codigo}','${itens.produto.prod_ID}','${itens.qtdeConteudoUtilizado}','${itens.unidade}','${itens.origem}','${itens.destino}'`;
 }
 
-async function validarFormulario(evento) {
+function validarFormulario(evento) {
     let itenstransf = {
         "itensTransferencia":listaItensTransferencia
     }
