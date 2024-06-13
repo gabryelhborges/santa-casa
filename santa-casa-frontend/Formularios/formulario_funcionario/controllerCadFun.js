@@ -25,7 +25,34 @@ const vapp = {
             });
         }
     },
-    methods: {
+    methods: {        
+        exibirMensagem(mensagem, estilo) {
+            let elemMensagem = document.getElementById('mensagem');
+            if (!estilo) {
+                estilo = 'aviso';
+            }
+            if (estilo == 'aviso') {
+                //Mensagem alerta
+                elemMensagem.innerHTML = `  <div class='divMsg msgAviso'>
+                                                <p>${mensagem}</p>
+                                            </div>`;
+            }
+            else if(estilo == 'ok'){
+                elemMensagem.innerHTML= `   <div class='divMsg msgOk'>
+                                                <p>${mensagem}</p>
+                                            </div>`;
+            }
+            else {
+                //quando estilo= 'erro';
+                elemMensagem.innerHTML = `  <div class='divMsg msgErro'>
+                                                <p>${mensagem}</p>
+                                            </div>`;
+            }
+        
+            setTimeout(() => {
+                elemMensagem.innerHTML = '';
+            }, 7000);//7 Segundos
+        },
         limpar() {
             this.id = '';
             this.cpf = '';
@@ -56,6 +83,7 @@ const vapp = {
         },
         excluir() {
             axios.delete(`${urlBase}/${this.id}`).then(() => {
+                this.exibirMensagem("Excluido com Sucesso","ok");
                 this.limpar();
                 this.gerarTabela();
             });
@@ -94,21 +122,22 @@ const vapp = {
                 "cpf": this.cpf,
                 "telefone_funcionario": this.telefone
             }).then(() => {
+                this.exibirMensagem("Alterado com Sucesso","ok");
                 this.limpar();
                 this.gerarTabela();
             });
         },
         executarAcao() {
             if (!this.cpf || !this.nome || !this.telefone || (this.isFarmaceutico==false && !this.coren)) {
-                alert("Por favor, preencha todos os campos obrigatórios.");
+                this.exibirMensagem("Por favor, preencha todos os campos obrigatórios.","erro");
                 return;
             }
             if (this.cpf.length !== 14) {
-                alert("CPF inválido. Por favor, insira um CPF no formato 000.000.000-00.");
+                this.exibirMensagem("CPF inválido. Por favor, insira um CPF no formato 000.000.000-00.","erro");
                 return;
             }
             if (this.telefone.length !== 14) {
-                alert("Telefone inválido. Por favor, insira um telefone com pelo menos 10 dígitos.");
+                this.exibirMensagem("Telefone inválido. Por favor, insira um telefone com pelo menos 10 dígitos.","erro");
                 return;
             }
             if (this.acao === 'ENVIAR') {
@@ -124,6 +153,7 @@ const vapp = {
                     "cpf": this.cpf,
                     "telefone_funcionario": this.telefone
                 }).then(() => {
+                    this.exibirMensagem("Cadastrado com Sucesso","ok");
                     this.limpar();
                     this.gerarTabela();
                 });
@@ -154,10 +184,6 @@ const vapp = {
                         <div id="idehe" class="gjs-row">
                             <div id="i3qzp" class="gjs-cell">
                                 <form @submit.prevent="executarAcao()" method="get" id="i1kli">
-                                    <div id="ido4u">
-                                        <label id="ijmu7">*CPF</label>
-                                        <input required @change="mascaraCPF()" v-model="cpf" type="text" id="ihkim" />
-                                    </div>
                                     <div id="iwqmj">
                                         <label id="irb6v">*Nome</label>
                                         <input required v-model="nome" type="text" id="iatkf" />
@@ -184,9 +210,9 @@ const vapp = {
                 </div>
             </div>
         </div>
-        <div id="i2c15" style="width: 50%; align-items: center;">
-            <input v-model="filtroNome" placeholder="Filtrar por nome" id="icf4s"/>
-            <select v-model="filtroFarmaceutico" id="icf4s">
+        <div class="filter-container">
+            <input v-model="filtroNome" placeholder="Filtrar por nome" class="filter-input" />
+            <select v-model="filtroFarmaceutico" class="filter-select">
                 <option value="todos">Todos</option>
                 <option value="S">Farmacêutico</option>
                 <option value="N">Não Farmacêutico</option>
@@ -229,6 +255,7 @@ const vapp = {
                 </tbody>
             </table>
         </div>
+        <div id="mensagem"></div>
         `
     
 }

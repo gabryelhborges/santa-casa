@@ -28,28 +28,23 @@ export default class EntradaCtrl{
                     entrada.gravar(conexao).then(async() =>{
                         let atualizou = 1;
                         let gravou2 = 1;
-                        let novo = 1;
                         let i = 0;
                         while (gravou2 && atualizou && i < itensEntrada.length) {
                             const item = itensEntrada[i];
                             let itemEntrada = new ItensEntrada(entrada, item.lote, item.produto, item.quantidade);
-                            let lote = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto, item.lote.formaFarmaceutica, item.lote.conteudo_frasco, item.lote.unidade, item.lote.total_conteudo, item.lote.local);
+                            let lote = new Lote(item.lote.codigo, item.lote.data_validade, item.lote.quantidade, item.lote.produto, item.lote.formaFarmaceutica, item.lote.conteudo_frasco, item.lote.unidade, item.lote.total_conteudo, item.lote.local,item.lote.data_entrada);
                             await lote.consultar().then((listaLote) => {
                                 if(listaLote.length==1){
                                     lote = listaLote.pop();
                                 }else{
-                                    lote.gravar().then((idLote) => {})
-                                    novo = 0;
+                                    lote.gravar(conexao).then((idLote) => {})
                                 }
+                            }); 
+                            await itemEntrada.gravar(conexao).catch(() => {
+                                gravou2 = 0;
                             });
-                            if(novo){
-                                await itemEntrada.gravar(conexao).catch(() => {
-                                    gravou2 = 0;
-                                });
-                            }
-                            // incrementar o lote
                             if (gravou2) {
-                                lote.total_conteudo = lote.total_conteudo + item.quantidade;
+                                lote.total_conteudo = Number(lote.total_conteudo) + Number(item.quantidade);
                                 lote.atualizar().catch((erro) => {
                                     atualizou = 0;
                                     //console.log(erro);

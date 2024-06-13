@@ -130,9 +130,9 @@ export default class Lote{
         };
     }
 
-    async gravar(){
+    async gravar(conexao){
         const loteDAO = new LoteDAO();
-        await loteDAO.gravar(this);
+        await loteDAO.gravar(this,conexao);
     }
 
     async atualizar(){
