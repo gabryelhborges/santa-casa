@@ -84,7 +84,7 @@ export default class FuncionarioCtrl{
     excluir(requisicao, resposta) {
         resposta.type('application/json');
         if (requisicao.method === "DELETE"){
-            const idFuncionario = requisicao.body.idFuncionario;
+            const idFuncionario = requisicao.params.termo;
             if(idFuncionario){
                 const funcionario = new Funcionario(idFuncionario);
                 funcionario.excluir().then(()=>{

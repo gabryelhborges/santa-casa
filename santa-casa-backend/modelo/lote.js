@@ -10,6 +10,7 @@ export default class Lote{
     #unidade;
     #total_conteudo;
     #local;
+    #data_entrada;
 
     constructor(codigo = "" ,
                 data_validade = "",
@@ -19,7 +20,8 @@ export default class Lote{
                 conteudo_frasco = 0,
                 unidade = null,
                 total_conteudo = 0,
-                local= null
+                local= null,
+                data_entrada = '' 
     ){
         this.#codigo = codigo;
         this.#data_validade = data_validade;
@@ -30,6 +32,15 @@ export default class Lote{
         this.#unidade = unidade;
         this.#total_conteudo = total_conteudo;
         this.#local = local;
+        this.#data_entrada = data_entrada;
+    }
+
+    get data_entrada(){
+        return this.#data_entrada;
+    }
+
+    set data_entrada(novo){
+        this.#data_entrada = novo;
     }
 
     get codigo(){
@@ -114,13 +125,14 @@ export default class Lote{
             conteudo_frasco: this.#conteudo_frasco,
             unidade: this.#unidade,
             total_conteudo: this.#total_conteudo,
-            local: this.#local
+            local: this.#local,
+            data_entrada: this.#data_entrada
         };
     }
 
-    async gravar(){
+    async gravar(conexao){
         const loteDAO = new LoteDAO();
-        await loteDAO.gravar(this);
+        await loteDAO.gravar(this,conexao);
     }
 
     async atualizar(){

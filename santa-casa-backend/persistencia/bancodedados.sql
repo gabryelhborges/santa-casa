@@ -94,16 +94,6 @@ create table loc(
     loc_nome varchar(30) not null,
     constraint pk_loc primary key (loc_id)
 );
-
-
-CREATE TABLE entrada(
-    entrada_id INTEGER not NULL AUTO_INCREMENT,
-    entrada_funcionario_id INTEGER not NULL,
-    data_entrada DATE NOT NULL,
-    constraint pk_id PRIMARY key (entrada_id),
-    constraint fk_fun FOREIGN KEY (entrada_funcionario_id) REFERENCES funcionarios(idFuncionario)
-);
-
 -- drop table lote;
 create table lote(
     codigo varchar(15) not null,
@@ -115,13 +105,20 @@ create table lote(
     unidade_un_cod integer not null,
     total_conteudo integer not null,
     loc integer not null,
+    data_entrada date not null,
     constraint pk_codigo primary key (codigo, produto_prod_ID, loc),
     constraint fk_prod_ID  foreign key (produto_prod_ID) references produtos(prod_ID), 
     constraint fk_ffa_cod foreign key (formafarmaceutica_ffa_cod) references formafarmaceutica(ffa_cod),  
     constraint fk_un_cod foreign key (unidade_un_cod) references unidade(un_cod),
     constraint fk_loc foreign key (loc) references loc(loc_id)
 );
-
+CREATE TABLE entrada(
+    entrada_id INTEGER not NULL AUTO_INCREMENT,
+    entrada_funcionario_id INTEGER not NULL,
+    data_entrada DATE NOT NULL,
+    constraint pk_id PRIMARY key (entrada_id),
+    constraint fk_fun FOREIGN KEY (entrada_funcionario_id) REFERENCES funcionarios(idFuncionario)
+);
 CREATE TABLE itensEntrada(
     ent_id INTEGER NOT NULL,
     lote_cod VARCHAR(15) NOT NULL,
@@ -131,8 +128,6 @@ CREATE TABLE itensEntrada(
     constraint fk_entrada foreign key (ent_id) REFERENCES entrada(entrada_id),
     constraint fk_lote Foreign Key (lote_cod,prod_id) REFERENCES lote(codigo,produto_prod_ID)
 );
-
-
 
 create table consumo(
 	cons_id integer not null auto_increment,
@@ -325,6 +320,6 @@ insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) va
 
 -- insert itens consumo
 insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 54321, 2, 11);
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 12345, 1, 6);
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 12345, 1, 2);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 1, 1, 6);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 1, 1, 2);
 

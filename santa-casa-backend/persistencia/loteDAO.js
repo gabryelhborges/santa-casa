@@ -8,7 +8,7 @@ import Local from "../modelo/local.js";
 
 export default class LoteDAO{
     //da para cadastrar lote e codigo iguais tenho que consertar
-    async gravar(lote){
+    async gravar(lote,conexao){
         if(lote instanceof Lote){
             const sql = `INSERT INTO lote(codigo,
                         data_validade,
@@ -18,8 +18,9 @@ export default class LoteDAO{
                         conteudo_frasco,
                         unidade_un_cod,
                         total_conteudo,
-                        loc
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                        loc,
+                        data_entrada
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             const parametros = [
                 lote.codigo,
                 lote.data_validade,
@@ -29,11 +30,10 @@ export default class LoteDAO{
                 lote.conteudo_frasco,  
                 lote.unidade.un_cod,  
                 lote.total_conteudo,
-                lote.local.loc_id
+                lote.local.loc_id,
+                lote.data_entrada
             ];
-            const conexao = await conectar();
             await conexao.execute(sql,parametros);
-            global.poolConexoes.releaseConnection(conexao);
         }
     }
 
@@ -56,7 +56,8 @@ export default class LoteDAO{
                 conteudo_frasco = ?,
                 unidade_un_cod = ?,
                 total_conteudo = ?,
-                loc = ?
+                loc = ?,
+                data_entrada = ?
                 WHERE codigo = ? AND produto_prod_ID = ?`;
             const parametros = [
                 lote.quantidade,
@@ -65,6 +66,7 @@ export default class LoteDAO{
                 lote.unidade.un_cod,
                 lote.total_conteudo,
                 lote.local.loc_id,
+                lote.data_entrada,
                 lote.codigo,
                 lote.produto.prod_ID
             ];
@@ -127,7 +129,7 @@ export default class LoteDAO{
             
             let lote = new Lote(registro.codigo,registro.data_validade,
                 registro.quantidade,produto,formaFarmaceutica,registro.conteudo_frasco,
-                unidade,registro.total_conteudo,local
+                unidade,registro.total_conteudo,local,registro.data_entrada
             );
             listaLotes.push(lote);
         }

@@ -9,6 +9,6 @@ rotaFuncionario.get("/", funCtrl.consultar)
 .post( '/', funCtrl.gravar)
 .patch('/', funCtrl.atualizar)
 .put('/',funCtrl.atualizar)
-.delete('/',funCtrl.excluir);
+.delete('/:termo',funCtrl.excluir);
 
 export default rotaFuncionario; 
