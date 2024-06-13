@@ -45,7 +45,7 @@ export default class EntradaCtrl{
                             });
                             if (gravou2) {
                                 lote.total_conteudo = Number(lote.total_conteudo) + Number(item.quantidade);
-                                lote.atualizar().catch((erro) => {
+                                lote.atualizar(conexao).catch((erro) => {
                                     atualizou = 0;
                                     //console.log(erro);
                                 });

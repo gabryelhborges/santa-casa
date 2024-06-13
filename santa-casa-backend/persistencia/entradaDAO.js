@@ -42,7 +42,7 @@ export  default class EntradaDAO {
         let listaEntradas = [];
         for(const registro of registros){
             let funcionario = new Funcionario();
-            await funcionario.consultar(registro.cons_func_id).then((listaFunc)=>{
+            await funcionario.consultar(registro.entrada_funcionario_id).then((listaFunc)=>{
                 funcionario = listaFunc.pop();
             });
 
