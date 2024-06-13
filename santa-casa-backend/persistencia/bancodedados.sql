@@ -319,7 +319,7 @@ insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) va
 insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) values(2, 2, '2026-07-30', 1);
 
 -- insert itens consumo
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 54321, 2, 11);
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 1, 1, 6);
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 1, 1, 2);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 'L001', 1, 11);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 'L002', 2, 6);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 'L001', 1, 2);
 
