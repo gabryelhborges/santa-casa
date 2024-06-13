@@ -118,7 +118,6 @@ export default class EntradaCtrl{
                             "status": false,
                             "mensagem": "Entrada não encontrada!"
                         });
-                        return;
                     }
 
                     const dataEntrada = new Date(listaEntradas[0].data_entrada);
@@ -144,7 +143,6 @@ export default class EntradaCtrl{
                                     "status": false,
                                     "mensagem": "Erro ao excluir item de entrada ou lote: " + erro.message
                                 });
-                                return;
                             }
                         }
 
