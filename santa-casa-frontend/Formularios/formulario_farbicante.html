@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +11,52 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="shortcut icon" type="imagex/png" href="../image/farmacia.png">
+    <link rel="stylesheet" href="../estilização/index.css" />
+
 <body class="body">
+   
+
+
+
+    <header>
+        <img src="../image/farmacia.png" alt="" class="logo_tamanho">
+
+        <div class="div-header">
+            <div class="dropdown">
+                <button class="dropbtn">Cadastros</button>
+                <div class="dropdown-content">
+                    <a href="../Formularios/cadastro_funcionario.html">Funcionário</a>
+                    <a href="../Formularios/formulario_paciente.html">Paciente</a>
+                    <a href="../Formularios/formulario_produto.html">Produto</a>
+                    <a href="../Formularios/formulario_farbicante.html">Fabricante</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">Operações</button>
+                <div class="dropdown-content">
+                    <a href="../funcao_fundametais/efetuar_consumo.html">Efetuar consumo</a>
+                    <a href="../funcao_fundametais/baixa_produto.html">Baixa de produto</a>
+                    <a href="../funcao_fundametais/entrada_de_produto.html">Entrada de produto</a>
+                    <a href="../funcao_fundametais/transferir_produtos.html">Transferência de produto</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">Relatórios</button>
+                <div class="dropdown-content">
+                    <a href="../Funcao_Saida/relatorioConsumo.html">Relatório de Consumo</a>
+                    <a href="../Funcao_Saida/relatorioBaixa.html">Relatório de Baixa</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
     <div class="corpo">
         <div class="fundo-formulario">
             <div class="titulo-form">
-                <h2 >
+                <h2>
                     Cadastro de Fabricante
                 </h2>
                 <hr>
@@ -22,11 +64,13 @@
             <form id="formFabricante" action="" method="POST" style="padding: 15px;">
                 <label>&nbsp;&nbsp;CNPJ: <strong style="color: red;">*</strong></label>
                 <div class="dual-input-container">
-                    <input id="cnpj" type="text" onchange="mascaraCNPJ(this)" class="input-style" placeholder="CNPJ" name="cnpj" required>
+                    <input id="cnpj" type="text" onchange="mascaraCNPJ(this)" class="input-style" placeholder="CNPJ"
+                        name="cnpj" required>
                 </div>
-                    <label>&nbsp;&nbsp;Nome do Fabricante: <strong style="color: red;">*</strong></label>
+                <label>&nbsp;&nbsp;Nome do Fabricante: <strong style="color: red;">*</strong></label>
                 <div class="dual-input-container">
-                    <input id="f_nome" type="text" class="input-style" placeholder="Nome do fabricante" name="n_fabricante" required>
+                    <input id="f_nome" type="text" class="input-style" placeholder="Nome do fabricante"
+                        name="n_fabricante" required>
                 </div>
                 <div class="dual-input-container">
                     <label>Endereco:</label>
@@ -49,7 +93,8 @@
                     <label>UF:</label>
                 </div>
                 <div class="dual-input-container">
-                    <input id="complemento" type="text" class="input-style" placeholder="complemento" name="complemento">
+                    <input id="complemento" type="text" class="input-style" placeholder="complemento"
+                        name="complemento">
                     <select id="uf" name="uf" class="input-style">
                         <option value="">Selecione a UF</option>
                         <option value="AC">AC</option>
@@ -82,9 +127,10 @@
                     </select>
                 </div>
                 <label>&nbsp;&nbsp;Telefone: </label>
-                <input id="telefone" type="text" onchange="mascaraTelefone(this)" class="input-style" placeholder="Telefone" name="telefone"  required>
+                <input id="telefone" type="text" onchange="mascaraTelefone(this)" class="input-style"
+                    placeholder="Telefone" name="telefone" required>
                 <br>
-                <hr/>
+                <hr />
                 <div>
                     <button id="btnForm" class="input-style" type="submit" style="padding: 12px 20px;">
                         Cadastrar
@@ -125,4 +171,5 @@
 <script src="../modelo/fabricante.js"></script>
 <script src="../controle/fabricanteCtrl.js"></script>
 <script src="../util/util.js"></script>
+
 </html>
