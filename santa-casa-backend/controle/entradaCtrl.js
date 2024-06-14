@@ -37,14 +37,16 @@ export default class EntradaCtrl{
                                 if(listaLote.length==1){
                                     lote = listaLote.pop();
                                 }else{
+                                    lote.total_conteudo = Number(item.lote.conteudo_frasco) + Number(item.quantidade);
                                     lote.gravar(conexao).then((idLote) => {})
+                                    gravou2 = 0
                                 }
                             }); 
                             await itemEntrada.gravar(conexao).catch(() => {
                                 gravou2 = 0;
                             });
                             if (gravou2) {
-                                lote.total_conteudo = Number(lote.total_conteudo) + Number(item.quantidade);
+                                lote.total_conteudo = Number(lote.total_conteudo) + (Number(item.lote.conteudo_frasco) * Number(item.quantidade));
                                 lote.atualizar(conexao).catch((erro) => {
                                     atualizou = 0;
                                     //console.log(erro);

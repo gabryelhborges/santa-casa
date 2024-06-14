@@ -301,18 +301,24 @@ INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valo
 VALUES (5, 5, 'Aspirina 100mg', 'N', 2.00, 5, 'Analgésico e anti-inflamatório', 'Uso oral, uma vez ao dia', 'Remedio', 1);
 
 -- insert lote
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L001', '2024-12-31', 100, 1, 1, 500, 2, 50000, 1);
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L002', '2025-06-30', 200, 2, 2, 1000, 1, 200000, 1);
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L003', '2024-08-15', 150, 3, 3, 10, 1, 125000, 1);
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L004', '2025-02-28', 250, 4, 4, 500, 1, 150000, 1);
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L005', '2024-11-30', 400, 5, 5, 32, 1, 12800, 1);
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L006', '2024-12-30', 300, 5, 5, 20, 1, 6000, 1);
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L001', '2024-12-31', 100, 1, 1, 500, 2, 50000, 1, '2024-06-14');
+
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L002', '2025-06-30', 200, 2, 2, 1000, 1, 200000, 1, '2024-06-14');
+
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L003', '2024-08-15', 150, 3, 3, 10, 1, 125000, 1, '2024-06-14');
+
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L004', '2025-02-28', 250, 4, 4, 500, 1, 150000, 1, '2024-06-14');
+
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L005', '2024-11-30', 400, 5, 5, 32, 1, 12800, 1, '2024-06-14');
+
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L006', '2024-12-30', 300, 5, 5, 20, 1, 6000, 1, '2024-06-14');
+
 -- select * from lote;
 
 -- insert consumo

@@ -25,7 +25,7 @@ const vapp = {
             });
         }
     },
-    methods: {        
+    methods: {      
         exibirMensagem(mensagem, estilo) {
             let elemMensagem = document.getElementById('mensagem');
             if (!estilo) {
@@ -217,8 +217,12 @@ const vapp = {
                         </div>
                         <div id="iux8ff" class="gjs-row"></div>
                         <div id="idehe" class="gjs-row">
-                            <div id="i3qzp" class="gjs-cell">
-                                <form @submit.prevent="executarAcao()" method="get" id="i1kli">
+                                    <div id="i3qzp" class="gjs-cell">
+                                        <form @submit.prevent="executarAcao()" method="get" id="i1kli">
+                                        <div id="ido4u">
+                                        <label id="ijmu7">*CPF</label>
+                                        <input required @change="mascaraCPF()" v-model="cpf" type="text" id="ihkim" />
+                                    </div>
                                     <div id="iwqmj">
                                         <label id="irb6v">*Nome</label>
                                         <input required v-model="nome" type="text" id="iatkf" />

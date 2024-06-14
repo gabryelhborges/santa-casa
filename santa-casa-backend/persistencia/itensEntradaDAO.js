@@ -55,7 +55,7 @@ export default class ItensEntradaDAO{
             await lote.consultar().then((listaLote)=>{
                 lote= listaLote.pop();
             });
-            let itensEnrada = new ItensEntrada(entrada, lote, produto, registro.quantidade);
+            let itensEnrada = new ItensEntrada(entrada, lote, produto, registro.qtde);
             listaItensEntradas.push(itensEnrada);
         }
         return listaItensEntradas;

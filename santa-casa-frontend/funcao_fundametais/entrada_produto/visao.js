@@ -34,10 +34,16 @@ const vapp ={
             isNovoLote: true,
             codigo_novo_lote: '',
             funcionario: '',
-            conteudo_frasco: ''
+            conteudo_frasco: '',
+            todasEntradas: []
         }
     },
     methods:{
+      puxarEntradas(){
+        axios.get(urlBase + '/entrada').then((response) => {
+            this.todasEntradas = response.data.listaEntradas;
+        })
+      },
       exibirMensagem(mensagem, estilo) {
         let elemMensagem = document.getElementById('mensagem');
         if (!estilo) {
@@ -75,6 +81,12 @@ const vapp ={
       pesquisa(){
           axios.get(urlBase + '/produto/'+ this.produto).then((response)=>{
               this.produtos = response.data.listaProdutos;
+          });
+      },
+      excluirEntrada(aux){
+        axios.delete(`${urlBase}/entrada/${aux.entrada_id}`).then(() => {
+          this.exibirMensagem('Entrada excluída com sucesso!', 'ok');
+          this.puxarEntradas();
           });
       },
       adicionar(c){
@@ -199,6 +211,7 @@ const vapp ={
               this.exibirMensagem("Entrada registrada com sucesso", "sucesso");
               this.lista = [];
               this.limparCampos();
+              this.puxarEntradas();
             })
             
           } else {
@@ -213,6 +226,7 @@ const vapp ={
     mounted(){
         this.add_unidade();
         this.add_unidade_minima();
+        this.puxarEntradas();
     },
     template:
     `
@@ -433,6 +447,28 @@ const vapp ={
       </div>
       </div>
      </div>
+    </div>
+    <div id="app" class="container mt-5">
+      <div v-for="t in todasEntradas" class="mb-4 p-3 bg-white border rounded">
+        <h5>{{t.entrada_id}} - {{t.funcionario}}</h5>
+        <button @click="excluirEntrada(t)"></button>
+        <table class="table table-striped" v-for="l in t.itensEntrada">
+          <thead v-if="produtos.length > 0" class="table-dark">
+            <tr>
+              <th scope="col">Lote</th>
+              <th scope="col">Produto</th>
+              <th scope="col">Quantidade</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>{{l.lote.codigo}}</td>
+                  <td>{{l.produto.prod_ID}}</td>
+                  <td>{{l.quantidade}}</td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div id="mensagem"></div>
     `
