@@ -338,7 +338,7 @@ export default class TransferenciaCtrl{
             if(requisicao.method === "GET"){
                 const itTransf = new ItensTransferencia();
                 const conexao = await DB.conectar();
-                itTransf.getperiodos(conexao,data).then((listaItens)=>{
+                itTransf.getantigos(conexao,data).then((listaItens)=>{
                     resposta.status(200).json({
                         "status":true,
                         "listaItens":listaItens
