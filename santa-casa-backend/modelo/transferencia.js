@@ -85,4 +85,13 @@ export default class Transferencia{
         const itfDAO = new TransferenciaDAO();
         return await itfDAO.consultar(termo,conexao);
     }
+
+    async getperiodos(conexao, data1, data2){
+        const itfDAO = new TransferenciaDAO();
+        return await itfDAO.getperiodos(conexao,data2,data1);
+    }
+    async getantigos(conexao, data1){
+        const itfDAO = new TransferenciaDAO();
+        return await itfDAO.getantigos(conexao,data1);
+    }
 }

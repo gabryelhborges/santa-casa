@@ -256,7 +256,7 @@ export default class TransferenciaCtrl{
         let dataFim = formatarDataSQL(dados.dataFim);
 
         if(requisicao.method === "GET"){
-            const itTransf = new ItensTransferencia();
+            const itTransf = new Transferencia();
             const conexao = await DB.conectar();
             itTransf.getperiodos(conexao,dataInicio,dataFim).then((listaItens)=>{
                 resposta.status(200).json({
@@ -283,8 +283,7 @@ export default class TransferenciaCtrl{
     async getrecentes(requisicao,resposta){
         resposta.type('application/json');
         if(requisicao.method==="GET"){
-            const transf = new Transferencia();
-            const conexao = await DB.conectar();
+            const dataAtual = new Date();
             const ano = dataAtual.getFullYear();
             const mes = (dataAtual.getMonth() + 1).toString().padStart(2, '0'); // Janeiro é 0, então adicionamos 1
             const dia = dataAtual.getDate().toString().padStart(2, '0');
@@ -294,9 +293,9 @@ export default class TransferenciaCtrl{
             const segundos = dataAtual.getSeconds().toString().padStart(2, '0');
 
             const dataInicio = `${ano}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
-            const dataFinal = `${ano}-${mes}-${dia-1} ${horas}:${minutos}:${segundos}`;
+            const dataFinal = `${ano}-${mes}-${dia-'1'} ${horas}:${minutos}:${segundos}`;
             if(requisicao.method === "GET"){
-                const itTransf = new ItensTransferencia();
+                const itTransf = new Transferencia();
                 const conexao = await DB.conectar();
                 itTransf.getperiodos(conexao,dataInicio,dataFinal).then((listaItens)=>{
                     resposta.status(200).json({
@@ -307,7 +306,7 @@ export default class TransferenciaCtrl{
                     .catch((erro)=>{
                         resposta.status(500).json({
                             "status":false,
-                            "mensagem":"Erro ao consultar transferencia por período: " + erro.message
+                            "mensagem":"Erro ao consultar transferencia: " + erro.message
                         });
                     });
                 conexao.release();
@@ -324,8 +323,7 @@ export default class TransferenciaCtrl{
     async getantigos(requisicao,resposta){
         resposta.type('application/json');
         if(requisicao.method==="GET"){
-            const transf = new Transferencia();
-            const conexao = await DB.conectar();
+            const dataAtual = new Date();
             const ano = dataAtual.getFullYear();
             const mes = (dataAtual.getMonth() + 1).toString().padStart(2, '0'); // Janeiro é 0, então adicionamos 1
             const dia = dataAtual.getDate().toString().padStart(2, '0');
@@ -334,9 +332,9 @@ export default class TransferenciaCtrl{
             const minutos = dataAtual.getMinutes().toString().padStart(2, '0');
             const segundos = dataAtual.getSeconds().toString().padStart(2, '0');
 
-            const data = `${ano}-${mes}-${dia-1} ${horas}:${minutos}:${segundos}`;
+            const data = `${ano}-${mes}-${dia-'1'} ${horas}:${minutos}:${segundos}`;
             if(requisicao.method === "GET"){
-                const itTransf = new ItensTransferencia();
+                const itTransf = new Transferencia();
                 const conexao = await DB.conectar();
                 itTransf.getantigos(conexao,data).then((listaItens)=>{
                     resposta.status(200).json({
