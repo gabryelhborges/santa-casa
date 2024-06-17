@@ -190,7 +190,6 @@ create table baixa(
     constraint pk_baixa primary key(idBaixa),
     constraint fk_baixa_func foreign key(b_idFuncionario) references Funcionarios(idFuncionario),
     constraint fk_baixa_loc foreign key(b_locId) references Loc(loc_id)
-
 );
 
 create table itensBaixa(
@@ -301,18 +300,24 @@ INSERT INTO produtos (prod_ID, Fabricante_idFabricante, nome, psicotropico, valo
 VALUES (5, 5, 'Aspirina 100mg', 'N', 2.00, 5, 'Analgésico e anti-inflamatório', 'Uso oral, uma vez ao dia', 'Remedio', 1);
 
 -- insert lote
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L001', '2024-12-31', 100, 1, 1, 500, 2, 50000, 1);
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L002', '2025-06-30', 200, 2, 2, 1000, 1, 200000, 1);
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L003', '2024-08-15', 150, 3, 3, 10, 1, 125000, 1);
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L004', '2025-02-28', 250, 4, 4, 500, 1, 150000, 1);
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L005', '2024-11-30', 400, 5, 5, 32, 1, 12800, 1);
-INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc)
-VALUES ('L006', '2024-12-30', 300, 5, 5, 20, 1, 6000, 1);
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L001', '2024-12-31', 100, 1, 1, 500, 2, 50000, 1, '2024-06-14');
+
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L002', '2025-06-30', 200, 2, 2, 1000, 1, 200000, 1, '2024-06-14');
+
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L003', '2024-08-15', 150, 3, 3, 10, 1, 125000, 1, '2024-06-14');
+
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L004', '2025-02-28', 250, 4, 4, 500, 1, 150000, 1, '2024-06-14');
+
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L005', '2024-11-30', 400, 5, 5, 32, 1, 12800, 1, '2024-06-14');
+
+INSERT INTO lote (codigo, data_validade, quantidade, produto_prod_ID, formafarmaceutica_ffa_cod, conteudo_frasco, unidade_un_cod, total_conteudo, loc, data_entrada)
+VALUES ('L006', '2024-12-30', 300, 5, 5, 20, 1, 6000, 1, '2024-06-14');
+
 -- select * from lote;
 
 -- insert consumo
@@ -320,7 +325,7 @@ insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) va
 insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) values(2, 2, '2026-07-30', 1);
 
 -- insert itens consumo
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 'L001', 1, 11);
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 'L002', 2, 6);
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 'L001', 1, 2);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 'L00001', 12, 11);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 'L0001', 2, 6);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 'L0001', 3, 2);
 

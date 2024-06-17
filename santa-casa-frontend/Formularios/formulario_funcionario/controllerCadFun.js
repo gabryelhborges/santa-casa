@@ -25,7 +25,7 @@ const vapp = {
             });
         }
     },
-    methods: {        
+    methods: {      
         exibirMensagem(mensagem, estilo) {
             let elemMensagem = document.getElementById('mensagem');
             if (!estilo) {
@@ -86,6 +86,10 @@ const vapp = {
                 this.exibirMensagem("Excluido com Sucesso","ok");
                 this.limpar();
                 this.gerarTabela();
+            }).catch(error => {
+                
+                this.exibirMensagem("Erro ao excluir o registro, usuario já em uso.", "erro");
+                
             });
         },
         mascaraCPF(){
@@ -136,7 +140,7 @@ const vapp = {
                 this.exibirMensagem("CPF inválido. Por favor, insira um CPF no formato 000.000.000-00.","erro");
                 return;
             }
-            if (this.telefone.length !== 14) {
+            if (this.telefone.length !== 15) {
                 this.exibirMensagem("Telefone inválido. Por favor, insira um telefone com pelo menos 10 dígitos.","erro");
                 return;
             }
@@ -199,6 +203,8 @@ const vapp = {
                 <div class="dropdown-content">
                     <a href="../../Funcao_Saida/relatorioConsumo.html">Relatório de Consumo</a>
                     <a href="../../Funcao_Saida/relatorioBaixa.html">Relatório de Baixa</a>
+                    <a href="../../Funcao_Saida/relatorioEntrada/relatorioEntrada.html">Relatório de Entrada</a>
+
                 </div>
             </div>
         </div>
@@ -217,8 +223,12 @@ const vapp = {
                         </div>
                         <div id="iux8ff" class="gjs-row"></div>
                         <div id="idehe" class="gjs-row">
-                            <div id="i3qzp" class="gjs-cell">
-                                <form @submit.prevent="executarAcao()" method="get" id="i1kli">
+                                    <div id="i3qzp" class="gjs-cell">
+                                        <form @submit.prevent="executarAcao()" method="get" id="i1kli">
+                                        <div id="ido4u">
+                                        <label id="ijmu7">*CPF</label>
+                                        <input required @change="mascaraCPF()" v-model="cpf" type="text" id="ihkim" />
+                                    </div>
                                     <div id="iwqmj">
                                         <label id="irb6v">*Nome</label>
                                         <input required v-model="nome" type="text" id="iatkf" />

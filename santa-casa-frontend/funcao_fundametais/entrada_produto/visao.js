@@ -34,10 +34,16 @@ const vapp ={
             isNovoLote: true,
             codigo_novo_lote: '',
             funcionario: '',
-            conteudo_frasco: ''
+            conteudo_frasco: '',
+            todasEntradas: []
         }
     },
     methods:{
+      puxarEntradas(){
+        axios.get(urlBase + '/entrada').then((response) => {
+            this.todasEntradas = response.data.listaEntradas;
+        })
+      },
       exibirMensagem(mensagem, estilo) {
         let elemMensagem = document.getElementById('mensagem');
         if (!estilo) {
@@ -77,10 +83,17 @@ const vapp ={
               this.produtos = response.data.listaProdutos;
           });
       },
+      excluirEntrada(aux){
+        axios.delete(`${urlBase}/entrada/${aux.entrada_id}`).then(() => {
+          this.exibirMensagem('Entrada excluída com sucesso!', 'ok');
+          this.puxarEntradas();
+          });
+      },
       adicionar(c){
           this.produto_selecionado = c;
           this.nome_farmacoligico = c.nomeFar;
           this.fabricante = c.fabricante;
+          this.unidade = c.unidade;
           axios.get(urlBase + '/lote?produto=' + c.prod_ID).then((response)=>{
               this.lotes = response.data.listaLotes;
           });
@@ -89,12 +102,10 @@ const vapp ={
         if (this.lote_selecionado === 'novo') {
           this.isNovoLote = false;
           this.validade = '';
-          this.unidade = '';
           this.forma_farmacologica = '';
         } else {
           this.isNovoLote = true;
           this.validade = formataData(this.lote_selecionado.data_validade);
-          this.unidade = this.lote_selecionado.unidade;
           this.conteudo_frasco = this.lote_selecionado.conteudo_frasco;
           this.forma_farmacologica = this.lote_selecionado.formaFarmaceutica;
         }
@@ -135,6 +146,7 @@ const vapp ={
               "produto": this.produto_selecionado,
               "quantidade": this.quantidade
             });
+            this.exibirMensagem('Lote adicionado com sucesso.','ok');
           }
         } else {
           this.exibirMensagem('Por favor, preencha todos os campos.','erro');
@@ -178,41 +190,59 @@ const vapp ={
         this.codigo_novo_lote = '';
         this.produto = '';
       },
+      async verificarFuncionario(funcionarioId) {
+        try {
+          let response = await axios.get(urlBase + '/funcionario/' + funcionarioId);
+          let funcionario = response.data.listaFuncionarios;
+      
+          if (funcionario.length === 1) {
+            return funcionario.pop();
+          } else {
+            this.exibirMensagem("Funcionario não reconhecido", "erro");
+            return null;
+          }
+        } catch (error) {
+          this.exibirMensagem("Erro ao verificar o funcionário", "erro");
+          console.error(error);
+          return null;
+        }
+      },
       async gravar() {
         console.log(this.lista);
         if (this.lista.length === 0) {
           this.exibirMensagem("Lista Vazia", "erro");
           return;
         }
-    
-        try {
-          let response = await axios.get(urlBase + '/funcionario/' + this.funcionario);
-          let funcionario = response.data.listaFuncionarios;
-    
-          if (funcionario.length === 1) {
-            await axios.post(urlBase + '/entrada', {
-              "entrada_id": 0,
-              "funcionario": funcionario.pop(),
-              "data_entrada": formataData(Date.now()),
-              "itensEntrada": this.lista
-            }).then(()=>{
-              this.exibirMensagem("Entrada registrada com sucesso", "sucesso");
-              this.lista = [];
-              this.limparCampos();
-            })
-            
-          } else {
-            this.exibirMensagem("Funcionario não reconhecido", "erro");
+      
+        let funcionario = await this.verificarFuncionario(this.funcionario);
+      
+        if (funcionario) {
+          let entrada = {
+            "entrada_id": 0,
+            "funcionario": funcionario,
+            "data_entrada": formataData(Date.now()),
+            "itensEntrada": this.lista
+          };
+          
+      
+          try {
+            await axios.post(urlBase + '/entrada', entrada);
+            this.exibirMensagem("Entrada registrada com sucesso", "sucesso");
+            this.lista = [];
+            this.limparCampos();
+            this.puxarEntradas();
+            this.exibirMensagem("Entrada enviada com sucesso", "ok");
+          } catch (error) {
+            console.error('Erro ao processar a entrada:', error);
+            this.exibirMensagem("Erro ao processar a entrada", "erro");
           }
-        } catch (error) {
-          this.exibirMensagem("Erro ao processar a entrada", "erro");
-          console.error(error);
         }
       }
     }, 
     mounted(){
         this.add_unidade();
         this.add_unidade_minima();
+        this.puxarEntradas();
     },
     template:
     `
@@ -245,6 +275,7 @@ const vapp ={
           <div class="dropdown-content">
               <a href="../Funcao_Saida/relatorioConsumo.html">Relatório de Consumo</a>
               <a href="../Funcao_Saida/relatorioBaixa.html">Relatório de Baixa</a>
+              <a href="../Funcao_Saida/relatorioEntrada/relatorioEntrada.html">Relatório de Entrada</a>
           </div>
       </div>
   </div>
@@ -327,7 +358,7 @@ const vapp ={
                 </div>
                 <div id="iekla" class="gjs-cell">
                   <label id="ik72k">Unidade Minima:</label>
-                  <select :disabled="isNovoLote" v-model="unidade" type="text" required id="igyah">
+                  <select disabled v-model="unidade" type="text" required id="igyah">
                     <option value="Selecione uma Unidade">Selecione uma Unidade</option>
                     <option v-for="m in unidades_minimas" :value="m">{{m.unidade}}</option>
                   </select>
@@ -433,6 +464,28 @@ const vapp ={
       </div>
       </div>
      </div>
+    </div>
+    <div id="app" class="container mt-5">
+      <div v-for="t in todasEntradas" class="mb-4 p-3 bg-white border rounded">
+        <h5>{{t.entrada_id}} - {{t.funcionario}}</h5>
+        <button @click="excluirEntrada(t)"></button>
+        <table class="table table-striped" v-for="l in t.itensEntrada">
+          <thead v-if="produtos.length > 0" class="table-dark">
+            <tr>
+              <th scope="col">Lote</th>
+              <th scope="col">Produto</th>
+              <th scope="col">Quantidade</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>{{l.lote.codigo}}</td>
+                  <td>{{l.produto.prod_ID}}</td>
+                  <td>{{l.quantidade}}</td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div id="mensagem"></div>
     `
