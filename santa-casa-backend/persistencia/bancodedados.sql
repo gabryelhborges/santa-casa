@@ -190,7 +190,6 @@ create table baixa(
     constraint pk_baixa primary key(idBaixa),
     constraint fk_baixa_func foreign key(b_idFuncionario) references Funcionarios(idFuncionario),
     constraint fk_baixa_loc foreign key(b_locId) references Loc(loc_id)
-
 );
 
 create table itensBaixa(
@@ -326,7 +325,7 @@ insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) va
 insert into consumo(cons_pac_id, cons_func_id, cons_dataConsumo, cons_loc_id) values(2, 2, '2026-07-30', 1);
 
 -- insert itens consumo
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 'L001', 1, 11);
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 'L002', 2, 6);
-insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 'L001', 1, 2);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 'L00001', 12, 11);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(2, 'L0001', 2, 6);
+insert into itensConsumo(ic_cons_id, ic_lote_codigo, ic_prod_id, ic_qtdeConteudoUtilizado) VALUES(1, 'L0001', 3, 2);
 

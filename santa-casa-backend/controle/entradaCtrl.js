@@ -29,6 +29,7 @@ export default class EntradaCtrl{
                         let atualizou = 1;
                         let gravou2 = 1;
                         let i = 0;
+                        let novo = 0;
                         while (gravou2 && atualizou && i < itensEntrada.length) {
                             const item = itensEntrada[i];
                             let itemEntrada = new ItensEntrada(entrada, item.lote, item.produto, item.quantidade);
@@ -37,15 +38,17 @@ export default class EntradaCtrl{
                                 if(listaLote.length==1){
                                     lote = listaLote.pop();
                                 }else{
-                                    lote.total_conteudo = Number(item.lote.conteudo_frasco) + Number(item.quantidade);
-                                    lote.gravar(conexao).then((idLote) => {})
-                                    gravou2 = 0
+                                    novo = 1
                                 }
-                            }); 
+                            });
+                            if(novo){
+                                lote.total_conteudo = Number(item.lote.conteudo_frasco) * Number(item.quantidade);
+                                await lote.gravar(conexao).then((idLote) => {})
+                            }
                             await itemEntrada.gravar(conexao).catch(() => {
                                 gravou2 = 0;
                             });
-                            if (gravou2) {
+                            if (gravou2 && !novo) {
                                 lote.total_conteudo = Number(lote.total_conteudo) + (Number(item.lote.conteudo_frasco) * Number(item.quantidade));
                                 lote.atualizar(conexao).catch((erro) => {
                                     atualizou = 0;
@@ -104,50 +107,55 @@ export default class EntradaCtrl{
 
     async excluir(requisicao, resposta) {
         resposta.type('application/json');
-
-        if (requisicao.method === "DELETE" && requisicao.is("application/json")) {
-            const id = requisicao.params.termo;
-
+        const id = requisicao.params.termo;
+        if (requisicao.method === "DELETE") {
             if (id) {
                 const entrada = new Entrada(id);
                 const conexao = await DB.conectar();
-
+    
                 try {
                     const listaEntradas = await entrada.consultar(id, conexao);
-
+    
                     if (listaEntradas.length === 0) {
                         resposta.status(404).json({
                             "status": false,
                             "mensagem": "Entrada não encontrada!"
                         });
+                        return;
                     }
-
+    
                     const dataEntrada = new Date(listaEntradas[0].data_entrada);
-
-                    if (Date.now() < dataEntrada.getTime() + 24 * 60 * 60 * 1000) {
+                    const now = new Date();
+    
+                    if (now.getTime() < dataEntrada.getTime() + 24 * 60 * 60 * 1000) {
                         await conexao.beginTransaction();
+                        
+                        for(let i=0;listaEntradas.itensEntrada.length<i;i++){
+                            const item = listaEntradas.itensEntrada[i];
+                            const lote = new Lote(
+                                item.lote.codigo,
+                                new Date(item.lote.data_validade),
+                                item.lote.quantidade,
+                                item.lote.produto,
+                                item.lote.formaFarmaceutica,
+                                item.lote.conteudo_frasco,
+                                item.lote.unidade,
+                                item.lote.total_conteudo,
+                                item.lote.local,
+                                new Date(item.lote.data_entrada)
+                            );
+                            await item.excluir(conexao);
+                            
+                            lote.total_conteudo = Number(lote.total_conteudo) - (Number(item.lote.conteudo_frasco) * Number(item.quantidade));
 
-                        for (let item of listaEntradas[0].itensEntrada) {
-                            const lote = new Lote(item.lote.codigo);
-
-                            try {
-                                await lote.consultar(conexao);
-
-                                if (item.lote.data_entrada === listaEntradas[0].data_entrada) {
-                                    await lote.excluir(conexao);
-                                }
-
-                                await item.excluir(conexao);
-
-                            } catch (erro) {
-                                await conexao.rollback();
-                                resposta.status(500).json({
-                                    "status": false,
-                                    "mensagem": "Erro ao excluir item de entrada ou lote: " + erro.message
-                                });
+                            const loteDataEntrada = new Date(item.lote.data_entrada);
+                            if (lote.total_conteudo===0 && dataEntrada.getTime() === loteDataEntrada.getTime()) {
+                                await lote.excluir(conexao);
+                            } else {
+                                await lote.atualizar(conexao);
                             }
                         }
-
+    
                         try {
                             await entrada.excluir(conexao);
                             await conexao.commit();
@@ -162,16 +170,15 @@ export default class EntradaCtrl{
                                 "mensagem": "Erro ao excluir entrada: " + erro.message
                             });
                         }
-
+    
                     } else {
                         resposta.status(400).json({
                             "status": false,
                             "mensagem": "Não é possível excluir a entrada, mais de um dia se passou!"
                         });
                     }
-
+    
                 } catch (erro) {
-                    await conexao.rollback();
                     resposta.status(500).json({
                         "status": false,
                         "mensagem": "Houve um erro ao consultar a entrada: " + erro.message
@@ -192,6 +199,8 @@ export default class EntradaCtrl{
             });
         }
     }
+    
+    
 
     async consultar(requisicao,resposta){
         resposta.type('application/json'); 
@@ -221,4 +230,135 @@ export default class EntradaCtrl{
             });
         }
     }
+
+    async consultarTotal(requisicao,resposta){
+        resposta.type('application/json'); 
+        let termo = requisicao.params.termo;
+        let id  = requisicao.query.id;
+        let inicio = requisicao.query.inicio;
+        let fim = requisicao.query.fim;
+        const entrada = new Entrada();
+        const conexao = await DB.conectar();
+        entrada.consultarTotal(id,inicio,fim,conexao).then((total)=>{
+            resposta.status(200).json({
+                "status": true,
+                "Total": total
+            });
+        }).catch((erro)=>{
+            resposta.status(500).json({
+                "status": false,
+                "mensagem": "Erro ao consultar entrada: " + erro.message
+            });
+        });
+       
+    }
+
+    async consultarTotalItens(requisicao,resposta){
+        resposta.type('application/json'); 
+        let id  = requisicao.query.id;
+        let inicio = requisicao.query.inicio;
+        let fim = requisicao.query.fim;
+        const entrada = new Entrada();
+        const conexao = await DB.conectar();
+        entrada.consultarTotalItens(id,inicio,fim,conexao).then((total)=>{
+            resposta.status(200).json({
+                "status": true,
+                "Total": total
+            });
+        }).catch((erro)=>{
+            resposta.status(500).json({
+                "status": false,
+                "mensagem": "Erro ao consultar entrada: " + erro.message
+            });
+        });
+    }
+
+    async consultarUltima(requisicao,resposta){
+        resposta.type('application/json'); 
+        let id  = requisicao.query.id;
+        let inicio = requisicao.query.inicio;
+        let fim = requisicao.query.fim;
+        const entrada = new Entrada();
+        const conexao = await DB.conectar();
+        entrada.consultarUltima(id,inicio,fim,conexao).then((entrada)=>{
+            resposta.status(200).json({
+                "status": true,
+                "entrada": entrada
+            });
+        }).catch((erro)=>{
+            resposta.status(500).json({
+                "status": false,
+                "mensagem": "Erro ao consultar entrada: " + erro.message
+            });
+        });
+    }
+
+    async consultarNovosLotes(requisicao,resposta){
+        resposta.type('application/json');
+        let id  = requisicao.query.id;
+        let inicio = requisicao.query.inicio;
+        let fim = requisicao.query.fim;
+        const entrada = new Entrada();
+        const conexao = await DB.conectar();
+        entrada.consultarNovosLotes(id,inicio,fim,conexao).then((entrada)=>{
+            resposta.status(200).json({
+                "status": true,
+                "entrada": entrada
+            });
+        }).catch((erro)=>{
+            resposta.status(500).json({
+                "status": false,
+                "mensagem": "Erro ao consultar entrada: " + erro.message
+            });
+        });
+    }
+
+    async consultarNovosLotes(requisicao,resposta){
+        resposta.type('application/json');
+        let id  = requisicao.query.id;
+        let inicio = requisicao.query.inicio;
+        let fim = requisicao.query.fim;
+        const entrada = new Entrada();
+        const conexao = await DB.conectar();
+        entrada.consultarNovosLotes(id,inicio,fim,conexao).then((entrada)=>{
+            resposta.status(200).json({
+                "status": true,
+                "entrada": entrada
+            });
+        }).catch((erro)=>{
+            resposta.status(500).json({
+                "status": false,
+                "mensagem": "Erro ao consultar entrada: " + erro.message
+            });
+        });
+    }
+
+    async consultar2(requisicao,resposta){
+        resposta.type('application/json'); 
+        let prod  = requisicao.query.prod;
+        let lote = requisicao.query.lote;
+
+        if(requisicao.method === "GET"){
+            const entrada = new Entrada();
+            const conexao = await DB.conectar();
+            entrada.consultar2(prod,lote,conexao).then((listaEntradas)=>{
+                resposta.status(200).json({
+                    "status": true,
+                    "listaEntradas": listaEntradas
+                });
+            }).catch((erro)=>{
+                resposta.status(500).json({
+                    "status": false,
+                    "mensagem": "Erro ao consultar entrada: " + erro.message
+                });
+            });
+        }
+        else{
+            resposta.status(400).json({
+                "status": false,
+                "mensagem": "Utilize o método GET para consultar algum entrada!"
+            });
+        }
+    }
+
 }

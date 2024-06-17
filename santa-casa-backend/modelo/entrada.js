@@ -73,4 +73,29 @@ export default class Entrada{
         const entradaDAO  = new EntradaDAO();
         return await  entradaDAO.consultar(termo,conexao);
     }
+
+    async consultar2(prod,lote,conexao){
+        const entradaDAO  = new EntradaDAO();
+        return await  entradaDAO.consultar2(prod,lote,conexao);
+    }
+
+    async consultarTotal(idFun,inicio,fim,conexao){
+        const entradaDAO  = new EntradaDAO();
+        return await entradaDAO.consultarTotal(idFun,inicio,fim,conexao);
+    }
+
+    async consultarTotalItens(idFun,inicio,fim,conexao){
+        const entradaDAO  = new EntradaDAO();
+        return await entradaDAO.consultarTotalItens(idFun,inicio,fim,conexao);
+    }
+
+    async consultarUltima(idFun,inicio,fim,conexao){
+        const entradaDAO  = new EntradaDAO();
+        return await entradaDAO.consultarUltima(idFun,inicio,fim,conexao);
+    }
+
+    async consultarNovosLotes(idFun,inicio,fim,conexao){
+        const entradaDAO  = new EntradaDAO();
+        return await entradaDAO.consultarNovosLotes(idFun,inicio,fim,conexao);
+    }
 }
