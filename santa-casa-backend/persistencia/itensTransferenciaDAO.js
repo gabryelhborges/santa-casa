@@ -6,9 +6,8 @@ import Produto from "../modelo/produto.js";
 export default class ItensTransferenciaDAO{
     async gravar(itemTransferencia, conexao){
         if(itemTransferencia instanceof ItensTransferencia){
-            const sql = `INSERT INTO itensTransferidos(itf_tf_id,itf_prod_id,itf_lote_cod,itf_qtdetransferida)
-            values(?,?,?,?)`;
-            const parametros = [itemTransferencia.transf_id, itemTransferencia.prod_cod, itemTransferencia.lote_cod, itemTransferencia.quantidade];
+            const sql = `INSERT INTO itensTransferidos(itf_tf_id,itf_lote_cod,itf_qtdetransferida) VALUES (?,?,?)`;
+            const parametros = [itemTransferencia.transf_id, itemTransferencia.lote_cod, itemTransferencia.quantidade];
             await conexao.execute(sql,parametros);
         }
     }

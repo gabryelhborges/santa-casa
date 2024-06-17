@@ -98,7 +98,7 @@ function validarFormulario(eventos) {
                     exibirMensagem(dados.mensagem);
                     exibirFabricantees();
                 }).catch((erro)=>{
-                    exibirMensagem('Erro ao tentar excluir o fabricante: '+erro.message);
+                    exibirMensagem('O fabricante está associado à um lote de um produto, por isso, não pode ser excluido!');
                 });
             }
         }

@@ -136,8 +136,13 @@ export default class Lote{
     }
 
     async atualizar(conexao){
-        const  loteDAO = new LoteDAO();
+        const loteDAO = new LoteDAO();
         await loteDAO.atualizar(this,conexao);
+    }
+
+    async atualizar2(conexao){
+        const loteDAO = new LoteDAO();
+        await loteDAO.atualizar2(this,conexao);
     }
 
     async excluir(conexao){
@@ -148,6 +153,11 @@ export default class Lote{
     async consultar(){
         const  loteDAO = new LoteDAO();
         return await loteDAO.consultar(this);
+    }
+
+    async consultar2(){
+        const  loteDAO = new LoteDAO();
+        return await loteDAO.consultar2(this);
     }
 
     async verificarExistenciaLote(){

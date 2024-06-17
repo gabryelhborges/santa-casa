@@ -2,6 +2,7 @@ const urlBase = 'http://localhost:4040';
 
 var pesquisa = document.getElementById('form_pesquisa_produto');
 var listaItensTransferencia = [];
+var listabackup = [];
 var listaLot = [];
 var listaFab = [];
 var listaLocais = [];
@@ -300,9 +301,9 @@ function disabled_able() {
 function adicionarItemTransf() {
     let val = separarPorHifen(document.getElementById('iLote').value);
     let codLote = val.parte1;
-    let codProd = document.getElementById('codProd').value;
-    let loc = ORIG;
-    let dest = DEST;
+    let codProd = parseInt(document.getElementById('codProd').value);
+    let loc = parseInt(ORIG);
+    let dest = parseInt(DEST);
     if(loc != "" && dest!=""){
         let objLote = listaLot.find(itemLote => itemLote.codigo === codLote && itemLote.produto.prod_ID == codProd && itemLote.local.loc_id == loc);
         let objProd;
@@ -313,9 +314,7 @@ function adicionarItemTransf() {
             // Verifica se já existe um item com o mesmo produto e lote
             if (itemExistente) {
                 // Se existir, apenas aumenta a quantidade
-                let num = parseInt(itemExistente.qtdeConteudoUtilizado);
-                num += parseInt(qtde);
-                itemExistente.qtdeConteudoUtilizado = parseInt(num);
+                exibirMensagem('Já existe um item como esse na lista!')
             }
             else {
                 let novoItem = {
@@ -442,6 +441,7 @@ function validarFormulario(evento) {
             if(dados.status){
                 limparFormItemTransf();
                 limparFormulario();
+                listabackup = listaItensTransferencia;
                 listaItensTransferencia = [];
                 exibirListaItensTransferencia();
                 alert(dados.mensagem);
@@ -458,4 +458,56 @@ function validarFormulario(evento) {
     }
     evento.preventDefault();
     evento.stopPropagation();
+}
+
+function exibirListaItensRecentes(){
+    let divItensTransf = document.getElementById("tabelaItensTemp");
+    divItensTransf.innerHTML = '';
+    if (listabackup.length) {
+        let tabela = document.createElement('table');
+        tabela.style.borderCollapse = 'collapse';
+        tabela.style.width = '95%';
+        tabela.style.borderBottom = '1px solid';
+        tabela.style.position='relative';
+        //tabela.style.maxHeight= '100px';
+        //tabela.className = 'table table-striped table-hover';
+        let cabecalho = document.createElement('thead');
+        cabecalho.style.borderBottom = '1px solid';
+        cabecalho.style.position='sticky';
+        cabecalho.style.top='-1 px';
+        cabecalho.style.backgroundColor='#55ACEE'
+        cabecalho.innerHTML = `
+                    <tr>
+                        <th>Lote</th>
+                        <th>|Produto</th>
+                        <th>|Qtde</th>
+                        <th>|Unidade de medida</th>
+                        <th>|Origem</th>
+                        <th>|Destino</th>
+                    </tr>
+                    `;
+        tabela.appendChild(cabecalho);
+        let corpo = document.createElement('tbody');
+        for (let i = 0; i < listabackup.length; i++) {
+            let linha = document.createElement('tr');
+            let nomelocaldestino;
+            let itTransf = listabackup[i];
+            nomelocaldestino = listaLocais.find(nomedolocal => nomedolocal.loc_id == itTransf.destino);
+            linha.innerHTML = `
+                        <td>${itTransf.lote.codigo}</td>
+                        <td>|${itTransf.produto.nome}</td>
+                        <td>|${itTransf.quantidade}</td>
+                        <td>|${itTransf.lote.conteudo_frasco + " " + itTransf.lote.unidade.unidade}</td>
+                        <td>|${itTransf.lote.local.loc_nome}</td>
+                        <td>|${nomelocaldestino.loc_nome}</td>
+                        `;
+            linha.style.borderBottom = '1px solid';
+            corpo.appendChild(linha);
+        }
+        tabela.appendChild(corpo);
+        divItensTransf.appendChild(tabela);
+    }
+    else {
+        divItensTransf.innerHTML = 'Nenhum produto foi utilizado';
+    }
 }
