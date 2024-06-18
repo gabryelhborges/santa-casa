@@ -196,7 +196,12 @@ const vapp ={
           let funcionario = response.data.listaFuncionarios;
       
           if (funcionario.length === 1) {
-            return funcionario.pop();
+            if(funcionario[0].farmaceutico==='S'){
+              return funcionario.pop();
+            }else{
+              this.exibirMensagem("Funcionario não é farmaceutico", "erro");
+              return null;
+            }
           } else {
             this.exibirMensagem("Funcionario não reconhecido", "erro");
             return null;
@@ -464,28 +469,6 @@ const vapp ={
       </div>
       </div>
      </div>
-    </div>
-    <div id="app" class="container mt-5">
-      <div v-for="t in todasEntradas" class="mb-4 p-3 bg-white border rounded">
-        <h5>{{t.entrada_id}} - {{t.funcionario}}</h5>
-        <button @click="excluirEntrada(t)"></button>
-        <table class="table table-striped" v-for="l in t.itensEntrada">
-          <thead v-if="produtos.length > 0" class="table-dark">
-            <tr>
-              <th scope="col">Lote</th>
-              <th scope="col">Produto</th>
-              <th scope="col">Quantidade</th>
-            </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td>{{l.lote.codigo}}</td>
-                  <td>{{l.produto.prod_ID}}</td>
-                  <td>{{l.quantidade}}</td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
     <div id="mensagem"></div>
     `
