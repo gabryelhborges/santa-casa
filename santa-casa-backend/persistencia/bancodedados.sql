@@ -166,14 +166,14 @@ create table transferencia(
 );
 
 -- drop table itensTransferidos
-create table itensTransferidos(
-    itf_transf_id int not null auto_increment,
-    itf_tf_id int not null,
-    itf_lote_cod varchar(15) not null,
-    itf_qtdetransferida integer not null,
-    constraint fk_itf_transf_id foreign key (itf_transf_id) references transferencia(tf_id),
-    constraint fk_itf_lote_cod foreign key (itf_lote_cod) references lote(codigo),
-    constraint pk_itf primary key (itf_transf_id)
+CREATE TABLE itensTransferidos (
+    itf_id INT NOT NULL AUTO_INCREMENT,
+    itf_tf_id INT NOT NULL,
+    itf_lote_cod VARCHAR(15) NOT NULL,
+    itf_qtdetransferida INT NOT NULL,
+    CONSTRAINT fk_itf_transf_id FOREIGN KEY (itf_tf_id) REFERENCES transferencia(tf_id),
+    CONSTRAINT fk_itf_lote_cod FOREIGN KEY (itf_lote_cod) REFERENCES lote(codigo),
+    CONSTRAINT pk_itf PRIMARY KEY (itf_id)
 );
 
 create table Motivo(
