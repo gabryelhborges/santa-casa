@@ -1,6 +1,4 @@
-import TransferenciaDAO from "../persistencia/transferenciaDAO.js";
-
-export default class Transferencia{
+class Transferencia{
     #tf_id;
     #tf_data;
     #func_id;
@@ -59,9 +57,7 @@ export default class Transferencia{
         this.#itensTransferencia = novo;
     }
 
-    toString(){
-
-    }
+   
     toJSON(){
         return{
             tf_id: this.#tf_id,
@@ -73,25 +69,4 @@ export default class Transferencia{
         }
     }
 
-    async gravar(conexao){
-        const itfDAO = new TransferenciaDAO();
-        await itfDAO.gravar(this,conexao);
-    }
-    async excluir(conexao){
-        const itfDAO = new TransferenciaDAO();
-        await itfDAO.excluir(this,conexao);
-    }
-    async consultar(termo,conexao){
-        const itfDAO = new TransferenciaDAO();
-        return await itfDAO.consultar(termo,conexao);
-    }
-
-    async getperiodos(conexao, data1, data2){
-        const itfDAO = new TransferenciaDAO();
-        return await itfDAO.getperiodos(conexao,data2,data1);
-    }
-    async getantigos(conexao, data1){
-        const itfDAO = new TransferenciaDAO();
-        return await itfDAO.getantigos(conexao,data1);
-    }
 }

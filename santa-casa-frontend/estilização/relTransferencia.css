@@ -1,0 +1,109 @@
+/* relTransferencia.css */
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #425465;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+header .header-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4f7ba4;
+    color: white;
+    cursor: pointer;
+    margin: 0 10px; /* Espaçamento entre os botões do header */
+}
+
+header .header-button:hover {
+    background-color: #395976;
+}
+
+#filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.filter-input, .filter-button, .print-button {
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+.filter-button, .print-button {
+    background-color: #4f7ba4;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 0; /* Remove a margem superior */
+}
+
+.filter-button:hover, .print-button:hover {
+    background-color: #395976;
+}
+
+.transferencia-container {
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.transferencia-header {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.transferencia-items {
+    display: none;
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+    text-align: center;
+}
+
+th, td {
+    padding: 10px;
+}
+
+@media print {
+    header {
+        display: none;
+    }
+
+    .filter-button, .print-button {
+        display: none;
+    }
+
+    .transferencia-container {
+        page-break-inside: avoid;
+    }
+}

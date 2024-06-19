@@ -52,6 +52,53 @@ export default class TransferenciaDAO{
 
             let transferencia = new Transferencia(registro.tf_id,registro.tf_data,funcionario,origem,destino,[]);
             let listaItensTransferencia = [];
+            let itf = new ItensTransferencia(transferencia.tf_id,null,null,null);
+            await itf.consultar(conexao).then((listaITF)=>{
+                listaItensTransferencia = listaITF;
+            })
+            listaTransferencias.push(transferencia);
+            transferencia.itensTransferencia = listaItensTransferencia;
+        }
+        return listaTransferencias;
+    }
+
+    //getperiodos, getantigos
+
+    async getperiodos(conexao,data1,data2){ //serve pro getrecentes também
+        let sql="";
+        let parametros = [];
+        if(data1 && data2){
+            sql = "SELECT * FROM transferencia WHERE tf_data BETWEEN ? AND ?";
+            parametros = [data2,data1];
+        }
+        else{
+            if(!data1){
+                data1="";
+            }
+            if(!data2){
+                data2="";
+            }
+            sql = "SELECT * FROM transferencia ORDER BY tf_data ASC";
+            parametros=[];
+        }
+        const [registros, campos] = await conexao.execute(sql,parametros);
+        let listaTransferencias = [];
+        for(const registro of registros){
+            let funcionario = new Funcionario();
+            await funcionario.consultar(registro.tf_func_id).then((listaFunc)=>{
+                funcionario = listaFunc.pop();
+            });
+            let origem = new Loc();
+            await origem.consultar(registro.tf_origem).then((listaOr)=>{
+                origem = listaOr.pop();
+            });
+            let destino = new Loc();
+            await destino.consultar(registro.tf_destino).then((listaDest)=>{
+                destino = listaDest.pop();
+            });
+
+            let transferencia = new Transferencia(registro.tf_id,registro.tf_data,funcionario,origem,destino,[]);
+            let listaItensTransferencia = [];
             let itf = new ItensTransferencia(transferencia);
             await itf.consultar(conexao).then((listaITF)=>{
                 listaItensTransferencia = listaITF;
@@ -62,19 +109,15 @@ export default class TransferenciaDAO{
         return listaTransferencias;
     }
 
-    //getperiodos, getantigos
-
-    async getperiodos(conexao,data1,data2){ //serve pro getrecentes também
+    async getantigos(conexao,data){
         let sql="";
         let parametros = [];
-        if(!isNaN(parseInt(termo))){
-            sql = "SELECT * FROM transferencia WHERE tf_data BTWEEN ? AND ?";
-            parametros = [data1,data2];
+        if(data){
+            sql = "SELECT * FROM transferencia WHERE tf_data < ?";
+            parametros = [data];
         }
         else{
-            if(!termo){
-                termo="";
-            }
+            data="";
             sql = "SELECT * FROM transferencia ORDER BY tf_data ASC";
             parametros=[];
         }

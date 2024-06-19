@@ -142,9 +142,9 @@ export default class LoteDAO{
         let parametros = [];
         if(lote.produto != null){
             sql = `SELECT * FROM 
-            lote WHERE produto_prod_ID = ?`
+            lote WHERE produto_prod_ID = ? AND loc = 1`
             if(lote.codigo!=0){
-                sql  += ` AND codigo = ?;`
+                sql  += ` AND codigo = ?`
                 parametros = [lote.produto.prod_ID,lote.codigo];
             }
             else{
@@ -153,7 +153,7 @@ export default class LoteDAO{
             }
             
         }else{
-            sql = "SELECT * FROM lote"
+            sql = "SELECT * FROM lote WHERE codigo = ?;"
             parametros = [lote.codigo];
         }
         const conexao = await conectar();

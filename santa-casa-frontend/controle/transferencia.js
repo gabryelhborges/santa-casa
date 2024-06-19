@@ -399,8 +399,8 @@ function exibirListaItensTransferencia() {
                         <td>|${itTransf.produto.nome}</td>
                         <td>|${itTransf.quantidade}</td>
                         <td>|${itTransf.lote.conteudo_frasco + " " + itTransf.lote.unidade.unidade}</td>
-                        <td>|${itTransf.lote.local.loc_nome}</td>
                         <td>|${nomelocaldestino.loc_nome}</td>
+                        <td>|${itTransf.lote.local.loc_nome}</td>
                         <td>
                             <button onclick="removerItemTransferencia(event, ${i})">
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 64 64">
