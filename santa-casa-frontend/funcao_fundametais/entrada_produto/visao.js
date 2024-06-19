@@ -114,7 +114,9 @@ const vapp ={
         let i;
         let Nexiste=true;
         
-        if ((this.lote_selecionado || this.codigo_novo_lote || this.codigo_novo_lote.length>1) && this.produto_selecionado && this.quantidade) {
+        if (((this.lote_selecionado==="novo" && this.validade && this.codigo_novo_lote && this.conteudo_frasco) || 
+        (this.lote_selecionado!=="novo" && this.lote_selecionado) ) && this.quantidade
+        ) {
           for(i = 0; i < this.lista.length; i++){
             if((this.lista[i].lote === this.lote_selecionado || this.lista[i].lote.codigo === this.codigo_novo_lote) && this.lista[i].produto === this.produto_selecionado){
               this.lista[i].quantidade += Number(this.quantidade);
