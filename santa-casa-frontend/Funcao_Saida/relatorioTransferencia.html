@@ -3,12 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <title>Relatório de Transferências</title>
-    <link rel="stylesheet" href="../estilização/relBaixa.css">
-    <link rel="stylesheet" href="../estilização/index.css">
+    <link rel="stylesheet" href="../estilização/relTransferencia.css">
+    <link rel="stylesheet" href="../estilização/index.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .divTabela {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        /* Estilos para a tabela de exibirConsumos */
+        #tabela-primaria,
+        #tabela-primaria th,
+        #tabela-primaria td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        #tabela-primaria th {
+            background-color: #249AE2;
+            color: white;
+        }
+
+        #tabela-primaria tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #tabela-primaria tbody tr:hover {
+            background-color: #ddd;
+        }
+
+        #tabela-primaria .botaoItCons {
+            background-color: #249AE2;
+            padding: 3px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #tabela-primaria .botaoExcluir {
+            background-color: #ff8c8c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Estilos para a tabela de exibirConsumoPorPaciente */
+        .tabPaciente,
+        .tabPaciente th,
+        .tabPaciente td,
+        .tabela-aninhada,
+        .tabela-aninhada th,
+        .tabela-aninhada td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #aaa;
+        }
+
+        .tabela-aninhada {
+            width: 100%;
+        }
+
+        .tabPaciente th {
+            background-color: #249AE2;
+            color: white;
+        }
+
+        .tabPaciente tbody tr:nth-child(even) {
+            background-color: #ebebeb;
+        }
+
+        /*
+        .tabPaciente tbody tr:hover {
+            background-color: #000000;
+        }
+        */
+
+        .tabela-aninhada th {
+            background-color: #a0a0a0;
+        }
+
+        /*
+        .tabela-aninhada tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        */
+        /*
+        .tabela-aninhada tbody tr:hover {
+            background-color: #eee;
+        }
+        */
+
+        /* Estilos para botões */
+        .botoes-exibicao {
+            padding: 10px 20px;
+            background-color: #249AE2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin: 5px;
+        }
+
+        .botoes-exibicao:hover {
+            background-color: #1E87C1;
+            transform: scale(1.05);
+        }
+
+        .botoes-exibicao:active {
+            transform: scale(1);
+        }
+
+        .div-opcoes-filtro {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos para modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #ddd;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            padding-right: 10px;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .divTabela {
+            overflow-y: auto;
+            height: 100%;
+            width: 95%;
+            border: 1px solid #ddd;
+        }
+
+        .tabItCons {
+            border-collapse: collapse;
+            width: 70%;
+            border: 1px solid;
+        }
+
+        .tabItCons thead {
+            border: 1px solid black;
+        }
+
+        .cabecalhoItCons {
+            border: 1px solid black;
+            position: sticky;
+            top: 0;
+            background-color: rgb(148, 148, 148);
+        }
+
+        .linhaItCons,
+        .linhaItCons td {
+            background-color: #fff;
+            border: 1px solid black;
+        }
+
+        .botaoExcluir {
+            background-color: rgb(255, 140, 140);
+        }
+
+        #cabecalho-primario {
+            border-bottom: 1px solid;
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+        }
+
+        #tabela-primaria {
+            border-collapse: collapse;
+            width: 100%;
+            border-bottom: 1px solid;
+        }
+
+        #divContainer {
+            overflow-y: auto;
+            height: 650px;
+            width: 100%;
+            border: 3px solid #ddd;
+        }
+
+        .info-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .info-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid;
+            border-radius: 100%;
+            margin-left: 8px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .information {
+            width: 20px;
+            height: 20px;
+        }
+
+        .botoes-exibicao {
+            padding: 10px 20px;
+            background-color: #249AE2;
+            /* Cor azul */
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin: 5px;
+        }
+
+        .botoes-exibicao:hover {
+            background-color: #1E87C1;
+            /* Cor azul mais escura */
+            transform: scale(1.05);
+        }
+
+        .botoes-exibicao:active {
+            transform: scale(1);
+        }
+
+        .div-opcoes-filtro {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #div-tabela-principal {
+            width: 98%;
+            margin-bottom: 70px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .coluna-menor {
+            width: 5px;
+        }
+
+        .input-periodo {
+            margin: 5px;
+        }
+
+        input{
+            height: 40px;
+            width: 200px;
+            border-radius: 10px;
+            text-align: center;
+            border: solid 2px black;
+        }
+    </style>
 </head>
 <body>
-
-    <header>
+    <header style="margin-bottom: 0px;">
         <img src="../image/farmacia.png" alt="" class="logo_tamanho">
     
         <div class="div-header">
@@ -37,186 +348,40 @@
                 <div class="dropdown-content">
                     <a href="../Funcao_Saida/relatorioConsumo.html">Relatório de Consumo</a>
                     <a href="../Funcao_Saida/relatorioBaixa.html">Relatório de Baixa</a>
+                    <a href="../Funcao_Saida/relatorioTransferencia.html">Relatório de Transferência</a>
                 </div>
             </div>
         </div>
     </header>
+    <header>
+        <button class="header-button" onclick="window.location.href='relatorioTransferencia.html'">Relatório de Transferencias</button>
+        
+        <button class="header-button" onclick="window.location.href='../funcao_fundametais/transferir_produtos.html'">Cadastro de Transferencias</button>
+   </header>
     <div class="container">
-        <h1>Relatório de Transferência</h1>
-
         <div id="filter-container">
             <div class="filter-item">
-                <label for="filter-start-date">Data Início:</label>
-                <input type="date" id="filter-start-date" class="filter-input">
+                <label for="filter-date-start">Data Início:</label>
+                <input type="date" id="filter-date-start" class="filter-input">
             </div>
             <div class="filter-item">
-                <label for="filter-end-date">Data Fim:</label>
-                <input type="date" id="filter-end-date" class="filter-input">
+                <label for="filter-date-end">Data Fim:</label>
+                <input type="date" id="filter-date-end" class="filter-input">
+            </div>
+            <div class="filter-item">
+                <label for="filter-origem">Origem:</label>
+                <input type="text" id="filter-origem" placeholder="Digite o nome da origem" class="filter-input">
+            </div>
+            <div class="filter-item">
+                <label for="filter-destino">Destino:</label>
+                <input type="text" id="filter-destino" placeholder="Digite o nome do destino" class="filter-input">
             </div>
             <button class="filter-button" onclick="applyFilters()">Filtrar</button>
+            <button class="print-button" onclick="printPage()">Imprimir</button>
         </div>
-
-        <div id="baixas-container"></div>
-        
-        <button class="filter-button" onclick="printPage()">Imprimir</button>
+        <div id="transferencias-container"></div>
     </div>
-    <script src="../modelo/baixa.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            addListaBaixa();
-        });
-
-        const urlBase = 'http://localhost:4040';
-        var listaTransf = [];
-        var listaITF = [];
-
-        function addListaBaixa() {
-            fetch(urlBase + "/transferencia", {
-                method: "GET"
-            }).then((resposta) => {
-                return resposta.json();
-            }).then((json) => {
-                listaTransf = [];
-                let listaTransf = json.listaTransf;
-                if (Array.isArray(listaTransf)) {
-                    for (let i = 0; i < listaTransf.length; i++) {
-                        let transferencia = listaTransf[i];
-                        let objBaixa = new Baixa(baixa.idBaixa, baixa.itensBaixa, baixa.funcionario, baixa.dataBaixa, baixa.local);
-                        listaBx.push(objBaixa);
-                    }
-                }
-                renderBaixas(listaBx);
-            }).catch((error) => {
-                console.error('Erro ao buscar as baixas:', error);
-            });
-        }
-
-        function renderBaixas(listaBx) {
-            const container = document.getElementById('baixas-container');
-            container.innerHTML = '';
-            
-            listaBx.forEach(baixa => {
-                const baixaContainer = document.createElement('div');
-                baixaContainer.classList.add('baixa-container');
-                baixaContainer.setAttribute('onclick', `toggleItems(${baixa.idBaixa})`);
-
-                const baixaHeader = document.createElement('div');
-                baixaHeader.classList.add('baixa-header');
-                baixaHeader.textContent = `Baixa ID: ${baixa.idBaixa} - Data: ${new Date(baixa.dataBaixa).toLocaleDateString()} - Funcionario: ${baixa.funcionario.nome_funcionario}`;
-
-                const baixaItems = document.createElement('div');
-                baixaItems.classList.add('baixa-items');
-                baixaItems.setAttribute('id', `items-${baixa.idBaixa}`);
-
-                const tabela = document.createElement('table');
-                const cabecalho = document.createElement('thead');
-                cabecalho.innerHTML = `
-                    <tr>
-                        <th>Lote</th>
-                        <th>Produto</th>
-                        <th>Qtde</th>
-                        <th>Unidade</th>
-                        <th>Motivo</th>
-                        <th>Observacao</th>
-                    </tr>
-                `;
-                tabela.appendChild(cabecalho);
-
-                const corpo = document.createElement('tbody');
-                baixa.itensBaixa.forEach(item => {
-                    const linha = document.createElement('tr');
-                    linha.innerHTML = `
-                        <td>${item.lote.codigo}</td>
-                        <td>${item.produto.nome}</td>
-                        <td>${item.quantidade}</td>
-                        <td>${item.unidade.unidade}</td>
-                        <td>${item.motivo.motivo}</td>
-                        <td>${item.ib_idObservacao}</td>
-                    `;
-                    corpo.appendChild(linha);
-                });
-                tabela.appendChild(corpo);
-
-                baixaItems.appendChild(tabela);
-                baixaContainer.appendChild(baixaHeader);
-                baixaContainer.appendChild(baixaItems);
-                
-                // Adiciona o botão de lixeira
-                const deleteButton = document.createElement('button');
-                deleteButton.classList.add('delete-button');
-                deleteButton.innerHTML = '🗑️';
-                deleteButton.onclick = function(event) {
-                    event.stopPropagation(); // Previne o clique de abrir/fechar itens
-                    confirmDelete(baixa.idBaixa);
-                };
-                baixaContainer.appendChild(deleteButton);
-
-                container.appendChild(baixaContainer);
-            });
-        }
-
-        function toggleItems(id) {
-            const items = document.getElementById(`items-${id}`);
-            if (items.style.display === "none" || items.style.display === "") {
-                items.style.display = "block";
-            } else {
-                items.style.display = "none";
-            }
-        }
-
-        function applyFilters() {
-            const startDateFilter = document.getElementById('filter-start-date').value;
-            const endDateFilter = document.getElementById('filter-end-date').value;
-            const productFilter = document.getElementById('filter-product').value.toLowerCase();
-            const lotFilter = document.getElementById('filter-lote').value.toLowerCase();
-
-            const filteredBaixas = listaBx.filter(baixa => {
-                const matchDate = (startDateFilter || endDateFilter) ? 
-                    (new Date(baixa.dataBaixa) >= new Date(startDateFilter) && new Date(baixa.dataBaixa) <= new Date(endDateFilter || startDateFilter)) : true;
-                const matchProduct = productFilter ? baixa.itensBaixa.some(item => item.produto.nome.toLowerCase().includes(productFilter)) : true;
-                const matchLot = lotFilter ? baixa.itensBaixa.some(item => item.lote.codigo.toLowerCase().includes(lotFilter)) : true;
-
-                return matchDate && matchProduct && matchLot;
-            });
-
-            renderBaixas(filteredBaixas);
-        }
-
-        function confirmDelete(idBaixa) {
-            const confirmed = confirm("Tem certeza de que deseja excluir esta baixa?");
-            if (confirmed) {
-                deleteBaixa(idBaixa);
-            }
-        }
-
-        function deleteBaixa(idBaixa) {
-            fetch(`${urlBase}/baixa`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ idBaixa: idBaixa })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erro ao deletar a baixa');
-                }
-                // Atualizar a lista de baixas após a exclusão
-                addListaBaixa();
-            })
-            .catch(error => console.error('Erro ao deletar a baixa:', error));
-        }
-
-        function printPage() {
-            // Abre todos os itens antes de imprimir
-            const baixaItems = document.querySelectorAll('.baixa-items');
-            baixaItems.forEach(item => {
-                item.style.display = 'block';
-            });
-            
-            window.print();
-        }
-
-    </script>
+    <script src="../controle/relTransferencia.js"></script>
+    <script src="../modelo/transferencia.js"></script>
 </body>
 </html>

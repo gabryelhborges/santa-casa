@@ -57,25 +57,27 @@ export default class TransferenciaCtrl{
                     let i = 0;
                     while (gravou2 && atualizou && i < itensTransferencia.length) {
                         const item = itensTransferencia[i];
-                        let itemTransferencia = new ItensTransferencia(transf.tf_id, item.transf_id.prod_ID, item.prod_cod.codigo, item.lote_cod);
+                        let itemTransferencia = new ItensTransferencia(transf.tf_id, item.lote_cod.codigo, item.quantidade);
                         await itemTransferencia.gravar(conexao).catch((erro) => {
                             gravou2 = false;
                         });
                         if (gravou2) {
-                            let lote1 = new Lote(item.prod_cod.codigo, item.prod_cod.data_validade, item.lote_cod, item.prod_cod.produto, item.prod_cod.formaFarmaceutica, item.prod_cod.conteudo_frasco, item.prod_cod.unidade, item.prod_cod.total_conteudo, destino);
+                            let lote1 = new Lote(item.lote_cod.codigo, item.lote_cod.data_validade, item.quantidade, item.lote_cod.produto, item.lote_cod.formaFarmaceutica, item.lote_cod.conteudo_frasco, item.lote_cod.unidade, item.lote_cod.total_conteudo, destino);
                             await lote1.consultar2().then((listaLote) => {
                                 lote1 = listaLote.pop();
                             });
-                            lote1.quantidade = lote1.quantidade - item.lote_cod;
-                            lote1.total_conteudo = lote1.total_conteudo - item.lote_cod;
+                            lote1.local.loc_id=destino.loc_id;
+                            lote1.quantidade = lote1.quantidade - item.quantidade/item.lote_cod.conteudo_frasco;
+                            lote1.total_conteudo = lote1.total_conteudo - item.quantidade;
                             await lote1.atualizar2(conexao).catch((erro) => {
                                 atualizou = false;
                             });
-                            let lote2 = new Lote(item.prod_cod.codigo, item.prod_cod.data_validade, item.lote_cod, item.prod_cod.produto, item.prod_cod.formaFarmaceutica, item.prod_cod.conteudo_frasco, item.prod_cod.unidade, item.prod_cod.total_conteudo, origem);
+                            let lote2 = new Lote(item.lote_cod.codigo, item.lote_cod.data_validade, item.quantidade, item.lote_cod.produto, item.lote_cod.formaFarmaceutica, item.lote_cod.conteudo_frasco, item.lote_cod.unidade, item.lote_cod.total_conteudo, origem);
                             let loteExiste = await lote2.consultar2().then((listaLote) => listaLote.pop());
 
                             if (loteExiste) {
-                                loteExiste.total_conteudo = loteExiste.total_conteudo + item.lote_cod;
+                                loteExiste.quantidade = loteExiste.quantidade + item.quantidade/item.lote_cod.conteudo_frasco;
+                                loteExiste.total_conteudo = loteExiste.total_conteudo + item.quantidade;
                                 await loteExiste.atualizar2(conexao).catch((erro) => {
                                     atualizou = false;
                                 });
@@ -140,8 +142,10 @@ export default class TransferenciaCtrl{
                 await conexao.beginTransaction();
     
                 // Buscar itens da transferência
-                const itensTransferencia = await new ItensTransferencia().consultarPorTransferencia(tf_id, conexao);
-                
+                let itensTransferencia = new ItensTransferencia(tf_id,null,null);
+                await itensTransferencia.consultar(conexao).then((listaLote) => {
+                    itensTransferencia = listaLote;
+                });
                 if (itensTransferencia.length === 0) {
                     throw new Error("Transferência não encontrada ou não possui itens.");
                 }
@@ -153,15 +157,21 @@ export default class TransferenciaCtrl{
                     const item = itensTransferencia[i];
     
                     // Atualizar quantidade e total_conteudo dos lotes de origem e destino
-                    let loteOrigem = new Lote(item.itf_lote_cod, null, null, null, null, null, null, null, item.origem);
-                    let loteDestino = new Lote(item.itf_lote_cod, null, null, null, null, null, null, null, item.destino);
+                    let loteOrigem = new Lote(item.lote_cod.codigo, null, null, item.lote_cod.produto, null, null, null, null, item.lote_cod.local);
+                    let loteDestino = new Lote(item.lote_cod.codigo, null, null, item.lote_cod.produto, null, null, null, null, item.lote_cod.local);
+
+                    if(item.lote_cod.local.loc_id == 2){
+                        loteOrigem.local.loc_id=1;
+                    }else{
+                        loteOrigem.local.loc_id=2;
+                    }
                     
                     // Consultar e atualizar lote de origem
                     await loteOrigem.consultar2().then((listaLote) => {
                         loteOrigem = listaLote.pop();
                     });
-                    loteOrigem.quantidade += item.itf_qtdetransferida;
-                    loteOrigem.total_conteudo += item.itf_qtdetransferida * loteOrigem.conteudo_frasco;
+                    loteOrigem.quantidade += item.quantidade/item.lote_cod.conteudo_frasco;
+                    loteOrigem.total_conteudo += item.quantidade;
                     await loteOrigem.atualizar2(conexao).catch((erro) => {
                         atualizou = false;
                     });
@@ -170,8 +180,8 @@ export default class TransferenciaCtrl{
                     await loteDestino.consultar2().then((listaLote) => {
                         loteDestino = listaLote.pop();
                     });
-                    loteDestino.quantidade -= item.itf_qtdetransferida;
-                    loteDestino.total_conteudo -= item.itf_qtdetransferida * loteDestino.conteudo_frasco;
+                    loteDestino.quantidade -= item.quantidade/item.lote_cod.conteudo_frasco;
+                    loteDestino.total_conteudo -= item.quantidade;
                     await loteDestino.atualizar2(conexao).catch((erro) => {
                         atualizou = false;
                     });
@@ -189,9 +199,11 @@ export default class TransferenciaCtrl{
                 if (!atualizou) {
                     throw new Error("Erro de transação. Houve um erro ao atualizar os lotes da transferência.");
                 }
+
+                let transf_excluir = new Transferencia(tf_id,null,null,null,null,null);
     
                 // Excluir a transferência
-                await new Transferencia().excluir(tf_id, conexao).catch((erro) => {
+                await transf_excluir.excluir(conexao).catch((erro) => {
                     throw new Error("Erro ao excluir a transferência: " + erro.message);
                 });
     

@@ -48,6 +48,7 @@
               <div class="dropdown-content">
                   <a href="../Funcao_Saida/relatorioConsumo.html">Relatório de Consumo</a>
                   <a href="../Funcao_Saida/relatorioBaixa.html">Relatório de Baixa</a>
+                  <a href="../Funcao_Saida/relatorioTransferencia.html">Relatório de Transferência</a>
               </div>
           </div>
       </div>
@@ -75,7 +76,7 @@
                           <div class="u-form-group u-form-name u-form-partition-factor-3">
                             <label for="name-e9ff" class="u-label">Origem:</label>
                             <div class="u-form-select-wrapper">
-                              <select id="selectOrigem" name="select-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-1" required="required"></select>
+                              <select id="selectDestino" name="select-1" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-1" required="required"></select>
                               <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
                             </div>
                           </div>
@@ -84,7 +85,7 @@
                           <div class="u-form-group u-form-partition-factor-3 u-form-group-3">
                             <label for="text-adc3" class="u-label">Destino:</label>
                             <div class="u-form-select-wrapper">
-                              <select id="selectDestino" name="select-3" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" required="required"></select>
+                              <select id="selectOrigem" name="select-3" class="u-border-2 u-border-black u-input u-input-rectangle u-radius u-input-3" required="required"></select>
                               <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
                             </div>
                           </div>
@@ -175,7 +176,6 @@
         </div>
       </div>
     </section>
-    <label>Últimos itens transferidos:</label>
     <div id="tabelaItensTemp" class="tabelaItens"></div>
 </body>
 <script src="../controle/transferencia.js"></script>

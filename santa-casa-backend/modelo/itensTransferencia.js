@@ -2,13 +2,11 @@ import ItensTransferenciaDAO from "../persistencia/itensTransferenciaDAO.js";
 
 export default class ItensTransferencia{
     #transf_id;
-    #prod_cod;
     #lote_cod;
     #quantidade;
 
-    constructor(transf_id = null, prod_cod=null, lote_cod=null,quantidade=null){
+    constructor(transf_id=null, lote_cod=null,quantidade=null){
         this.#transf_id = transf_id;
-        this.#prod_cod = prod_cod;
         this.#lote_cod = lote_cod;
         this.#quantidade = quantidade;
     }
@@ -17,13 +15,6 @@ export default class ItensTransferencia{
     }
     set transf_id(novo){
         this.#transf_id = novo;
-    }
-
-    get prod_cod(){
-        return this.#prod_cod;
-    }
-    set prod_cod(novo){
-        this.#prod_cod = novo;
     }
 
     get lote_cod(){
@@ -43,7 +34,6 @@ export default class ItensTransferencia{
     toJSON(){
         return {
             transf_id: this.#transf_id,
-            prod_cod: this.#prod_cod,
             lote_cod: this.#lote_cod,
             quantidade: this.#quantidade
         }

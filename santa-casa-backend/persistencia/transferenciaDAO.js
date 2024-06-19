@@ -52,12 +52,12 @@ export default class TransferenciaDAO{
 
             let transferencia = new Transferencia(registro.tf_id,registro.tf_data,funcionario,origem,destino,[]);
             let listaItensTransferencia = [];
-            let itf = new ItensTransferencia(transferencia);
+            let itf = new ItensTransferencia(transferencia.tf_id,null,null,null);
             await itf.consultar(conexao).then((listaITF)=>{
                 listaItensTransferencia = listaITF;
             })
-            transferencia.itensTransferencia = listaItensTransferencia;
             listaTransferencias.push(transferencia);
+            transferencia.itensTransferencia = listaItensTransferencia;
         }
         return listaTransferencias;
     }
