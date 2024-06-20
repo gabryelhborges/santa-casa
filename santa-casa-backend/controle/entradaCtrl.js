@@ -103,103 +103,102 @@ export default class EntradaCtrl{
                 "mensagem": "Informe todos as informações de um entrada!"
             });
         }
-    }
-
+    }    
+    
     async excluir(requisicao, resposta) {
         resposta.type('application/json');
         const id = requisicao.params.termo;
-        if (requisicao.method === "DELETE") {
-            if (id) {
-                const entrada = new Entrada(id);
-                const conexao = await DB.conectar();
     
-                try {
-                    const listaEntradas = await entrada.consultar(id, conexao);
-    
-                    if (listaEntradas.length === 0) {
-                        resposta.status(404).json({
-                            "status": false,
-                            "mensagem": "Entrada não encontrada!"
-                        });
-                        return;
-                    }
-    
-                    const dataEntrada = new Date(listaEntradas[0].data_entrada);
-                    const now = new Date();
-    
-                    if (now.getTime() < dataEntrada.getTime() + 24 * 60 * 60 * 1000) {
-                        await conexao.beginTransaction();
-                        
-                        for(let i=0;listaEntradas.itensEntrada.length<i;i++){
-                            const item = listaEntradas.itensEntrada[i];
-                            const lote = new Lote(
-                                item.lote.codigo,
-                                new Date(item.lote.data_validade),
-                                item.lote.quantidade,
-                                item.lote.produto,
-                                item.lote.formaFarmaceutica,
-                                item.lote.conteudo_frasco,
-                                item.lote.unidade,
-                                item.lote.total_conteudo,
-                                item.lote.local,
-                                new Date(item.lote.data_entrada)
-                            );
-                            await item.excluir(conexao);
-                            
-                            lote.total_conteudo = Number(lote.total_conteudo) - (Number(item.lote.conteudo_frasco) * Number(item.quantidade));
-
-                            const loteDataEntrada = new Date(item.lote.data_entrada);
-                            if (lote.total_conteudo===0 && dataEntrada.getTime() === loteDataEntrada.getTime()) {
-                                await lote.excluir(conexao);
-                            } else {
-                                await lote.atualizar(conexao);
-                            }
-                        }
-    
-                        try {
-                            await entrada.excluir(conexao);
-                            await conexao.commit();
-                            resposta.status(200).json({
-                                "status": true,
-                                "mensagem": "Entrada excluída com sucesso!"
-                            });
-                        } catch (erro) {
-                            await conexao.rollback();
-                            resposta.status(500).json({
-                                "status": false,
-                                "mensagem": "Erro ao excluir entrada: " + erro.message
-                            });
-                        }
-    
-                    } else {
-                        resposta.status(400).json({
-                            "status": false,
-                            "mensagem": "Não é possível excluir a entrada, mais de um dia se passou!"
-                        });
-                    }
-    
-                } catch (erro) {
-                    resposta.status(500).json({
-                        "status": false,
-                        "mensagem": "Houve um erro ao consultar a entrada: " + erro.message
-                    });
-                } finally {
-                    conexao.release();
-                }
-            } else {
-                resposta.status(400).json({
-                    "status": false,
-                    "mensagem": "ID de entrada não fornecido!"
-                });
-            }
-        } else {
+        if (requisicao.method !== "DELETE") {
             resposta.status(400).json({
                 "status": false,
                 "mensagem": "Utilize o método DELETE para excluir uma entrada!"
             });
+            return;
+        }
+    
+        if (!id) {
+            resposta.status(400).json({
+                "status": false,
+                "mensagem": "ID de entrada não fornecido!"
+            });
+            return;
+        }
+    
+        const entrada = new Entrada(id);
+        const conexao = await DB.conectar();
+    
+        try {
+            let auxLE = await entrada.consultar(id, conexao);
+    
+            if (auxLE.length === 0) {
+                resposta.status(404).json({
+                    "status": false,
+                    "mensagem": "Entrada não encontrada!"
+                });
+                return;
+            }
+    
+            const listaEntradas = auxLE.pop();
+            const dataEntrada = new Date(listaEntradas.data_entrada);
+            const now = new Date();
+    
+            if (now.getTime() >= dataEntrada.getTime() + 24 * 60 * 60 * 1000) {
+                resposta.status(400).json({
+                    "status": false,
+                    "mensagem": "Não é possível excluir a entrada, mais de um dia se passou!"
+                });
+                return;
+            }
+    
+            await conexao.beginTransaction();
+    
+            for (let i = 0; i < listaEntradas.itensEntrada.length; i++) {
+                const item = listaEntradas.itensEntrada[i];
+                const lote = new Lote(
+                    item.lote.codigo,
+                    new Date(item.lote.data_validade),
+                    item.lote.quantidade,
+                    item.lote.produto,
+                    item.lote.formaFarmaceutica,
+                    item.lote.conteudo_frasco,
+                    item.lote.unidade,
+                    item.lote.total_conteudo,
+                    item.lote.local,
+                    new Date(item.lote.data_entrada)
+                );
+    
+                await item.excluir(conexao);
+    
+                lote.total_conteudo = Number(lote.total_conteudo) - (Number(item.lote.conteudo_frasco) * Number(item.quantidade));
+    
+                const loteDataEntrada = new Date(item.lote.data_entrada);
+                if (lote.total_conteudo === 0 && dataEntrada.getTime() === loteDataEntrada.getTime()) {
+                    await lote.excluir(conexao);
+                } else {
+                    await lote.atualizar(conexao);
+                }
+            }
+    
+            await entrada.excluir(conexao);
+            await conexao.commit();
+    
+            resposta.status(200).json({
+                "status": true,
+                "mensagem": "Entrada excluída com sucesso!"
+            });
+    
+        } catch (erro) {
+            await conexao.rollback();
+            resposta.status(500).json({
+                "status": false,
+                "mensagem": "Erro ao excluir entrada: " + erro.message
+            });
+    
+        } finally {
+            conexao.release();
         }
     }
-    
     
 
     async consultar(requisicao,resposta){

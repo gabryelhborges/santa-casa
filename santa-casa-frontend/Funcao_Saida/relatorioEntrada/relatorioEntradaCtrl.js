@@ -1,19 +1,14 @@
 const urlBase = "http://localhost:4040"
-function formataData(dataParametro){
-    // Convertendo a string em um objeto Date
-    let data = new Date(dataParametro);
-
-    // Obtendo o ano, mês e dia
-    let ano = data.getFullYear();
-    let mes = ('0' + (data.getMonth() + 1)).slice(-2); // Adicionando 1 porque os meses são zero indexados
-    let dia = ('0' + data.getDate()).slice(-2);
-
-    // Formatando a data no formato esperado pelo input tipo date
-    let dataFormatada = ano + '-' + mes + '-' + dia;
-
-    // Atribuindo a data formatada ao campo de data
-    return dataFormatada;
+function formataData(date) {
+    const dia = String(date.getDate()).padStart(2, '0');
+    const mes = String(date.getMonth() + 1).padStart(2, '0'); // Meses começam do 0
+    const ano = date.getFullYear();
+    return `${ano}-${mes}-${dia}`;
 }
+
+const hoje = new Date();
+const amanha = new Date(hoje);
+amanha.setDate(hoje.getDate() + 1);
 
         const butoes = {
             data() {
@@ -28,8 +23,8 @@ function formataData(dataParametro){
                     totalEntradasFun: 0,
                     dadosFuncionarios: {},
                     totaisEntradas: {},
-                    inicio: '2023-01-01',
-                    fim: formataData(new Date()),
+                    inicio: '2024-01-01',
+                    fim: formataData(amanha),
                     produtos: [],
                     entradas: []
                 }
@@ -68,9 +63,12 @@ function formataData(dataParametro){
                         console.log(this.funcionarios);
                     }else if (this.isEntrada) {
                         try {
-                            const response = await axios.get(urlBase + "/produto");
+                            const response = await axios.get(urlBase + "/produto/"+this.filtro);
                             this.produtos = [];
-                
+
+                            const inicio = new Date(this.inicio); // Convertendo as datas de início e fim para objetos Date
+                            const fim = new Date(this.fim);
+                            
                             for (let i = 0; i < response.data.listaProdutos.length; i++) {
                                 let aux = response.data.listaProdutos[i];
                 
@@ -88,6 +86,11 @@ function formataData(dataParametro){
                                             lote.itens = responseItens.data.listaEntradas;
                                         }
                                     }
+
+                                    lotes = lotes.filter(lote => {
+                                        const dataEntrada = new Date(lote.data_entrada);
+                                        return dataEntrada >= inicio && dataEntrada <= fim;
+                                    });
                 
                                     aux.lotes = lotes; // Atualiza os lotes com os itens correspondentes
                                     this.produtos.push(aux);  // Adiciona o produto ao array this.produtos
@@ -251,7 +254,7 @@ function formataData(dataParametro){
             </div>
             
             <div class="info-container" id="div-pesquisa-relatorio-consumo">
-                <input v-model="filtro" @change="gerarLista()" id="pesquisaConsumo" type="text" placeholder="Entrada">
+                <input v-model="filtro" @change="gerarLista()" id="pesquisaConsumo" type="text" placeholder="Nome">
                 <div v-if="!isListar">
                     <label for="inputDataInicio">Início:</label>
                     <input @change="gerarLista()" v-model="inicio" class="input-periodo" type="date" id="inputDataInicio">
@@ -361,7 +364,7 @@ function formataData(dataParametro){
                             <table id = 'tabela-primaria'>
                                 <thead>
                                 <tr class='cabecalhoItCons'>
-                                    <th colspan="3">Itens Produtos</th>
+                                    <th colspan="3">Produtos</th>
                                 </tr>
                                 <tr class='cabecalhoItCons'>
                                     <th>Produto</th>
@@ -393,11 +396,8 @@ function formataData(dataParametro){
                                                             <table id = 'tabela-primaria'>
                                                                     <thead>
                                                                     <tr class='cabecalhoItCons'>
-                                                                        <th colspan="3">Entada</th>
-                                                                    </tr>
-                                                                    <tr class='cabecalhoItCons'>
                                                                         <th>Funcionario</th>
-                                                                        <th>Data de Entrada de Lore</th>
+                                                                        <th>Data de Entrada de Lote</th>
                                                                         <th>Quantidade Adicionada</th>
                                                                     </tr>
                                                                 </thead>
